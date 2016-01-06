@@ -36,3 +36,13 @@ input[type="select"] {
         padding: 0;
     }
 }
+
+.floating {
+    float:left;
+    overflow:hidden;
+}
+.floating img {
+    display:block;
+    width:50px;
+    height:50px;
+}

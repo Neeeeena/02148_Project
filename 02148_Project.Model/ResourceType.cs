@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _02148_Project.Model
 {
-    enum ResourceType
+    public enum ResourceType
     {
         Tree, 
         Clay, 
