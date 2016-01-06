@@ -28,19 +28,31 @@ namespace _02148_Project
             connection = null;
         }
 
+
+        /// <summary>
+        /// Create a player from the parsed name.
+        /// Throws a SQL exception, if the name allready exsits in the table
+        /// </summary>
+        /// <param name="name">Name of the player</param>
+        public static void CreatePlayer(string name)
+        {
+            OpenConnection();
+            string query = "INSERT INTO Players (Name) VALUES (@Name);";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", name);
+            command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Get all the players from the database
+        /// </summary>
+        /// <returns>Rows from the database with player data</returns>
         public static SqlDataReader GetPlayers()
         {
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
             OpenConnection();
-
-            cmd.CommandText = "SELECT * FROM Players";
-            cmd.CommandType = CommandType.Text;
-            cmd.Connection = connection;
-
-            reader = cmd.ExecuteReader();
-
-            return reader;
+            SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
+            return command.ExecuteReader();
         }
 
         /// <summary>

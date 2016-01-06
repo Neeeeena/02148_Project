@@ -13,8 +13,6 @@ C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\obj\Debug\Se
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Server.Test.dll
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Server.Test.pdb
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.dll
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.Model.dll
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.pdb
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.Model.pdb
