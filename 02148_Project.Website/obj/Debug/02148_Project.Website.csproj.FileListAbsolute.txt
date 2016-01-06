@@ -76,3 +76,5 @@ C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\bin\Microsoft.Owi
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.csprojResolveAssemblyReference.cache
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.dll
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.pdb
+C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\bin\02148_Project.Model.dll
+C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Website\bin\02148_Project.Model.pdb

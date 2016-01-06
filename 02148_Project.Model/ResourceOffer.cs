@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace _02148_Project.Model
 {
-    class ResourceOffer
+    public class ResourceOffer
     {
         public int Id { get; set; }
 
         public int SellerID { get; set; }
 
-        public int ResourceType { get; set; }
+        public ResourceType Type { get; set; }
 
         public int Count { get; set; }
 

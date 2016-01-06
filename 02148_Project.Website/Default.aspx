@@ -10,7 +10,7 @@
 
     <div class="row">
 
-        <asp:Repeater ID="localResources" runat="server">
+        <asp:Repeater ID="localResources" runat="server" >
           <HeaderTemplate>
             <table>
               <thead>
@@ -21,8 +21,8 @@
               <tbody>
           </HeaderTemplate>
           <ItemTemplate>
-            <tr>
-              <td><%# Eval("Type") %></td>
+            <tr class="floating">
+              <td ><%# Eval("Type") %></td>
             </tr>
           </ItemTemplate>
           <FooterTemplate>
