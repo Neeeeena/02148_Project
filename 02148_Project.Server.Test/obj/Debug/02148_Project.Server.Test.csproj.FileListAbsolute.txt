@@ -10,10 +10,8 @@ C:\Users\olive\Source\Repos\02148_Project\Server.Test\obj\Debug\Server.Test.pdb
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Server.Test.dll
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Server.Test.pdb
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.dll
-C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.Model.dll
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.pdb
-C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\bin\Debug\02148_Project.Model.pdb
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\obj\Debug\02148_Project.Server.Test.csprojResolveAssemblyReference.cache
 C:\Users\Nina\Source\Repos\02148_Project\02148_Project.Server.Test\obj\Debug\Server.Test.dll
