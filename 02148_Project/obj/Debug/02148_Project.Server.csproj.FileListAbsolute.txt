@@ -13,3 +13,5 @@ C:\Users\olive\Source\Repos\02148_Project\02148_Project\obj\Debug\02148_Project.
 C:\Users\olive\Source\Repos\02148_Project\02148_Project\obj\Debug\02148_Project.pdb
 C:\Users\olive\Source\Repos\02148_Project\02148_Project\bin\Debug\02148_Project.dll
 C:\Users\olive\Source\Repos\02148_Project\02148_Project\bin\Debug\02148_Project.pdb
+C:\Users\olive\Source\Repos\02148_Project\02148_Project\bin\Debug\02148_Project.Model.dll
+C:\Users\olive\Source\Repos\02148_Project\02148_Project\bin\Debug\02148_Project.Model.pdb

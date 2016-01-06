@@ -8,36 +8,23 @@ namespace _02148_Project.Server.Test
     [TestClass]
     public class DatabaseInterfaceTests
     {
-        private static DatabaseInterface dbi;
-
         [ClassInitialize]
         public static void Before(TestContext context)
         {
-            dbi = new DatabaseInterface();
-            dbi.OpenConnection();
+            DatabaseInterface.OpenConnection();
         }
 
         [ClassCleanup]
         public static void Cleanup()
         {
-            dbi.CloseConnection();
+            DatabaseInterface.CloseConnection();
             Console.WriteLine("Connection clossed");
         }
-
-        //[TestMethod]
-        //public void ConnectionTest()
-        //{
-        //    dbi = new DatabaseInterface();
-        //    dbi.OpenConnection();
-        //    Console.WriteLine("Connection is open");
-        //    dbi.CloseConnection();
-        //    Console.WriteLine("Connection is now closed");
-        //}
-
+        
         [TestMethod]
         public void GetPlayersTest()
         {
-            SqlDataReader reader = dbi.GetPlayers();
+            SqlDataReader reader = DatabaseInterface.GetPlayers();
             
             if (reader.HasRows)
             {
@@ -57,13 +44,13 @@ namespace _02148_Project.Server.Test
         [TestMethod]
         public void PlaceMarketTest()
         {
-            dbi.PlaceResources(1, 5, 200, 150);
+            DatabaseInterface.PlaceResources(1, 5, 200, 150);
         }
 
         [TestMethod]
         public void GetResourcesFromMarketTest()
         {
-            SqlDataReader reader = dbi.ReadResourcesOnMarket();
+            SqlDataReader reader = DatabaseInterface.ReadResourcesOnMarket();
 
             if (reader.HasRows)
             {
