@@ -11,7 +11,6 @@ namespace _02148_Project.Server.Test
         [ClassInitialize]
         public static void Before(TestContext context)
         {
-            DatabaseInterface.OpenConnection();
         }
 
         [ClassCleanup]
@@ -30,8 +29,7 @@ namespace _02148_Project.Server.Test
             {
                 while (reader.Read())
                 {
-                    Console.WriteLine("{0}\t{1}", reader.GetInt32(0),
-                        reader.GetString(1));
+                    Console.WriteLine("{0}", reader.GetString(0));
                 }
             }
             else
@@ -44,7 +42,7 @@ namespace _02148_Project.Server.Test
         [TestMethod]
         public void PlaceMarketTest()
         {
-            DatabaseInterface.PlaceResources(1, 5, 200, 150);
+            DatabaseInterface.PlaceResources("Oliver", 5, 200, 150);
         }
 
         [TestMethod]
@@ -56,9 +54,18 @@ namespace _02148_Project.Server.Test
             {
                 while (reader.Read())
                 {
-                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", reader.GetInt32(0),
-                        reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3), 
-                        reader.GetInt32(4), reader.GetString(5));
+                    if (reader.IsDBNull(5))
+                    {
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", reader.GetInt32(0),
+                            reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3),
+                            reader.GetInt32(4));
+                    } 
+                    else
+                    {
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", reader.GetInt32(0),
+                            reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3),
+                            reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
+                    }
                 }
             }
             else

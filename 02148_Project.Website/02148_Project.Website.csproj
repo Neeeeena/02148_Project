@@ -194,6 +194,7 @@
     <Content Include="ApplicationInsights.config" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Images\firewood.png" />
+    <Content Include="Images\wood.gif" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />

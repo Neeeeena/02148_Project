@@ -22,44 +22,69 @@ namespace _02148_Project
             connection.Open();
         }
 
+        /// <summary>
+        /// Close the connection to the database, and set the object to null
+        /// </summary>
         public static void CloseConnection()
         {
             connection.Close();
             connection = null;
         }
 
-        public static SqlDataReader GetPlayers()
-        {
-            SqlCommand cmd = new SqlCommand();
-            SqlDataReader reader;
-            OpenConnection();
-
-            cmd.CommandText = "SELECT * FROM Players";
-            cmd.CommandType = CommandType.Text;
-            cmd.Connection = connection;
-
-            reader = cmd.ExecuteReader();
-
-            return reader;
-        }
 
         /// <summary>
-        /// 
+        /// Create a player from the parsed name.
+        /// Throws a SQL exception, if the name allready exsits in the table
         /// </summary>
-        public static void PlaceResources(int sellerID, int resource, int count, int price)
+        /// <param name="name">Name of the player</param>
+        public static void CreatePlayer(string name)
         {
-            string query = string.Format("INSERT INTO Market (SellerID, ResourceType, Count, Price) " +
-                "VALUES ({0}, {1}, {2}, {3});", sellerID, resource, count, price);
+            OpenConnection();
+            string query = "INSERT INTO Players (Name) VALUES (@Name);";
 
             SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", name);
             command.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Get all the players from the database
+        /// </summary>
+        /// <returns>Rows from the database with player data</returns>
+        public static SqlDataReader GetPlayers()
+        {
+            OpenConnection();
+            SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
+            return command.ExecuteReader();
+        }
+
+        /// <summary>
+        /// Place a resource on the marketsplace
+        /// </summary>
+        public static void PlaceResources(string sellerName, int resource, int count, int price)
+        {
+            OpenConnection();
+            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) " +
+                "VALUES (@Name, @Resource, @Count, @Price);";
+   
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", sellerName);
+            command.Parameters.AddWithValue("@Resource", resource);
+            command.Parameters.AddWithValue("@Count", count);
+            command.Parameters.AddWithValue("@Price", price);
+            command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Read all the resource from the market
+        /// </summary>
+        /// <returns>A SQL reader object with the result data</returns>
         public static SqlDataReader ReadResourcesOnMarket()
         {
-            string query = "SELECT Market.Id, Market.SellerId, Market.ResourceType, Market.Count, Market.Price, Players.Name "
+            OpenConnection();
+            string query = "SELECT * "
                 + "FROM Market "
-                + "LEFT JOIN Players On Market.SellerID = Players.Id;";
+                + "LEFT JOIN Players On Market.SellerName = Players.Name;";
             SqlCommand command = new SqlCommand(query, connection);
 
             return command.ExecuteReader();
