@@ -5,24 +5,31 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using _02148_Project.Model;
 
 namespace _02148_Project.Website
 {
 
     public partial class _Default : Page
     {
-        //protected void Page_Load(object sender, EventArgs e)
-        //{
-        //    List<ResourceOffer> resources = new List<ResourceOffer>();
+        List<ResourceOffer> resources;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            resources = new List<ResourceOffer>();
 
-        //    Add 5 resources
-        //    for (int i = 1; i <= 5; i++)
-        //    {
-        //        resources.Add(new Resource());
-        //    }
-        //    localResources.DataSource = resources;
-        //    localResources.DataBind();
-        //}
+            RenderMarket();
+        }
+
+        protected void RenderMarket()
+        {
+            //Add 5 resources
+            for (int i = 1; i <= 5; i++)
+            {
+                resources.Add(new ResourceOffer() { Type = ResourceType.Tree });
+            }
+            localResources.DataSource = resources;
+            localResources.DataBind();
+
+        }
     }
 }
