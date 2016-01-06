@@ -8,27 +8,27 @@ using System.Data;
 
 namespace _02148_Project
 {
-    public class DatabaseInterface
+    public static class DatabaseInterface
     {
         private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        private SqlConnection connection;
+        private static SqlConnection connection;
 
         /// <summary>
         /// Create a new SqlConnection with the given connection string and open it
         /// </summary>
-        public void OpenConnection()
+        public static void OpenConnection()
         {
             connection = new SqlConnection(connectionString);
             connection.Open();
         }
 
-        public void CloseConnection()
+        public static void CloseConnection()
         {
             connection.Close();
             connection = null;
         }
 
-        public SqlDataReader GetPlayers()
+        public static SqlDataReader GetPlayers()
         {
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
@@ -46,7 +46,7 @@ namespace _02148_Project
         /// <summary>
         /// 
         /// </summary>
-        public void PlaceResources(int sellerID, int resource, int count, int price)
+        public static void PlaceResources(int sellerID, int resource, int count, int price)
         {
             string query = string.Format("INSERT INTO Market (SellerID, ResourceType, Count, Price) " +
                 "VALUES ({0}, {1}, {2}, {3});", sellerID, resource, count, price);
@@ -55,7 +55,7 @@ namespace _02148_Project
             command.ExecuteNonQuery();
         }
 
-        public SqlDataReader ReadResourcesOnMarket()
+        public static SqlDataReader ReadResourcesOnMarket()
         {
             string query = "SELECT Market.Id, Market.SellerId, Market.ResourceType, Market.Count, Market.Price, Players.Name "
                 + "FROM Market "
