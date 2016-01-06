@@ -30,7 +30,6 @@ namespace _02148_Project
                 }
             }
             reader.Close();
-
             return players;
         }
 
@@ -44,10 +43,11 @@ namespace _02148_Project
             DatabaseInterface.OpenConnection();
             SqlDataReader reader = DatabaseInterface.ReadResourcesOnMarket();
 
-            if (reader.HasRows)
+            if (reader.HasRows) // Check if the reader has any results. 
             {
                 while (reader.Read())
                 {
+                    // Check the highest bidder for null value
                     if (reader.IsDBNull(5))
                     {
                         offers.Add(new ResourceOffer(reader.GetInt32(0),
@@ -63,7 +63,18 @@ namespace _02148_Project
                     }
                 }
             }
+            reader.Close();
             return offers;
+        }
+
+        /// <summary>
+        /// Get the resource offer from the market 
+        /// </summary>
+        /// <param name="id">Id of the resource offer to remove</param>
+        /// <returns>The resource offer from the database</returns>
+        public static ResourceOffer GetResourceOffer(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

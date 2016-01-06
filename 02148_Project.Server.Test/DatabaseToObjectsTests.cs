@@ -48,7 +48,12 @@ namespace Server.Test
         [TestMethod]
         public void RemoveResourceOfferFromMarketTest()
         {
+            ResourceOffer offer = DatabaseToObjects.GetResourceOffer(1);
 
+            if (offer != null)
+            {
+                Console.WriteLine("{0}\t{1}", offer.Id, offer.SellerName);
+            }
         }
     }
 }
