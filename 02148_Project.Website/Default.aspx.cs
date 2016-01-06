@@ -25,7 +25,7 @@ namespace _02148_Project.Website
             //Add 5 resources
             for (int i = 1; i <= 5; i++)
             {
-                resources.Add(new ResourceOffer() { Type = ResourceType.Tree });
+                resources.Add(new ResourceOffer() { Id = i });
             }
             localResources.DataSource = resources;
             localResources.DataBind();
