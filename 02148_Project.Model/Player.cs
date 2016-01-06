@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02148_Project
+namespace _02148_Project.Model
 {
-    public class Class1
+    public class Player
     {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 }
