@@ -19,7 +19,7 @@ namespace Server.Test
             Console.WriteLine("Id\tName");
             foreach (Player player in players)
             {
-                Console.WriteLine("{0}\t{1}", player.Id, player.Name);
+                Console.WriteLine("{0}", player.Name);
             }
         }
 

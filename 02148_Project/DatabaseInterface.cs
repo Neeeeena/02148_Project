@@ -22,6 +22,9 @@ namespace _02148_Project
             connection.Open();
         }
 
+        /// <summary>
+        /// Close the connection to the database, and set the object to null
+        /// </summary>
         public static void CloseConnection()
         {
             connection.Close();
@@ -56,22 +59,32 @@ namespace _02148_Project
         }
 
         /// <summary>
-        /// 
+        /// Place a resource on the marketsplace
         /// </summary>
-        public static void PlaceResources(int sellerID, int resource, int count, int price)
+        public static void PlaceResources(string sellerName, int resource, int count, int price)
         {
-            string query = string.Format("INSERT INTO Market (SellerID, ResourceType, Count, Price) " +
-                "VALUES ({0}, {1}, {2}, {3});", sellerID, resource, count, price);
-
+            OpenConnection();
+            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) " +
+                "VALUES (@Name, @Resource, @Count, @Price);";
+   
             SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", sellerName);
+            command.Parameters.AddWithValue("@Resource", resource);
+            command.Parameters.AddWithValue("@Count", count);
+            command.Parameters.AddWithValue("@Price", price);
             command.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Read all the resource from the market
+        /// </summary>
+        /// <returns>A SQL reader object with the result data</returns>
         public static SqlDataReader ReadResourcesOnMarket()
         {
-            string query = "SELECT Market.Id, Market.SellerId, Market.ResourceType, Market.Count, Market.Price, Players.Name "
+            OpenConnection();
+            string query = "SELECT * "
                 + "FROM Market "
-                + "LEFT JOIN Players On Market.SellerID = Players.Id;";
+                + "LEFT JOIN Players On Market.SellerName = Players.Name;";
             SqlCommand command = new SqlCommand(query, connection);
 
             return command.ExecuteReader();

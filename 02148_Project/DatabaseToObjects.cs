@@ -22,7 +22,7 @@ namespace _02148_Project
             {
                 while (reader.Read())
                 {
-                    players.Add(new Player(reader.GetInt32(0), reader.GetString(1)));
+                    players.Add(new Player(reader.GetString(0)));
                 }
             }
             reader.Close();
