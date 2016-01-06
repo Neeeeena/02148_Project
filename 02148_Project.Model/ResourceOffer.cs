@@ -22,8 +22,8 @@ namespace _02148_Project.Model
 
         public int HighestBid { get; set; }
 
-        public ResourceOffer(int id, string sellerName, ResourceType type,
-            int count, int price) : this(id, sellerName, type, count, price, null, 0)
+        public ResourceOffer(int id, string sellerName, ResourceType type, int count, int price) 
+            : this(id, sellerName, type, count, price, null, 0)
         { }
 
         /// <summary>
