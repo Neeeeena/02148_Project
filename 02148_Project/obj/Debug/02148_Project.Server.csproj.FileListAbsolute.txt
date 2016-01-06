@@ -1,0 +1,5 @@
+c:\users\nina\documents\visual studio 2015\Projects\02148_Project\02148_Project\bin\Debug\02148_Project.dll
+c:\users\nina\documents\visual studio 2015\Projects\02148_Project\02148_Project\bin\Debug\02148_Project.pdb
+c:\users\nina\documents\visual studio 2015\Projects\02148_Project\02148_Project\obj\Debug\02148_Project.Server.csprojResolveAssemblyReference.cache
+c:\users\nina\documents\visual studio 2015\Projects\02148_Project\02148_Project\obj\Debug\02148_Project.dll
+c:\users\nina\documents\visual studio 2015\Projects\02148_Project\02148_Project\obj\Debug\02148_Project.pdb
