@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _02148_Project.Model
 {
-    class Message
+    public class Message
     {
         public string Context { get; set; }
 

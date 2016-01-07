@@ -139,5 +139,27 @@ namespace _02148_Project
             SqlCommand command = new SqlCommand(query, connection);
             command.ExecuteNonQuery();
         }
+
+        public static void SendMessage(Message msg)
+        {
+            OpenConnection();
+            string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Message", msg.Context);
+            command.Parameters.AddWithValue("@Sender", msg.SenderName);
+            command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+            command.Parameters.AddWithValue("@ToAll", msg.ToAll);
+            command.ExecuteNonQuery();
+        }
+
+        public static SqlDataReader ReadMessage(String reciever)
+        {
+            OpenConnection();
+            SqlCommand command = new SqlCommand("SELECT * FROM Chat WHERE RecieverName = '" + reciever + "'", connection);
+            return command.ExecuteReader();
+        }
+
     }
 }
