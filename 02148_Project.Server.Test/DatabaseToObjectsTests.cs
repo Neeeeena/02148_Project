@@ -98,5 +98,11 @@ namespace Server.Test
             Assert.AreEqual(45, updatedOffer.HighestBid);
             Assert.AreEqual("Alex", updatedOffer.HighestBidder);
         }
+
+        [TestMethod]
+        public void SendMessageTest()
+        {
+            
+        }
     }
 }
