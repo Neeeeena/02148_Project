@@ -5,11 +5,27 @@
 
     <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span2">
+        <div class="span3">
       <!--Sidebar content-->
         <p>This is where you buy houses, a blacksmith etc.</p>
     </div>
-      <div class="span10">
+        <div class="span2">
+            <div "> 
+                <table class="table table-hover" style="width:100%">
+				    <tr>
+					    <td>
+					        <!-- <img src="untitled.png" width="30" height="25">
+						        <p ID=houseCount>0</p>-->
+						    <button type="button" class="btn btn-primary btn-block btn-lg" id="houseButton" disabled="true">
+							    BUY (2W, 2T)
+						    </button>
+					    </td>
+				    </tr>
+	  		    </table>
+            </div>
+
+        </div>
+        <div class="span8">
     <div class="jumbotron" id="marked" >
         <h3>Marked</h3>
        <div class="grid-container outline">
@@ -42,7 +58,6 @@
             <div class="col-1" id="cell23" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
             <div class="col-1" id="cell24" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
         </div>  
-
     </div>
         </div>
 
@@ -72,6 +87,7 @@
             </table>
           </FooterTemplate>
     </asp:Repeater>
+                
     </div>
 </div>
   </div>
