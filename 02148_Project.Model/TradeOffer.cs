@@ -39,5 +39,14 @@ namespace _02148_Project.Model
             Count = count;
             Price = price;
         }
+
+        public TradeOffer(string sellerName, string recieverName, ResourceType type, int count, int price)
+        {
+            this.SellerName = sellerName;
+            this.RecieverName = recieverName;
+            this.Type = type;
+            this.Count = count;
+            this.Price = price;
+        }
     }
 }
