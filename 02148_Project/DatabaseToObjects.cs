@@ -142,9 +142,9 @@ namespace _02148_Project
             DatabaseInterface.SendMessage(msg);
         }
 
-        public static Message ReadMessage(String reciever)
+        public static Message GetMessage(String reciever)
         {
-            SqlDataReader reader = DatabaseInterface.ReadMessage(reciever);
+            SqlDataReader reader = DatabaseInterface.GetMessage(reciever);
             Message msg = null;
             if (reader.HasRows)
             {
@@ -155,16 +155,5 @@ namespace _02148_Project
             reader.Close();
             return msg;
         }
-
-        public static void getMessage(String reciever)
-        {
-
-        }
-
-        public static void updateMessage(String reciever)
-        {
-
-        }
-
     }
 }

@@ -154,12 +154,12 @@ namespace _02148_Project
             command.ExecuteNonQuery();
         }
 
-        public static SqlDataReader ReadMessage(String reciever)
+        public static SqlDataReader GetMessage(String reciever)
         {
             OpenConnection();
             SqlCommand command = new SqlCommand("SELECT * FROM Chat WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC", connection);
             return command.ExecuteReader();
         }
-
+                
     }
 }
