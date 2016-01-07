@@ -136,5 +136,16 @@ namespace _02148_Project
         {
             return DatabaseInterface.PlaceResources(offer.SellerName, (int) offer.Type, offer.Count, offer.Price);
         }
+
+        public static void SendMessage(Message msg)
+        {
+            DatabaseInterface.SendMessage(msg);
+        }
+
+        public static void ReadMessage()
+        {
+            //SqlDataReader reader = DatabaseInterface.ReadMessage();
+        }
+
     }
 }
