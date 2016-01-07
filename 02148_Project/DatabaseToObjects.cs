@@ -149,11 +149,21 @@ namespace _02148_Project
             if (reader.HasRows)
             {
                 reader.Read();
-                msg = new Message(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetBoolean(3));                
+                msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4));                
             }
 
             reader.Close();
             return msg;
+        }
+
+        public static void getMessage(String reciever)
+        {
+
+        }
+
+        public static void updateMessage(String reciever)
+        {
+
         }
 
     }
