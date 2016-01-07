@@ -157,7 +157,7 @@ namespace _02148_Project
         public static SqlDataReader ReadMessage(String reciever)
         {
             OpenConnection();
-            SqlCommand command = new SqlCommand("SELECT * FROM Chat WHERE RecieverName = '" + reciever + "'", connection);
+            SqlCommand command = new SqlCommand("SELECT * FROM Chat WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC", connection);
             return command.ExecuteReader();
         }
 
