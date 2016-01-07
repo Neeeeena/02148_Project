@@ -8,7 +8,7 @@ namespace _02148_Project.Model
 {
     public enum ResourceType
     {
-        Tree, 
+        Wood, 
         Clay, 
         Wool,
         Stone, 

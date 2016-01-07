@@ -58,3 +58,51 @@ input[type="select"] {
     width:50px;
     height:50px;
 }
+
+.jumbotron {
+    background-color:#E8793D;
+}
+
+
+.span10 {
+    margin-left: 200px;
+}
+
+.span2 {
+    width: 200px;
+    float: left;
+}
+
+.row:before, 
+    .row:after {
+        content:"";
+        display: table ;
+         clear:both;
+    }
+
+.grid-container{
+        width: 100%; 
+        max-width: 1200px;      
+    }
+
+[class*='col-'] {
+        float: left; 
+        min-height: 74px; 
+        width: 16.66%; 
+        padding: 12px; 
+        background-color:  #FFBE7F;
+    }
+
+    .col-1{ width: 8.33%; outline: 1px solid #302E2A;}
+
+
+
+
+    /*-- some extra column content styling --*/
+    [class*='col-'] > p {
+     background-color:  #FFBE7F; 
+     padding: 0;
+     margin: 0;
+     text-align: center; 
+     color: #FFBE7F; 
+    }
