@@ -62,9 +62,7 @@
             <tr class="floating">
               <td>
                   <div class="resource" >
-                      <div >
-                            <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="Images/firewood.png"  />
-                          </div>
+                            <img id="<%#Eval("Id")%>"  data-price="<%#Eval("Price")%>" ondragstart="drag(event)" draggable="true" src="Images/firewood.png"  />
                  </div>
               </td>
             </tr>

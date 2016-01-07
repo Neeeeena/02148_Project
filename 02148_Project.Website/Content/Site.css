@@ -107,3 +107,7 @@ input[type="select"] {
      text-align: center; 
      color:#302E2A; 
     }
+
+.col-1 p{
+    font-size:13px;
+}
