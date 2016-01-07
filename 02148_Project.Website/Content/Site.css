@@ -64,14 +64,26 @@ input[type="select"] {
 }
 
 
-.span10 {
-    margin-left: 200px;
+
+
+.span8 {
+    margin-left: 21%;
+    margin-right: 21%;
+}
+
+.span3 {
+    width: 20%;
+    float: left;
+    background-color:#E8793D;
 }
 
 .span2 {
-    width: 200px;
-    float: left;
+    width: 20%;
+    float: right;
+    background-color:#E8793D;
+    border-radius:6px;
 }
+
 
 .row:before, 
     .row:after {
