@@ -102,7 +102,8 @@ namespace Server.Test
         [TestMethod]
         public void SendMessageTest()
         {
-            
+            Message msg = new Message("Hello Alex", "Oliver", "Alex", false);
+            DatabaseToObjects.SendMessage(msg);
         }
     }
 }
