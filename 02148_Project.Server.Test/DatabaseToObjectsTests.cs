@@ -105,5 +105,13 @@ namespace Server.Test
             Message msg = new Message("Hello Alex", "Oliver", "Alex", false);
             DatabaseToObjects.SendMessage(msg);
         }
+
+        [TestMethod]
+        public void RecieveMessageTest()
+        {
+            Message msg = DatabaseToObjects.ReadMessage("Alex");
+            Assert.AreEqual("Hello Alex", msg.Context);
+            Assert.AreEqual("Oliver", msg.SenderName);
+        }
     }
 }
