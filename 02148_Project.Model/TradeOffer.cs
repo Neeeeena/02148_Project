@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _02148_Project.Model
 {
-    class TradeOffer
+    public class TradeOffer
     {
         public int Id { get; set; }
 
@@ -23,12 +23,12 @@ namespace _02148_Project.Model
         /// <summary>
         /// Create a trade offer object with all the data
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="sellerName"></param>
-        /// <param name="recieverName"></param>
-        /// <param name="type"></param>
-        /// <param name="count"></param>
-        /// <param name="price"></param>
+        /// <param name="id">Id of the Trade offer in the database</param>
+        /// <param name="sellerName">Name of the seller</param>
+        /// <param name="recieverName">Name of the reciever</param>
+        /// <param name="type">Type of resource</param>
+        /// <param name="count">Number of resources to sell</param>
+        /// <param name="price">Price of the resources</param>
         public TradeOffer(int id, string sellerName, string recieverName, 
             ResourceType type, int count, int price)
         {

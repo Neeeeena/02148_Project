@@ -23,7 +23,7 @@ namespace _02148_Project.Server.Test
         [TestMethod]
         public void GetPlayersTest()
         {
-            SqlDataReader reader = DatabaseInterface.GetPlayers();
+            SqlDataReader reader = DatabaseInterface.ReadPlayers();
             
             if (reader.HasRows)
             {
@@ -42,7 +42,7 @@ namespace _02148_Project.Server.Test
         [TestMethod]
         public void PlaceMarketTest()
         {
-            DatabaseInterface.PlaceResources("Oliver", 5, 200, 150);
+            Console.WriteLine(DatabaseInterface.PlaceResources("Oliver", 5, 200, 150));
         }
 
         [TestMethod]
