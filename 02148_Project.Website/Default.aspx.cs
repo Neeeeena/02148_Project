@@ -12,7 +12,8 @@ namespace _02148_Project.Website
 
     public partial class _Default : Page
     {
-        List<ResourceOffer> resources;
+        public List<ResourceOffer> resources;
+        public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
             resources = new List<ResourceOffer>();
@@ -25,7 +26,7 @@ namespace _02148_Project.Website
             //Add 5 resources
             for (int i = 1; i <= 5; i++)
             {
-                //resources.Add(new ResourceOffer() { Id = i });
+                resources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
             }
             localResources.DataSource = resources;
             localResources.DataBind();
