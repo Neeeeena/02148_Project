@@ -91,6 +91,7 @@ input[type="select"] {
         width: 16.66%; 
         padding: 12px; 
         background-color:  #FFBE7F;
+        color:#302E2A; 
     }
 
     .col-1{ width: 8.33%; outline: 1px solid #302E2A;}
@@ -104,5 +105,5 @@ input[type="select"] {
      padding: 0;
      margin: 0;
      text-align: center; 
-     color: #FFBE7F; 
+     color:#302E2A; 
     }
