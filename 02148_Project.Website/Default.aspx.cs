@@ -12,7 +12,8 @@ namespace _02148_Project.Website
 
     public partial class _Default : Page
     {
-        List<ResourceOffer> resources;
+        public List<ResourceOffer> resources;
+        public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
             resources = new List<ResourceOffer>();
