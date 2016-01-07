@@ -12,3 +12,4 @@ C:\Users\olive\Source\Repos\02148_Project\02148_Project.Model\bin\Debug\02148_Pr
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Model\bin\Debug\02148_Project.Model.pdb
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Model\obj\Debug\02148_Project.Model.dll
 C:\Users\olive\Source\Repos\02148_Project\02148_Project.Model\obj\Debug\02148_Project.Model.pdb
+C:\Users\olive\Source\Repos\02148_Project\02148_Project.Model\obj\Debug\02148_Project.Model.csprojResolveAssemblyReference.cache
