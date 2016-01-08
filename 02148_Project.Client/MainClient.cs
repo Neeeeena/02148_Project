@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _02148_Project;
 using _02148_Project.Model;
+using System.Timers;
 
 namespace _02148_Project.Client
 {
@@ -12,20 +13,19 @@ namespace _02148_Project.Client
     {
 
         public List<ResourceOffer> allResourcesOnMarket;
-        public List<TradeOffer> allTradeOffers;
+        public List<TradeOffer> allYourRecievedTradeOffers;
+        public List<TradeOffer> allYourSentTradeOffers;
         public List<Message> collectedMessages = new List<Message>();
+        public List<Player> allOtherPlayers;
         
         public Player player;
 
-
+        public List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
+        
         public void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
-        }
-
-        public void SetupTimer()
-        {
-            //Setup timeren/timersne
+            //Code Behind prolly
         }
 
         // Market stuff:
@@ -46,6 +46,7 @@ namespace _02148_Project.Client
         }
 
         // SERVER SKAL HAVE EN GetResourceFromMarked og så en UpdatePlayerTable hvor den -guld og +resource på en spiller.
+        // Til når en ressource bliver købt
 
 
         // Own player gold and resource stuff
@@ -54,15 +55,32 @@ namespace _02148_Project.Client
             player = DatabaseInterface.ReadPlayer(player.Name);
         }
 
-        //Update players skal addes hvis man vil se de andre guld eller ressourcer
+        public void ReadOtherPlayersGold()
+        {
+            allOtherPlayers = DatabaseInterface.ReadAllPlayers();
+            removeYourself();
+        }
 
+        // Used by ReadOtherPlayersGold
+        private void removeYourself()
+        {
+            for (int i = 0; i < allOtherPlayers.Count; i++)
+            {
+                if (allOtherPlayers.ElementAt(i).Name == player.Name)
+                {
+                    allOtherPlayers.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+        
 
         // Trade offer stuff:
 
-        public void ReadAllTradeOffers()
+        // Hent trade-offers til dig
+        public void ReadAllTradeOffersForYou()
         {
-            // Read både dem til dig, og dem du har lagt op
-            allTradeOffers = DatabaseInterface.ReadAllTradeOffers(player.Name);
+            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(player.Name);
         }
 
         public void SendTradeOfferToPlayer(TradeOffer offer)
@@ -71,9 +89,29 @@ namespace _02148_Project.Client
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers går intet)
         
             //put det op
-            DatabaseInterface.PutTradeOffer(offer);
+            int id = DatabaseInterface.PutTradeOffer(offer);
             SubtractResource(offer.Type, offer.Count);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);                        
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
+
+            Timer timer = new Timer(10000);
+            timer.Elapsed += TakeBackTradeOffer;
+            timer.AutoReset = true;
+
+            Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
+
+            timersWithId.Add(meh);
+
+            timer.Start();
+
+            // Evt add til allYourSentTradeOffers                        
+        }
+
+        private void TakeBackTradeOffer(object sender, ElapsedEventArgs e)
+        {
+            // Ældste timer er altid på position 0
+            int id = timersWithId.ElementAt(0).Item2;
+            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
         }
 
         public void AcceptTradeOffer(int id)
