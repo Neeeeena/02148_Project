@@ -148,7 +148,7 @@ namespace Server.Test
         [TestCategory("Chat")]
         public void SendMessageTest()
         {
-            Message msg = new Message("Hello Alex", "Oliver", "Alex", false);
+            Message msg = new Message("Hello Alex", "Oliver", "Alex");
             DatabaseInterface.SendMessage(msg);
         }
 
@@ -157,7 +157,7 @@ namespace Server.Test
         public void RecieveMessageTest()
         {
             Message msg = DatabaseInterface.GetMessage("Alex");
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}", msg.Context, msg.SenderName, msg.RecieverName, msg.ToAll);
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}", msg.Context, msg.SenderName, msg.RecieverName);
         }
 
 

@@ -8,8 +8,11 @@ namespace _02148_Project.Model.Exceptions
 {
     public class MessageException : Exception
     {
-        public MessageException(string message) : base(message)
+        public Message message { get; set; }
+
+        public MessageException(string message, Message msg) : base(message)
         {
+            this.message = msg;
         }
     }
 }

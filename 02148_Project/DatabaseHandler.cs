@@ -248,14 +248,13 @@ namespace _02148_Project
         internal static void SendMessage(Message msg)
         {
             OpenConnection();
-            string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
-                + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+            string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
+                + "VALUES (@Message, @Sender, @Reciever);";
 
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@Message", msg.Context);
             command.Parameters.AddWithValue("@Sender", msg.SenderName);
             command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
-            command.Parameters.AddWithValue("@ToAll", msg.ToAll);
             command.ExecuteNonQuery();
         }
 
