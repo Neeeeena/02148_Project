@@ -48,7 +48,7 @@ namespace _02148_Project
         private static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
         {
             return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5));
+                (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
         }
 
         /// <summary>

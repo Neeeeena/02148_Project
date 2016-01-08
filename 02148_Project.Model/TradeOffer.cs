@@ -18,6 +18,8 @@ namespace _02148_Project.Model
 
         public int Count { get; set; }
 
+        public ResourceType PriceType { get; set; }
+
         public int Price { get; set; }
 
         /// <summary>
@@ -30,22 +32,25 @@ namespace _02148_Project.Model
         /// <param name="count">Number of resources to sell</param>
         /// <param name="price">Price of the resources</param>
         public TradeOffer(int id, string sellerName, string recieverName, 
-            ResourceType type, int count, int price)
+            ResourceType type, int count, ResourceType priceType, int price)
         {
             Id = id;
             SellerName = sellerName;
             RecieverName = recieverName;
             Type = type;
             Count = count;
+            PriceType = priceType;
             Price = price;
         }
 
-        public TradeOffer(string sellerName, string recieverName, ResourceType type, int count, int price)
+        public TradeOffer(string sellerName, string recieverName, ResourceType type, 
+            int count, ResourceType priceType, int price)
         {
             this.SellerName = sellerName;
             this.RecieverName = recieverName;
             this.Type = type;
             this.Count = count;
+            this.PriceType = priceType;
             this.Price = price;
         }
     }

@@ -165,7 +165,7 @@ namespace Server.Test
         [TestCategory("Trade Offer")]
         public void PutTradeOfferInDatabaseTest()
         {
-            TradeOffer offer = new TradeOffer("Oliver", "Alex", ResourceType.Stone, 15, 10);
+            TradeOffer offer = new TradeOffer("Oliver", "Alex", ResourceType.Stone, 15, ResourceType.Gold, 10);
             DatabaseInterface.PutTradeOffer(offer);
         }
 
