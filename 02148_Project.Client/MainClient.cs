@@ -20,7 +20,7 @@ namespace _02148_Project.Client
 
         public void GameSetup()
         {
-            //Setup all fields before game, like username, goldamount at start etc.
+            //Setup all fields before game, like username, goldamount at start, etc.
         }
 
         public void SetupTimer()
@@ -28,8 +28,6 @@ namespace _02148_Project.Client
             //Setup timeren/timersne
         }
 
-        //SKAL SÅDAN SET KALDES AF EN HANDLER, BARE LIGE FOR ORDEN I DESIGN OG HVORDAN DER SNAKKES SAMMEN
-        
         // Market stuff:
 
         public void UpdateResourcesOnMarket()
@@ -56,24 +54,43 @@ namespace _02148_Project.Client
             player = DatabaseInterface.ReadPlayer(player.Name);
         }
 
+        //Update players skal addes hvis man vil se de andre guld eller ressourcer
+
 
         // Trade offer stuff:
 
         public void ReadAllTradeOffers()
         {
+            // Read både dem til dig, og dem du har lagt op
             allTradeOffers = DatabaseInterface.ReadAllTradeOffers(player.Name);
         }
 
         public void SendTradeOfferToPlayer(TradeOffer offer)
         {
+            //Set en timer på trade-offeret
+            //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers går intet)
+        
+            //put det op
             DatabaseInterface.PutTradeOffer(offer);
+            SubtractResource(offer.Type, offer.Count);
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);                        
         }
 
         public void AcceptTradeOffer(int id)
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            Player sellerPlayer = DatabaseInterface.ReadPlayer(offer.SellerName);
-            //Update de 2 spillere
+            SubtractResource(offer.PriceType, offer.Price);
+            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
+        }
+
+        public void DeclineTradeOffer(int id)
+        {
+            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
+            SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
         }
 
 
@@ -93,7 +110,48 @@ namespace _02148_Project.Client
 
         public void SendNewMessageToAll(Message msg)
         {
-            //Send 1 besked til hver spiller, fx med x send message.
+            List<Player> players = new List<Player>();
+            players = DatabaseInterface.ReadAllPlayers();
+            foreach(Player p in players)
+            {
+                if (p.Name != player.Name)
+                {
+                    msg.RecieverName = p.Name;
+                    DatabaseInterface.SendMessage(msg);
+                }
+            }
+        }
+
+
+        private void SubtractResource(ResourceType type, int count)
+        {
+            switch (type)
+            {
+                case ResourceType.Clay:
+                    player.Clay -= count;
+                    break;
+                case ResourceType.Food:
+                    player.Food -= count;
+                    break;
+                case ResourceType.Gold:
+                    player.Gold -= count;
+                    break;
+                case ResourceType.Iron:
+                    player.Iron -= count;
+                    break;
+                case ResourceType.Stone:
+                    player.Stone -= count;
+                    break;
+                case ResourceType.Straw:
+                    player.Straw -= count;
+                    break;
+                case ResourceType.Wood:
+                    player.Wood -= count;
+                    break;
+                default:   //Default er wool
+                    player.Wool -= count;
+                    break;
+            }
         }
     }
 }
