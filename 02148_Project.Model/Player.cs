@@ -52,6 +52,7 @@ namespace _02148_Project.Model
             this.Name = name;
             this.Wood = wood;
             this.Clay = clay;
+            this.Wool = wool;
             this.Stone = stone;
             this.Iron = iron;
             this.Straw = straw;

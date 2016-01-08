@@ -21,16 +21,17 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("Player")]
         public void CreatePlayerTest()
         {
-            DatabaseInterface.PutPlayer("Nina");
+            DatabaseInterface.PutPlayer("Oliver");
         }
 
         [TestMethod]
-        [TestCategory("DB to Objects")]
+        [TestCategory("Player")]
         public void GetPlayersObjectsTest()
         {
-            List<Player> players = DatabaseInterface.ReadPlayers();
+            List<Player> players = DatabaseInterface.ReadAllPlayers();
             
             Console.WriteLine("Players in the database as objects");
             Console.WriteLine("Name");
@@ -41,15 +42,31 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("Player")]
+        public void ReadPlayerWithResourcesTest()
+        {
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
+
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", 
+                player.Name, player.Wood, player.Clay, player.Wool, player.Stone,
+                player.Iron, player.Straw, player.Food, player.Gold);
+
+            Assert.AreEqual("Oliver", player.Name);
+            Assert.AreEqual(100, player.Wood);
+        }
+
+        [TestMethod]
+        [TestCategory("ResourceOffer")]
         public void ReadResourceOfferTest()
         {
-            ResourceOffer offer = DatabaseInterface.ReadResourceOffer(9);
+            ResourceOffer offer = DatabaseInterface.ReadResourceOffer(2);
 
             Assert.AreEqual(ResourceType.Iron, offer.Type);
             Assert.AreEqual(60, offer.Price);
         }
         
         [TestMethod]
+        [TestCategory("ResourceOffer")]
         public void ReadResourceOffersFromMarketTest()
         {
             List<ResourceOffer> offers = DatabaseInterface.ReadAllResourceOffers();
@@ -62,6 +79,7 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("ResourceOffer")]
         public void GetResourceOfferFromMarketTest()
         {
             ResourceOffer offer = DatabaseInterface.GetResourceOffer(5);
@@ -74,6 +92,7 @@ namespace Server.Test
         }
         
         [TestMethod]
+        [TestCategory("ResourceOffer")]
         public void PutResourceOfferOnMarketTest()
         {
             ResourceOffer offer = new ResourceOffer("Oliver", ResourceType.Iron, 40, 60);
@@ -82,18 +101,20 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("ResourceOffer")]
         public void UpdateResourceOfferTest()
         {
+            int id = 4; // Used to select the resource in the database to test on
             // Get the current offer on the market
-            ResourceOffer beforeOffer = DatabaseInterface.ReadResourceOffer(9);
+            ResourceOffer beforeOffer = DatabaseInterface.ReadResourceOffer(id);
             Random random = new Random();
             int count = random.Next();
 
             // Create the new offer to update
-            ResourceOffer offer = new ResourceOffer(9, "Oliver", ResourceType.Iron, count, 60, "Alex", 45);
+            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, count, 60, "Alex", 45);
             DatabaseInterface.UpdateResourceOffer(offer);
 
-            ResourceOffer updatedOffer = DatabaseInterface.ReadResourceOffer(9);
+            ResourceOffer updatedOffer = DatabaseInterface.ReadResourceOffer(id);
             Assert.AreEqual(count, updatedOffer.Count);
             Assert.AreNotEqual(beforeOffer.Count, updatedOffer.Count);
             Assert.AreEqual(45, updatedOffer.HighestBid);
@@ -101,6 +122,7 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("Chat")]
         public void SendMessageTest()
         {
             Message msg = new Message("Hello Alex", "Oliver", "Alex", false);
@@ -108,6 +130,7 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("Chat")]
         public void RecieveMessageTest()
         {
             Message msg = DatabaseInterface.GetMessage("Alex");

@@ -29,10 +29,12 @@ namespace _02148_Project
         /// </summary>
         internal static void CloseConnection()
         {
-            connection.Close();
-            connection = null;
+            if (connection != null)
+            { 
+                connection.Close();
+                connection = null;
+            }
         }
-
 
         /// <summary>
         /// Create a player from the parsed name.
@@ -53,7 +55,7 @@ namespace _02148_Project
         /// Get all the players from the database
         /// </summary>
         /// <returns>Rows from the database with player data</returns>
-        internal static SqlDataReader ReadPlayers()
+        internal static SqlDataReader ReadAllPlayers()
         {
             OpenConnection();
             SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
@@ -79,10 +81,26 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Reads all the data about a player in the database and returns the 
+        /// SQL data reader object with the data
+        /// </summary>
+        /// <param name="name">Name of the player</param>
+        /// <returns>The data reader object with the returned data</returns>
+        internal static SqlDataReader ReadPlayerData(string name)
+        {
+            OpenConnection();
+            string query = "SELECT * FROM Players WHERE Name = @Name;";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@Name", name);
+            return command.ExecuteReader();
+        }
+
+        /// <summary>
         /// Read all the resource from the market
         /// </summary>
         /// <returns>A SQL reader object with the result data</returns>
-        internal static SqlDataReader ReadResourcesOnMarket()
+        internal static SqlDataReader ReadAllResourcesOnMarket()
         {
             OpenConnection();
             string query = "SELECT * "
@@ -90,6 +108,20 @@ namespace _02148_Project
                 + "LEFT JOIN Players On Market.SellerName = Players.Name;";
             SqlCommand command = new SqlCommand(query, connection);
 
+            return command.ExecuteReader();
+        }
+
+        /// <summary>
+        /// Read the data of a resource offer on the market
+        /// </summary>
+        /// <param name="id">Of the offer to read</param>
+        /// <returns>A SQL data reader object with the query result</returns>
+        internal static SqlDataReader ReadResourceOnMarket(int id)
+        {
+            OpenConnection();
+            string query = "SELECT * FROM Market WHERE Id = @Id;";
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Id", id);
             return command.ExecuteReader();
         }
 
@@ -117,22 +149,21 @@ namespace _02148_Project
         /// <param name="price">Requested price of the resources</param>
         /// <param name="highestBidder">The name of the currents bidder, who is going to win the offer</param>
         /// <param name="highestBid">The bid on the resources</param>
-        internal static void UpdateResourceOffer(int id, string sellerName, ResourceType type, 
-            int count, int price, string highestBidder, int highestBid)
+        internal static void UpdateResourceOffer(ResourceOffer offer)
         {
             OpenConnection();
             string query = "UPDATE Market "
                 + "SET SellerName = @SellerName, ResourceType = @Type, "
                 + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
-                + "WHERE Market.Id = " + id + ";";
+                + "WHERE Market.Id = " + offer.Id + ";";
 
             SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@SellerName", sellerName);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@Count", count);
-            command.Parameters.AddWithValue("@Price", price);
-            command.Parameters.AddWithValue("@Bidder", highestBidder ?? Convert.DBNull);
-            command.Parameters.AddWithValue("@Bid", highestBid);
+            command.Parameters.AddWithValue("@SellerName", offer.SellerName);
+            command.Parameters.AddWithValue("@Type", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
+            command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
+            command.Parameters.AddWithValue("@Bid", offer.HighestBid);
 
             command.ExecuteNonQuery();
         }
