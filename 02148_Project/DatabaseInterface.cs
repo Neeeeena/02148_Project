@@ -16,15 +16,15 @@ namespace _02148_Project
         private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
             reader.Read();
-            if (reader.IsDBNull(5))
+            if (reader.IsDBNull(6))
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                    reader.GetInt32(3), reader.GetInt32(4));
+                    reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5));
             }
             else
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                   reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
+                   reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5), reader.GetString(6), reader.GetInt32(7));
             }
         }
 
@@ -252,7 +252,6 @@ namespace _02148_Project
             try
             {
                 DatabaseHandler.SendMessage(msg);
-                DatabaseHandler.CloseConnection();
             }
             catch (SqlException ex)
             {
@@ -262,8 +261,12 @@ namespace _02148_Project
                 }
                 else
                 {
-                    throw ex;
+                    throw new MessageException("Uanble to send your message", msg);
                 }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -279,10 +282,14 @@ namespace _02148_Project
             if (reader.HasRows)
             {
                 reader.Read();
-                msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4));                
+                msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                reader.Dispose();
+                DatabaseHandler.CloseConnection();
             }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
+            else
+            {
+                throw new MessageException("No message where found", new Message(null, null, reciever));
+            }
             return msg;
         }
     }

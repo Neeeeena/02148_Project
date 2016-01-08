@@ -68,14 +68,15 @@ namespace _02148_Project
         internal static int PlaceResources(ResourceOffer offer)
         {
             OpenConnection();
-            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
+            string query = "INSERT INTO Market (SellerName, ResourceType, Count, PriceType, Price) "
                 + "OUTPUT INSERTED.Id "
-                + "VALUES (@Name, @Resource, @Count, @Price);";
+                + "VALUES (@Name, @Resource, @Count, @PriceType, @Price);";
    
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@Name", offer.SellerName);
             command.Parameters.AddWithValue("@Resource", offer.Type);
             command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@PriceType", offer.PriceType);
             command.Parameters.AddWithValue("@Price", offer.Price);
             return (int) command.ExecuteScalar();
         }
@@ -181,13 +182,14 @@ namespace _02148_Project
             OpenConnection();
             string query = "UPDATE Market "
                 + "SET SellerName = @SellerName, ResourceType = @Type, "
-                + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
+                + "Count = @Count, PriceType = @PriceType, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
                 + "WHERE Market.Id = " + offer.Id + ";";
 
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@SellerName", offer.SellerName);
             command.Parameters.AddWithValue("@Type", offer.Type);
             command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@PriceType", offer.PriceType);
             command.Parameters.AddWithValue("@Price", offer.Price);
             command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
             command.Parameters.AddWithValue("@Bid", offer.HighestBid);
@@ -229,7 +231,7 @@ namespace _02148_Project
         internal static void PlaceTradeOffer(TradeOffer offer)
         {
             OpenConnection();
-            string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, Price) "
+            string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, PriceType, Price) "
                 + "VALUES (@Seller, @Reciever, @Type, @Count, @Price);";
             SqlCommand command = new SqlCommand(query, connection);
 
@@ -248,14 +250,13 @@ namespace _02148_Project
         internal static void SendMessage(Message msg)
         {
             OpenConnection();
-            string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
-                + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+            string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
+                + "VALUES (@Message, @Sender, @Reciever);";
 
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@Message", msg.Context);
             command.Parameters.AddWithValue("@Sender", msg.SenderName);
             command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
-            command.Parameters.AddWithValue("@ToAll", msg.ToAll);
             command.ExecuteNonQuery();
         }
 

@@ -14,8 +14,6 @@ namespace _02148_Project.Model
 
         public string RecieverName { get; set; }
 
-        public bool ToAll { get; set; }
-
         /// <summary>
         /// Create a new message with all data objects
         /// </summary>
@@ -23,12 +21,11 @@ namespace _02148_Project.Model
         /// <param name="sender"></param>
         /// <param name="reciever"></param>
         /// <param name="toAll">Flag to state wheneter or not the message is to everyone</param>
-        public Message(string context, string sender, string reciever, bool toAll)
+        public Message(string context, string sender, string reciever)
         {
             this.Context = context;
             this.SenderName = sender;
             this.RecieverName = reciever;
-            this.ToAll = toAll;
         }
     }
 }
