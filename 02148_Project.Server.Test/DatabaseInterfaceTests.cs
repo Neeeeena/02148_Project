@@ -60,7 +60,7 @@ namespace Server.Test
                 player.Iron, player.Straw, player.Food, player.Gold);
 
             Assert.AreEqual("Oliver", player.Name);
-            Assert.AreEqual(100, player.Wood);
+            Assert.AreEqual(80, player.Wood);
         }
 
         [TestMethod]
@@ -111,11 +111,10 @@ namespace Server.Test
         public void ReadResourceOfferTest()
         {
             ResourceOffer offer = DatabaseInterface.ReadResourceOffer(2);
-
             Assert.AreEqual(ResourceType.Iron, offer.Type);
-            Assert.AreEqual(60, offer.Price);
+            Assert.AreEqual(50, offer.Price);
         }
-        
+
         [TestMethod]
         [TestCategory("ResourceOffer")]
         public void ReadResourceOffersFromMarketTest()
@@ -185,7 +184,7 @@ namespace Server.Test
         public void RecieveMessageTest()
         {
             Message msg = DatabaseInterface.GetMessage("Alex");
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}", msg.Context, msg.SenderName, msg.RecieverName);
+            Console.WriteLine("{0}\t{1}\t{2}", msg.Context, msg.SenderName, msg.RecieverName);
         }
 
 

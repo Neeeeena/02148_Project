@@ -52,25 +52,56 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Used for generel exception handling for sql exceptions from the handler 
+        /// </summary>
+        /// <param name="ex">Exception to handel</param>
+        private static void SqlExceptionHandling(SqlException ex)
+        {
+            if (ex.ErrorCode == 26)
+            {
+                throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+            }
+            else if (ex.Number == -2146232060)
+            {
+                throw new ConnectionException(ConnectionException.Error.LoginFailure);
+            }
+            else
+            {
+                throw new Exception("Unknown error occurred");
+            }
+        }
+
+
+        /// <summary>
         /// Read all the players from the database as objects 
         /// </summary>
         /// <returns>A list of Players</returns>
         public static List<Player> ReadAllPlayers()
         {
             List<Player> players = new List<Player>();
-            DatabaseHandler.OpenConnection();
-            SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
-
-            // Get all the players from the results
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                DatabaseHandler.OpenConnection();
+                SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
+
+                // Get all the players from the results
+                if (reader.HasRows)
                 {
-                    players.Add(GetPlayerFromReader(reader));
+                    while (reader.Read())
+                    {
+                        players.Add(GetPlayerFromReader(reader));
+                    }
                 }
+                reader.Dispose();
             }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
             return players;
         }
 
@@ -108,14 +139,7 @@ namespace _02148_Project
             } 
             catch (SqlException ex)
             {
-                if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException("Unable to locate database");
-                }
-                else
-                {
-                    throw new ConnectionException("The resources was not updated due to an server error");
-                }
+                SqlExceptionHandling(ex);
             }
             finally
             {
@@ -135,14 +159,7 @@ namespace _02148_Project
             }
             catch (SqlException ex)
             {
-                if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException("Unable to connect to the database", player);
-                } 
-                else
-                {
-                    throw new ConnectionException("Unable to update the player", player);
-                }
+                SqlExceptionHandling(ex);
             }
             finally
             {
@@ -166,13 +183,9 @@ namespace _02148_Project
                 {
                     throw new PlayerException("Username already taken", name);
                 }
-                else if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
-                }
                 else
                 {
-                    throw new Exception("Unknown error occurred");
+                    SqlExceptionHandling(ex);
                 }
             }
             finally
@@ -232,14 +245,7 @@ namespace _02148_Project
             }
             catch (SqlException ex)
             {
-                if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
-                }
-                else
-                { 
-                    throw new Exception("Unknown error occurred");
-                }
+                SqlExceptionHandling(ex);
             }
             finally
             {
@@ -310,10 +316,22 @@ namespace _02148_Project
         /// Put a trade offer on to the market
         /// </summary>
         /// <param name="offer"></param>
-        public static void PutTradeOffer(TradeOffer offer)
+        public static int PutTradeOffer(TradeOffer offer)
         {
-            DatabaseHandler.PlaceTradeOffer(offer);
-            DatabaseHandler.CloseConnection();
+            int id = -1;
+            try
+            {
+                id = DatabaseHandler.PlaceTradeOffer(offer);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return id;
         }
 
         /// <summary>
@@ -322,21 +340,14 @@ namespace _02148_Project
         /// <param name="offer">Offer to place on the market</param>
         public static int PutResourceOfferOnMarket(ResourceOffer offer)
         {
-            int id;
+            int id = 0;
             try
             {
                 id = DatabaseHandler.PlaceResources(offer);
             } 
             catch (SqlException ex)
             {
-                if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
-                } 
-                else
-                {
-                    throw new Exception("Unknown error occurred");
-                }
+                SqlExceptionHandling(ex);
             }
             finally
             {
@@ -357,14 +368,7 @@ namespace _02148_Project
             }
             catch (SqlException ex)
             {
-                if (ex.ErrorCode == 26)
-                {
-                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
-                }
-                else
-                {
-                    throw new MessageException("Uanble to send your message", msg);
-                }
+                SqlExceptionHandling(ex);
             }
             finally
             {

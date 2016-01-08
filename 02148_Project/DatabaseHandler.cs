@@ -20,10 +20,7 @@ namespace _02148_Project
         /// </summary>
         internal static void OpenConnection()
         {
-            if (connection == null)
-            {
-                connection = new SqlConnection(connectionString);
-            }
+            connection = new SqlConnection(connectionString);
             connection.Open();
         }
 
@@ -245,10 +242,11 @@ namespace _02148_Project
         /// Place a trade offer on the market
         /// </summary>
         /// <param name="offer">The offer to place on the market</param>
-        internal static void PlaceTradeOffer(TradeOffer offer)
+        internal static int PlaceTradeOffer(TradeOffer offer)
         {
             OpenConnection();
             string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, PriceType, Price) "
+                + "OUTPUT INSERTED.Id "
                 + "VALUES (@Seller, @Reciever, @Type, @Count, @PriceType, @Price);";
             SqlCommand command = new SqlCommand(query, connection);
 
@@ -258,7 +256,7 @@ namespace _02148_Project
             command.Parameters.AddWithValue("@Count", offer.Count);
             command.Parameters.AddWithValue("@PriceType", offer.PriceType);
             command.Parameters.AddWithValue("@Price", offer.Price);
-            command.ExecuteNonQuery();
+            return (int)command.ExecuteScalar();
         }
 
         /// <summary>
