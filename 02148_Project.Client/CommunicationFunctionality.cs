@@ -11,14 +11,14 @@ namespace _02148_Project.Client
     public static class CommunicationFunctionality
     {
         
-        public static List<ResourceOffer> updateAllResourceOffers()
+        public static List<ResourceOffer> UpdateAllResourceOffers()
         {
             return DatabaseInterface.ReadAllResourceOffers();
         }
 
-        public static List<TradeOffer> updateAlleTradeOffers()
+        public static List<TradeOffer> UpdateAlleTradeOffers(string reciever)
         {
-            
+            return DatabaseInterface.ReadAllTradeOffers(reciever);
         }
 
 
