@@ -13,7 +13,10 @@ namespace _02148_Project.Client
 
         public List<ResourceOffer> allResourcesOnMarket;
         public List<TradeOffer> allTradeOffers;
+        public List<Message> collectedMessages = new List<Message>();
+
         public Player player;
+
 
         public void GameSetup()
         {
@@ -26,14 +29,49 @@ namespace _02148_Project.Client
         }
 
         //SKAL SÅDAN SET KALDES AF EN HANDLER, BARE LIGE FOR ORDEN I DESIGN OG HVORDAN DER SNAKKES SAMMEN
-        public void GetAllResourcesOnMarket()
+        
+        // Market stuff:
+
+        public void UpdateResourcesOnMarket()
         {
-            allResourcesOnMarket = CommunicationFunctionality.UpdateAllResourceOffers();
+            allResourcesOnMarket = DatabaseInterface.ReadAllResourceOffers();
         }
+
+        public void BidOnResource(ResourceOffer offer)
+        {
+            DatabaseInterface.UpdateResourceOffer(offer);
+        }
+
+        public void PlaceResourceOfferOnMarket(ResourceOffer offer)
+        {
+            DatabaseInterface.PutResourceOfferOnMarket(offer);
+        }
+
+        // SERVER SKAL HAVE EN GetResourceFromMarked og så en UpdatePlayerTable hvor den -guld og +resource på en spiller.
+
+
+
+        // Trade offer stuff:
 
         public void GetAllTradeOffers()
         {
-            allTradeOffers = CommunicationFunctionality.UpdateAlleTradeOffers(player.Name);
+            allTradeOffers = DatabaseInterface.ReadAllTradeOffers(player.Name);
+        }
+
+
+
+        // Message stuff:
+
+        public void GetNewMessage()
+        {
+            Message msg = DatabaseInterface.GetMessage(player.Name);
+            if(msg != null) collectedMessages.Add(msg);            
+        }
+
+        // Exception skal kastes
+        public void SendNewMessage(Message msg)
+        {
+            DatabaseInterface.SendMessage(msg);
         }
     }
 }

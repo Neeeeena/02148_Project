@@ -8,6 +8,7 @@ using _02148_Project;
 
 namespace _02148_Project.Client
 {
+    // Kommer nok til at være ligemeget
     public static class CommunicationFunctionality
     {
         
@@ -19,6 +20,16 @@ namespace _02148_Project.Client
         public static List<TradeOffer> UpdateAlleTradeOffers(string reciever)
         {
             return DatabaseInterface.ReadAllTradeOffers(reciever);
+        }
+
+        public static Message GetNewMessage(string reciever)
+        {
+            return DatabaseInterface.GetMessage(reciever);        
+        }
+
+        public static void PlaceNewResourceOffer()
+        {
+
         }
 
 
