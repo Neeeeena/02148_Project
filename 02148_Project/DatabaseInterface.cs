@@ -1,11 +1,6 @@
-﻿using System;
+﻿using _02148_Project.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
-
-using _02148_Project.Model;
 
 namespace _02148_Project
 {
@@ -49,7 +44,8 @@ namespace _02148_Project
                     players.Add(new Player(reader.GetString(0)));
                 }
             }
-            reader.Close();
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
             return players;
         }
 
@@ -61,15 +57,17 @@ namespace _02148_Project
         public static Player ReadPlayer(string name)
         {
             SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
-
+            Player player = null;
             if (reader.HasRows)
             {
                 reader.Read();
-                return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
+                player = new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
                     reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
                     reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8));
             }
-            return null;
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return player;
         }
 
         /// <summary>
@@ -79,6 +77,7 @@ namespace _02148_Project
         public static void PutPlayer(string name)
         {
             DatabaseHandler.CreatePlayer(name);
+            DatabaseHandler.CloseConnection();
         }
 
         /// <summary>
@@ -89,11 +88,14 @@ namespace _02148_Project
         public static ResourceOffer ReadResourceOffer(int id)
         {
             SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
+            ResourceOffer offer = null;
             if (reader.HasRows)
             {
-                return GetResourceOfferFromReader(reader);
+                offer = GetResourceOfferFromReader(reader);
             }
-            return null;
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offer;
         }
 
         /// <summary>
@@ -113,7 +115,8 @@ namespace _02148_Project
                     offers.Add(GetResourceOfferFromReader(reader));
                 }
             }
-            reader.Close();
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
             return offers;
         }
 
@@ -125,6 +128,7 @@ namespace _02148_Project
         {
             DatabaseHandler.UpdateResourceOffer(offer.Id, offer.SellerName, offer.Type, offer.Count,
                 offer.Price, offer.HighestBidder, offer.HighestBid);
+            DatabaseHandler.CloseConnection();
         }
 
         /// <summary>
@@ -136,11 +140,12 @@ namespace _02148_Project
         {
             SqlDataReader reader = DatabaseHandler.GetResourceOnMarket(id);
             ResourceOffer offer = null;
-
             if (reader.HasRows)
             {
                 offer = GetResourceOfferFromReader(reader);
             }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
             return offer;
         }
 
@@ -162,7 +167,8 @@ namespace _02148_Project
                         (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5)));
                 }
             }
-            reader.Close();
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
             return offers;
         }
 
@@ -174,14 +180,16 @@ namespace _02148_Project
         public static TradeOffer GetTradeOffer(int id)
         {
             SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
-            
+            TradeOffer offer = null;
             if (reader.HasRows)
             {
                 reader.Read();
-                return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
+                offer = new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
                     (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5));
             }
-            return null;
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offer;
         }
 
         /// <summary>
@@ -191,6 +199,7 @@ namespace _02148_Project
         public static void PutTradeOffer(TradeOffer offer)
         {
             DatabaseHandler.PlaceTradeOffer(offer);
+            DatabaseHandler.CloseConnection();
         }
 
         /// <summary>
@@ -199,7 +208,9 @@ namespace _02148_Project
         /// <param name="offer">Offer to place on the market</param>
         public static int PutResourceOfferOnMarket(ResourceOffer offer)
         {
-            return DatabaseHandler.PlaceResources(offer.SellerName, (int) offer.Type, offer.Count, offer.Price);
+            int id = DatabaseHandler.PlaceResources(offer.SellerName, (int) offer.Type, offer.Count, offer.Price);
+            DatabaseHandler.CloseConnection();
+            return id;
         }
 
         /// <summary>
@@ -209,6 +220,7 @@ namespace _02148_Project
         public static void SendMessage(Message msg)
         {
             DatabaseHandler.SendMessage(msg);
+            DatabaseHandler.CloseConnection();
         }
 
         /// <summary>
@@ -225,7 +237,8 @@ namespace _02148_Project
                 reader.Read();
                 msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4));                
             }
-            reader.Close();
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
             return msg;
         }
     }

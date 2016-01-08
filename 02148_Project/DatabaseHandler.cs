@@ -29,10 +29,12 @@ namespace _02148_Project
         /// </summary>
         internal static void CloseConnection()
         {
-            connection.Close();
-            connection = null;
+            if (connection != null)
+            { 
+                connection.Close();
+                connection = null;
+            }
         }
-
 
         /// <summary>
         /// Create a player from the parsed name.
