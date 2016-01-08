@@ -9,15 +9,16 @@ using _02148_Project.Model;
 
 namespace _02148_Project
 {
-    public static class DatabaseHandler
+    internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=master;User ID=local;Password=1234";
         private static SqlConnection connection;
 
         /// <summary>
         /// Create a new SqlConnection with the given connection string and open it
         /// </summary>
-        public static void OpenConnection()
+        internal static void OpenConnection()
         {
             connection = new SqlConnection(connectionString);
             connection.Open();
@@ -26,7 +27,7 @@ namespace _02148_Project
         /// <summary>
         /// Close the connection to the database, and set the object to null
         /// </summary>
-        public static void CloseConnection()
+        internal static void CloseConnection()
         {
             connection.Close();
             connection = null;
@@ -38,7 +39,7 @@ namespace _02148_Project
         /// Throws a SQL exception, if the name allready exsits in the table
         /// </summary>
         /// <param name="name">Name of the player</param>
-        public static void CreatePlayer(string name)
+        internal static void CreatePlayer(string name)
         {
             OpenConnection();
             string query = "INSERT INTO Players (Name) VALUES (@Name);";
@@ -52,7 +53,7 @@ namespace _02148_Project
         /// Get all the players from the database
         /// </summary>
         /// <returns>Rows from the database with player data</returns>
-        public static SqlDataReader ReadPlayers()
+        internal static SqlDataReader ReadPlayers()
         {
             OpenConnection();
             SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
@@ -62,7 +63,7 @@ namespace _02148_Project
         /// <summary>
         /// Place a resource on the marketsplace
         /// </summary>
-        public static int PlaceResources(string sellerName, int resource, int count, int price)
+        internal static int PlaceResources(string sellerName, int resource, int count, int price)
         {
             OpenConnection();
             string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
@@ -81,7 +82,7 @@ namespace _02148_Project
         /// Read all the resource from the market
         /// </summary>
         /// <returns>A SQL reader object with the result data</returns>
-        public static SqlDataReader ReadResourcesOnMarket()
+        internal static SqlDataReader ReadResourcesOnMarket()
         {
             OpenConnection();
             string query = "SELECT * "
@@ -97,7 +98,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="id">Id of the resource offer to get</param>
         /// <returns>A SqlDataReader object with the data</returns>
-        public static SqlDataReader GetResourceOnMarket(int id)
+        internal static SqlDataReader GetResourceOnMarket(int id)
         {
             OpenConnection();
             string query = "DELETE FROM Market OUTPUT DELETED.* WHERE Id = " + id;
@@ -107,16 +108,16 @@ namespace _02148_Project
         }
 
         /// <summary>
-        /// 
+        /// Update a resource offer with new data. Used when placing a new bid on an offer
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="sellerName"></param>
-        /// <param name="type"></param>
-        /// <param name="count"></param>
-        /// <param name="price"></param>
-        /// <param name="highestBidder"></param>
-        /// <param name="highestBid"></param>
-        public static void UpdateResourceOffer(int id, string sellerName, ResourceType type, 
+        /// <param name="id">Of the offer</param>
+        /// <param name="sellerName">The name of the seller</param>
+        /// <param name="type">Type of resource on sale</param>
+        /// <param name="count">Number of items on sale</param>
+        /// <param name="price">Requested price of the resources</param>
+        /// <param name="highestBidder">The name of the currents bidder, who is going to win the offer</param>
+        /// <param name="highestBid">The bid on the resources</param>
+        internal static void UpdateResourceOffer(int id, string sellerName, ResourceType type, 
             int count, int price, string highestBidder, int highestBid)
         {
             OpenConnection();
@@ -137,10 +138,10 @@ namespace _02148_Project
         }
 
         /// <summary>
-        /// 
+        /// Get a trade offer from the database by deleting it and returning the data
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Id of the offer</param>
+        /// <returns>A SQL data reader object with the results from the query</returns>
         internal static SqlDataReader GetTradeOffer(int id)
         {
             OpenConnection();
@@ -149,6 +150,12 @@ namespace _02148_Project
             return command.ExecuteReader();
         }
 
+        /// <summary>
+        /// Reads all the tradeoffers from the database and returns the reader object from the 
+        /// sql query
+        /// </summary>
+        /// <param name="reciever">Name of the reciever</param>
+        /// <returns>The data reader object with results from the query</returns>
         internal static SqlDataReader ReadAllTradeOffers(string reciever)
         {
             OpenConnection();
@@ -176,7 +183,11 @@ namespace _02148_Project
             command.ExecuteNonQuery();
         }
 
-        public static void SendMessage(Message msg)
+        /// <summary>
+        /// Sends a message by placing the chat object in the database
+        /// </summary>
+        /// <param name="msg">Message to send</param>
+        internal static void SendMessage(Message msg)
         {
             OpenConnection();
             string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
@@ -190,7 +201,13 @@ namespace _02148_Project
             command.ExecuteNonQuery();
         }
 
-        public static SqlDataReader GetMessage(string reciever)
+        /// <summary>
+        /// Get a message from the database. This will delete the message from the database
+        /// and return the deleted data
+        /// </summary>
+        /// <param name="reciever">Name of the reciever for whom the message should be</param>
+        /// <returns>The data reader object from the sql query</returns>
+        internal static SqlDataReader GetMessage(string reciever)
         {
             OpenConnection();
             string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
