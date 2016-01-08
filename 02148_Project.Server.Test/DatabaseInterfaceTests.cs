@@ -56,6 +56,29 @@ namespace Server.Test
         }
 
         [TestMethod]
+        [TestCategory("Player")]
+        public void UpdatePlayerResourcesTest()
+        {
+            // Get the data before
+            Player playerBefore = DatabaseInterface.ReadPlayer("Alex");
+
+            // Create and update the new data
+            Random random = new Random();
+            Player update = new Player("Alex", random.Next(), random.Next(), random.Next(),
+                random.Next(), random.Next(), random.Next(), random.Next(), random.Next());
+            DatabaseInterface.UpdatePlayer(update);
+
+            // Output the results
+            Player player = DatabaseInterface.ReadPlayer("Alex");
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                player.Name, player.Wood, player.Clay, player.Wool, player.Stone,
+                player.Iron, player.Straw, player.Food, player.Gold);
+
+            Assert.AreNotEqual(playerBefore.Wood, player.Wood);
+            Assert.AreNotEqual(playerBefore.Gold, player.Gold);
+        }
+
+        [TestMethod]
         [TestCategory("ResourceOffer")]
         public void ReadResourceOfferTest()
         {

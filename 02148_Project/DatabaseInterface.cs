@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using _02148_Project.Model.Exceptions;
+using System;
 
 namespace _02148_Project
 {
@@ -28,6 +29,29 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Get a player object from the reader
+        /// </summary>
+        /// <param name="reader">Reader with the data</param>
+        /// <returns>The player in the reader object</returns>
+        private static Player GetPlayerFromReader(SqlDataReader reader)
+        {
+            return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
+                                reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
+                                reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8));
+        }
+
+        /// <summary>
+        /// Get a tradeoffer objet from the reader results
+        /// </summary>
+        /// <param name="reader">Reader with the data</param>
+        /// <returns>A trade offer object</returns>
+        private static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
+        {
+            return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
+                (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5));
+        }
+
+        /// <summary>
         /// Read all the players from the database as objects 
         /// </summary>
         /// <returns>A list of Players</returns>
@@ -42,7 +66,7 @@ namespace _02148_Project
             {
                 while (reader.Read())
                 {
-                    players.Add(new Player(reader.GetString(0)));
+                    players.Add(GetPlayerFromReader(reader));
                 }
             }
             reader.Dispose();
@@ -62,13 +86,21 @@ namespace _02148_Project
             if (reader.HasRows)
             {
                 reader.Read();
-                player = new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
-                    reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
-                    reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8));
+                player = GetPlayerFromReader(reader);
             }
             reader.Dispose();
             DatabaseHandler.CloseConnection();
             return player;
+        }
+
+        /// <summary>
+        /// Update a player and all his resources
+        /// </summary>
+        /// <param name="player">Player to update in the database</param>
+        public static void UpdatePlayer(Player player)
+        {
+            DatabaseHandler.UpdatePlayerData(player);
+            DatabaseHandler.CloseConnection();
         }
 
         /// <summary>
@@ -163,8 +195,7 @@ namespace _02148_Project
             {
                 while (reader.Read())
                 {
-                    offers.Add(new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                        (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5)));
+                    offers.Add(GetTradeOfferFromReader(reader));
                 }
             }
             reader.Dispose();
@@ -184,14 +215,13 @@ namespace _02148_Project
             if (reader.HasRows)
             {
                 reader.Read();
-                offer = new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                    (ResourceType)reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5));
+                offer = GetTradeOfferFromReader(reader);
             }
             reader.Dispose();
             DatabaseHandler.CloseConnection();
             return offer;
         }
-
+        
         /// <summary>
         /// Put a trade offer on to the market
         /// </summary>
@@ -208,7 +238,7 @@ namespace _02148_Project
         /// <param name="offer">Offer to place on the market</param>
         public static int PutResourceOfferOnMarket(ResourceOffer offer)
         {
-            int id = DatabaseHandler.PlaceResources(offer.SellerName, (int) offer.Type, offer.Count, offer.Price);
+            int id = DatabaseHandler.PlaceResources(offer);
             DatabaseHandler.CloseConnection();
             return id;
         }
