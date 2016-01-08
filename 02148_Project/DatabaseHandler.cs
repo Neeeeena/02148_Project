@@ -65,7 +65,7 @@ namespace _02148_Project
         /// <summary>
         /// Place a resource on the marketsplace
         /// </summary>
-        internal static int PlaceResources(string sellerName, int resource, int count, int price)
+        internal static int PlaceResources(ResourceOffer offer)
         {
             OpenConnection();
             string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
@@ -73,11 +73,38 @@ namespace _02148_Project
                 + "VALUES (@Name, @Resource, @Count, @Price);";
    
             SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", sellerName);
-            command.Parameters.AddWithValue("@Resource", resource);
-            command.Parameters.AddWithValue("@Count", count);
-            command.Parameters.AddWithValue("@Price", price);
+            command.Parameters.AddWithValue("@Name", offer.SellerName);
+            command.Parameters.AddWithValue("@Resource", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
             return (int) command.ExecuteScalar();
+        }
+
+        /// <summary>
+        /// Update the player data in the database
+        /// </summary>
+        /// <param name="player">Player to update</param>
+        internal static void UpdatePlayerData(Player player)
+        {
+            OpenConnection();
+            string query = "UPDATE Players "
+                + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+                + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+                + "Food = @Food, Gold = @Gold "
+                + "WHERE Name = @Name;";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@Wood", player.Wood);
+            command.Parameters.AddWithValue("@Clay", player.Clay);
+            command.Parameters.AddWithValue("@Wool", player.Wool);
+            command.Parameters.AddWithValue("@Stone", player.Stone);
+            command.Parameters.AddWithValue("@Iron", player.Iron);
+            command.Parameters.AddWithValue("@Straw", player.Straw);
+            command.Parameters.AddWithValue("@Food", player.Food);
+            command.Parameters.AddWithValue("@Gold", player.Gold);
+            command.Parameters.AddWithValue("@Name", player.Name);
+
+            command.ExecuteNonQueryAsync();
         }
 
         /// <summary>
