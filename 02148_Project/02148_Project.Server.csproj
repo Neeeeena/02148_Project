@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DatabaseHandler.cs" />
     <Compile Include="DatabaseInterface.cs" />
+    <Compile Include="MainServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
