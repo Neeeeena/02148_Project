@@ -31,7 +31,7 @@ namespace Server.Test
         public void GetPlayersObjectsTest()
         {
             List<Player> players = DatabaseInterface.ReadPlayers();
-
+            
             Console.WriteLine("Players in the database as objects");
             Console.WriteLine("Name");
             foreach (Player player in players)
