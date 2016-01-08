@@ -16,15 +16,15 @@ namespace _02148_Project
         private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
             reader.Read();
-            if (reader.IsDBNull(5))
+            if (reader.IsDBNull(6))
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                    reader.GetInt32(3), reader.GetInt32(4));
+                    reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5));
             }
             else
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                   reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
+                   reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5), reader.GetString(6), reader.GetInt32(7));
             }
         }
 
