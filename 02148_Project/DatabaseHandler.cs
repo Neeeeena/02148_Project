@@ -20,7 +20,10 @@ namespace _02148_Project
         /// </summary>
         internal static void OpenConnection()
         {
-            connection = new SqlConnection(connectionString);
+            if (connection == null)
+            {
+                connection = new SqlConnection(connectionString);
+            }
             connection.Open();
         }
 
@@ -32,7 +35,6 @@ namespace _02148_Project
             if (connection != null)
             { 
                 connection.Close();
-                connection = null;
             }
         }
 
@@ -105,6 +107,23 @@ namespace _02148_Project
             command.Parameters.AddWithValue("@Name", player.Name);
 
             command.ExecuteNonQueryAsync();
+        }
+
+        /// <summary>
+        /// Update a specific resource for a player
+        /// </summary>
+        /// <param name="name">Name of the player to update</param>
+        /// <param name="type">Type of the resource to update</param>
+        /// <param name="count">Amount of resources to add</param>
+        internal static void UpdatePlayerResource(string name, ResourceType type, int count)
+        {
+            OpenConnection();
+            string query = "UPDATE Players " 
+                + "SET " + type.ToString() + " = " + type.ToString() + " + " + count + " "
+                + "WHERE Name = @Name;";
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", name);
+            command.ExecuteNonQuery();
         }
 
         /// <summary>

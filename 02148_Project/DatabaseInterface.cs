@@ -74,6 +74,7 @@ namespace _02148_Project
             return players;
         }
 
+
         /// <summary>
         /// Read a players data from the database, and returns the player object
         /// </summary>
@@ -91,6 +92,35 @@ namespace _02148_Project
             reader.Dispose();
             DatabaseHandler.CloseConnection();
             return player;
+        }
+
+        /// <summary>
+        /// Update a specific resource type for a player
+        /// </summary>
+        /// <param name="name">Name of the player to update</param>
+        /// <param name="type">Type of resource to update</param>
+        /// <param name="count">Amount to add to the players resources</param>
+        public static void UpdatePlayerResource(string name, ResourceType type, int count)
+        {
+            try
+            {
+                DatabaseHandler.UpdatePlayerResource(name, type, count);
+            } 
+            catch (SqlException ex)
+            {
+                if (ex.ErrorCode == 26)
+                {
+                    throw new ConnectionException("Unable to locate database");
+                }
+                else
+                {
+                    throw new ConnectionException("The resources was not updated due to an server error");
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
@@ -126,8 +156,29 @@ namespace _02148_Project
         /// <param name="name">Name of the player</param>
         public static void PutPlayer(string name)
         {
-            DatabaseHandler.CreatePlayer(name);
-            DatabaseHandler.CloseConnection();
+            try
+            {
+                DatabaseHandler.CreatePlayer(name);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627)
+                {
+                    throw new PlayerException("Username already taken", name);
+                }
+                else if (ex.ErrorCode == 26)
+                {
+                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+                }
+                else
+                {
+                    throw new Exception("Unknown error occurred");
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
@@ -161,7 +212,6 @@ namespace _02148_Project
             {
                 while (reader.Read())
                 {
-                    // Check the highest bidder for null value
                     offers.Add(GetResourceOfferFromReader(reader));
                 }
             }
@@ -176,8 +226,25 @@ namespace _02148_Project
         /// <param name="offer">Offer to update</param>
         public static void UpdateResourceOffer(ResourceOffer offer)
         {
-            DatabaseHandler.UpdateResourceOffer(offer);
-            DatabaseHandler.CloseConnection();
+            try
+            {
+                DatabaseHandler.UpdateResourceOffer(offer);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.ErrorCode == 26)
+                {
+                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+                }
+                else
+                { 
+                    throw new Exception("Unknown error occurred");
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
@@ -255,8 +322,26 @@ namespace _02148_Project
         /// <param name="offer">Offer to place on the market</param>
         public static int PutResourceOfferOnMarket(ResourceOffer offer)
         {
-            int id = DatabaseHandler.PlaceResources(offer);
-            DatabaseHandler.CloseConnection();
+            int id;
+            try
+            {
+                id = DatabaseHandler.PlaceResources(offer);
+            } 
+            catch (SqlException ex)
+            {
+                if (ex.ErrorCode == 26)
+                {
+                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+                } 
+                else
+                {
+                    throw new Exception("Unknown error occurred");
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
             return id;
         }
 
@@ -272,9 +357,9 @@ namespace _02148_Project
             }
             catch (SqlException ex)
             {
-                if (ex.Message.Equals("System.Data.SqlClient.SqlException: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)"))
+                if (ex.ErrorCode == 26)
                 {
-                    throw new ConnectionException("Unable to locate database");
+                    throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
                 }
                 else
                 {

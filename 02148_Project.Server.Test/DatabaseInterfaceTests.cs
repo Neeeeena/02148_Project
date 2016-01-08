@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using _02148_Project;
 using _02148_Project.Model;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace Server.Test
 {
@@ -24,7 +25,14 @@ namespace Server.Test
         [TestCategory("Player")]
         public void CreatePlayerTest()
         {
-            DatabaseInterface.PutPlayer("Oliver");
+            try
+            {
+                DatabaseInterface.PutPlayer("Oliver");
+            } 
+            catch (Exception ex)
+            {
+                Assert.AreEqual("Username already taken", ex.Message);
+            }
         }
 
         [TestMethod]
@@ -76,6 +84,26 @@ namespace Server.Test
 
             Assert.AreNotEqual(playerBefore.Wood, player.Wood);
             Assert.AreNotEqual(playerBefore.Gold, player.Gold);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void UpdatePlayerWithOnlyOneResourceTest()
+        {
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
+            DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Gold, 10);
+            Player after = DatabaseInterface.ReadPlayer("Oliver");
+            Assert.AreEqual(player.Gold + 10, after.Gold);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void SubtractOneResourceTypeFromPlayerTest()
+        {
+            Player before = DatabaseInterface.ReadPlayer("Oliver");
+            DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Iron, -10);
+            Player after = DatabaseInterface.ReadPlayer("Oliver");
+            Assert.AreEqual(before.Iron - 10, after.Iron);
         }
 
         [TestMethod]
