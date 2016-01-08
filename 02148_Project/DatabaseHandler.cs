@@ -149,22 +149,21 @@ namespace _02148_Project
         /// <param name="price">Requested price of the resources</param>
         /// <param name="highestBidder">The name of the currents bidder, who is going to win the offer</param>
         /// <param name="highestBid">The bid on the resources</param>
-        internal static void UpdateResourceOffer(int id, string sellerName, ResourceType type, 
-            int count, int price, string highestBidder, int highestBid)
+        internal static void UpdateResourceOffer(ResourceOffer offer)
         {
             OpenConnection();
             string query = "UPDATE Market "
                 + "SET SellerName = @SellerName, ResourceType = @Type, "
                 + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
-                + "WHERE Market.Id = " + id + ";";
+                + "WHERE Market.Id = " + offer.Id + ";";
 
             SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@SellerName", sellerName);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@Count", count);
-            command.Parameters.AddWithValue("@Price", price);
-            command.Parameters.AddWithValue("@Bidder", highestBidder ?? Convert.DBNull);
-            command.Parameters.AddWithValue("@Bid", highestBid);
+            command.Parameters.AddWithValue("@SellerName", offer.SellerName);
+            command.Parameters.AddWithValue("@Type", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
+            command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
+            command.Parameters.AddWithValue("@Bid", offer.HighestBid);
 
             command.ExecuteNonQuery();
         }

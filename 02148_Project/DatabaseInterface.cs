@@ -1,6 +1,7 @@
 ﻿using _02148_Project.Model;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project
 {
@@ -126,8 +127,7 @@ namespace _02148_Project
         /// <param name="offer">Offer to update</param>
         public static void UpdateResourceOffer(ResourceOffer offer)
         {
-            DatabaseHandler.UpdateResourceOffer(offer.Id, offer.SellerName, offer.Type, offer.Count,
-                offer.Price, offer.HighestBidder, offer.HighestBid);
+            DatabaseHandler.UpdateResourceOffer(offer);
             DatabaseHandler.CloseConnection();
         }
 
@@ -219,8 +219,22 @@ namespace _02148_Project
         /// <param name="msg">Message to send</param>
         public static void SendMessage(Message msg)
         {
-            DatabaseHandler.SendMessage(msg);
-            DatabaseHandler.CloseConnection();
+            try
+            {
+                DatabaseHandler.SendMessage(msg);
+                DatabaseHandler.CloseConnection();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Equals("System.Data.SqlClient.SqlException: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)"))
+                {
+                    throw new ConnectionException("Unable to locate database");
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         /// <summary>
