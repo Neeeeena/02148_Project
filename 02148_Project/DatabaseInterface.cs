@@ -19,12 +19,12 @@ namespace _02148_Project
             if (reader.IsDBNull(6))
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                    reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5));
+                    reader.GetInt32(3), reader.GetInt32(4));
             }
             else
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                   reader.GetInt32(3), (ResourceType) reader.GetInt32(4), reader.GetInt32(5), reader.GetString(6), reader.GetInt32(7));
+                   reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
             }
         }
 
@@ -99,8 +99,25 @@ namespace _02148_Project
         /// <param name="player">Player to update in the database</param>
         public static void UpdatePlayer(Player player)
         {
-            DatabaseHandler.UpdatePlayerData(player);
-            DatabaseHandler.CloseConnection();
+            try
+            {
+                DatabaseHandler.UpdatePlayerData(player);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.ErrorCode == 26)
+                {
+                    throw new ConnectionException("Unable to connect to the database", player);
+                } 
+                else
+                {
+                    throw new ConnectionException("Unable to update the player", player);
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>

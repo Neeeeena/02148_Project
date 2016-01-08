@@ -3,7 +3,6 @@
     [SellerName]    VARCHAR (32) NOT NULL,
     [ResourceType]  INT          NOT NULL,
     [Count]         INT          NOT NULL,
-	[PriceType]		INT	NOT NULL, 
     [Price]         INT          NOT NULL,
     [HighestBidder] VARCHAR (32) NULL,
     [Bid]           INT          NULL,

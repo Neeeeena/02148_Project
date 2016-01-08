@@ -118,7 +118,7 @@ namespace Server.Test
         [TestCategory("ResourceOffer")]
         public void PutResourceOfferOnMarketTest()
         {
-            ResourceOffer offer = new ResourceOffer("Oliver", ResourceType.Iron, 40, ResourceType.Gold, 60);
+            ResourceOffer offer = new ResourceOffer("Oliver", ResourceType.Iron, 40, 60);
             offer.Id = DatabaseInterface.PutResourceOfferOnMarket(offer);
             PrintOffer(offer);
         }
@@ -134,7 +134,7 @@ namespace Server.Test
             int count = random.Next();
 
             // Create the new offer to update
-            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, count, ResourceType.Gold, 60, "Alex", 45);
+            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, count, 60, "Alex", 45);
             DatabaseInterface.UpdateResourceOffer(offer);
 
             ResourceOffer updatedOffer = DatabaseInterface.ReadResourceOffer(id);
