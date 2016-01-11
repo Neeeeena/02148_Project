@@ -20,12 +20,30 @@ namespace _02148_Project.Client
         
         public Player player;
 
+        public Timer updateTimer;
+
         public List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
         
         public void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
-            //Code Behind prolly
+            //Code Behind probably
+        }
+
+        public void setUpdateTimer()
+        {
+            updateTimer = new Timer(1000);
+            updateTimer.AutoReset = true;
+            updateTimer.Elapsed += GetUpdatesFromTupleSpace;
+        }
+
+        private void GetUpdatesFromTupleSpace(object sender, ElapsedEventArgs e)
+        {
+            UpdateResourcesOnMarket();
+            UpdateOwnGoldAndResources();
+            ReadOtherPlayersGold();
+            ReadAllTradeOffersForYou();
+            GetNewMessage();
         }
 
         // Market stuff:
@@ -86,7 +104,7 @@ namespace _02148_Project.Client
         public void SendTradeOfferToPlayer(TradeOffer offer)
         {
             //Set en timer på trade-offeret
-            //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers går intet)
+            //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
         
             //put det op
             int id = DatabaseInterface.PutTradeOffer(offer);
@@ -95,7 +113,7 @@ namespace _02148_Project.Client
 
             Timer timer = new Timer(10000);
             timer.Elapsed += TakeBackTradeOffer;
-            timer.AutoReset = true;
+            timer.AutoReset = false;
 
             Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
 
@@ -110,8 +128,12 @@ namespace _02148_Project.Client
         {
             // Ældste timer er altid på position 0
             int id = timersWithId.ElementAt(0).Item2;
+            //Try get
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+            //If gotten
+            if(offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+
+            timersWithId.RemoveAt(0);
         }
 
         public void AcceptTradeOffer(int id)
