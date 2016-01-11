@@ -15,7 +15,6 @@ namespace _02148_Project
         /// <returns>The Resource offer from the reader object</returns>
         private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
-            reader.Read();
             if (reader.IsDBNull(6))
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
@@ -24,7 +23,7 @@ namespace _02148_Project
             else
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
-                   reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
+                    reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
             }
         }
 
@@ -205,6 +204,7 @@ namespace _02148_Project
             ResourceOffer offer = null;
             if (reader.HasRows)
             {
+                reader.Read();
                 offer = GetResourceOfferFromReader(reader);
             }
             reader.Dispose();
@@ -264,6 +264,7 @@ namespace _02148_Project
             ResourceOffer offer = null;
             if (reader.HasRows)
             {
+                reader.Read();
                 offer = GetResourceOfferFromReader(reader);
             }
             reader.Dispose();
@@ -318,7 +319,7 @@ namespace _02148_Project
         /// <param name="offer"></param>
         public static int PutTradeOffer(TradeOffer offer)
         {
-            int id = -1;
+            int id = 0;
             try
             {
                 id = DatabaseHandler.PlaceTradeOffer(offer);

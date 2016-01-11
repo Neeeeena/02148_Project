@@ -33,7 +33,7 @@ namespace _02148_Project.Client.Test
             sender.allResourcesOnMarket = DatabaseInterface.ReadAllResourceOffers();
             ResourceOffer offer = sender.allResourcesOnMarket.Find(delegate (ResourceOffer o) { return true; });
             offer.HighestBidder = reciever.player.Name;
-            offer.HighestBid = 100;
+            offer.HighestBid = 200;
             sender.BidOnResource(offer);
         }
 
