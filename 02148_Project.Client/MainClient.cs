@@ -28,15 +28,22 @@ namespace _02148_Project.Client
         {
             //Setup all fields before game, like username, goldamount at start, etc.
             //Code Behind probably
+
         }
 
         public static void createPlayer(string name)
         {
             player = new Player(name);
             DatabaseInterface.PutPlayer(name);
+            //Kun for test
+            DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
         }
 
-
+        public static void deletePlayer(string name)
+        {
+            DatabaseInterface.DeletePlayer(name);
+        }
+   
 
         public static void setUpdateTimer()
         {
@@ -69,6 +76,7 @@ namespace _02148_Project.Client
         public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
         {
             DatabaseInterface.PutResourceOfferOnMarket(offer);
+            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
         }
 
         // SERVER SKAL HAVE EN GetResourceFromMarked og så en UpdatePlayerTable hvor den -guld og +resource på en spiller.
@@ -86,39 +94,39 @@ namespace _02148_Project.Client
             string idGenerator = "a";
             UpdateOwnGoldAndResources();
             List<LocalResource> result = new List<LocalResource>();
-            for(int i = 0; i <= player.Clay; i++)
+            for(int i = 0; i < player.Clay; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator,Type= "clay"});
+                result.Add(new LocalResource() { Id = idGenerator,Type=ResourceType.Clay});
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Food; i++)
+            for (int i = 0; i < player.Food; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "food" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Food });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Iron; i++)
+            for (int i = 0; i < player.Iron; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "iron" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Iron });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Stone; i++)
+            for (int i = 0; i < player.Stone; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "stone" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Stone });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Straw; i++)
+            for (int i = 0; i < player.Straw; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "straw" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Straw });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Wood; i++)
+            for (int i = 0; i < player.Wood; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "wood" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wood });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Wool; i++)
+            for (int i = 0; i < player.Wool; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = "wool" });
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wool });
                 idGenerator += "a";
             }
             return result;
