@@ -10,6 +10,8 @@ namespace _02148_Project
 {
     class MainServer
     {
+
+        //Initializing game
         public static void initGame(List<Player> players)
         {
             foreach(Player p in players)
@@ -29,25 +31,43 @@ namespace _02148_Project
         }
 
         
-
+        static int MAX_MARKET_ADVERTS = 8;
         private static void createAdvert(Object source, System.Timers.ElapsedEventArgs e)
         {
-
-            int offercount = DatabaseInterface.ReadAllResourceOffers().Count;
-            Random r = new Random();
-            if (r.Next(12) >= offercount)
-            {
-                int count = new Random().Next(3);
-                int price = new Random().Next(4, 8);
             
+            //offercount = amount of adverts the market is currently offering
+            int offercount = DatabaseInterface.ReadAllResourceOffers().FindAll(s => s.SellerName.Equals("Market")).Count;
+            Random r = new Random();
+
+            //TEMP
+            Console.WriteLine("MIGHT CREATE ADVERT");
+
+            //possibly creating new advert from marketplace
+            //chance is (100 - (offercount / MAX_MARKET_ADVERTS) * 100)%
+            //The fewer market adverts, the higher chance of creating advert)
+            if (r.Next(MAX_MARKET_ADVERTS) >= offercount)
+            {
+                //TEMP
+                Console.WriteLine("CREATING ADVERT!!!!");
+
+                //Setting random price and count
+                int count = new Random().Next(3);
+                int price = (new Random().Next(4, 8)) * (count);
+
+                //Creating array of the enum values
                 Array resTypes = Enum.GetValues(typeof(ResourceType));
+
+                //Picking a random resource from the array, except the last, which is gold
                 ResourceType res = (ResourceType)resTypes.GetValue(r.Next(resTypes.Length-1));
                 ResourceOffer ro = new ResourceOffer("Market", res, count, price);
                 DatabaseInterface.PutResourceOfferOnMarket(ro);
             }
 
 
+
         }
+
+        //Creating timer, that calls create advert every 10 seconds.
         public static void advertTimer()
         {
             System.Timers.Timer timer = new System.Timers.Timer();
