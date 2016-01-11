@@ -15,7 +15,6 @@ namespace _02148_Project.Website
     {
         public List<ResourceOffer> localresources;
         public List<ResourceOffer> marketresources;
-        public MainClient mc;
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -23,7 +22,6 @@ namespace _02148_Project.Website
             
             if (!Page.IsPostBack)
             {
-                mc = new MainClient();
                 localresources = new List<ResourceOffer>();
                 marketresources = new List<ResourceOffer>();
                 RenderMarket();
@@ -46,7 +44,7 @@ namespace _02148_Project.Website
             //{
             //    marketresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
             //}
-            marketresources = mc.UpdateResourcesOnMarket();
+            marketresources = MainClient.UpdateResourcesOnMarket();
             repMarketResources.DataSource = marketresources;
             repMarketResources.DataBind();
 
@@ -78,7 +76,7 @@ namespace _02148_Project.Website
             var soldElement = localresources.Find(se => se.Id == Int32.Parse(sid));
             soldElement.Price = Int32.Parse(inputPrice.Value);
             localresources.Remove(soldElement);
-            mc.PlaceResourceOfferOnMarket(soldElement);
+            MainClient.PlaceResourceOfferOnMarket(soldElement);
             marketresources.Add(soldElement);
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
