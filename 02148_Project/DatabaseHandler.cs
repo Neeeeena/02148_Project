@@ -12,17 +12,23 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        //private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234";
-        private static SqlConnection connection;
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        internal static SqlConnection connection;
 
         /// <summary>
         /// Create a new SqlConnection with the given connection string and open it
         /// </summary>
         internal static void OpenConnection()
         {
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            if (connection == null)
+            {
+                connection = new SqlConnection(connectionString);
+            }
+            if (connection.State != ConnectionState.Open)
+            {
+                connection.Open();
+            }
         }
 
         /// <summary>
@@ -121,6 +127,21 @@ namespace _02148_Project
 
             command.Parameters.AddWithValue("@Name", name);
             return command.ExecuteReader();
+        }
+
+        /// <summary>
+        /// Delete a player with a given name 
+        /// </summary>
+        /// <param name="name">User to delete</param>
+        internal static void DeletePlayer(string name)
+        {
+            OpenConnection();
+            string query = "DELETE FROM Players WHERE Name = @Name;";
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Name", name);
+                command.ExecuteNonQuery();
+            }
         }
         #endregion
 
@@ -305,21 +326,86 @@ namespace _02148_Project
         }
         #endregion
 
-        #region SQL_Notifications
-
-        private static void DependencyInitialization()
+        #region Notifications
+        /// <summary>
+        /// Start the sql dependency notifications
+        /// </summary>
+        internal static void DependencyInitialization()
         {
             SqlDependency.Start(connectionString);
         }
 
-        private static SqlCommand dependencyCommand;
-
-        public static void MonitorPlayers()
+        /// <summary>
+        /// Stop the sql dependency notifications
+        /// </summary>
+        internal static void DependencyTermination()
         {
-            string query = "SELECT * FROM Players";
-            
+            // Release the dependency.
+            SqlDependency.Stop(connectionString);
         }
 
+
+        /// <summary>
+        /// Setup method for monitoring changes in the player database
+        /// </summary>
+        internal static void MonitorPlayers()
+        {
+            OpenConnection();
+            using (SqlCommand command = new SqlCommand("SELECT Name, Wood, Clay, Wool, " +
+                "Stone, Iron, Straw, Food, Gold FROM dbo.Players",
+                DatabaseHandler.connection))
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Players);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Setup monitor/event lister for resource offer data
+        /// </summary>
+        internal static void MonitorResourceOffers()
+        {
+            OpenConnection();
+            using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, ResourceType, "
+                + "Count, Price, HighestBidder, Bid "
+                + "FROM dbo.Market",
+                connection))
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_ResourceOffers);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Setup listener for the trade offers table
+        /// </summary>
+        internal static void MonitorTradeOffers()
+        {
+            OpenConnection();
+            using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
+                + "ResourceType, Count, PriceType, Price FROM TradeOffers;",
+                connection))
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_TradeOffers);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static void MonitorChat()
+        {
+            OpenConnection();
+            using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
+                + "FROM dbo.Chat",
+                connection))
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Chat);
+                command.ExecuteNonQuery();
+            }
+        }
         #endregion
     }
 }

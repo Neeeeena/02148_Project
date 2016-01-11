@@ -45,7 +45,7 @@ namespace Server.Test
             Console.WriteLine("Name");
             foreach (Player player in players)
             {
-                Console.WriteLine("{0}", player.Name);
+                Console.WriteLine("{0}\t{1}\t{2}", player.Name, player.Wood, player.Gold);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Server.Test
                 player.Iron, player.Straw, player.Food, player.Gold);
 
             Assert.AreEqual("Oliver", player.Name);
-            Assert.AreEqual(80, player.Wood);
+            Assert.IsNotNull(player.Wood);
         }
 
         [TestMethod]
@@ -104,6 +104,16 @@ namespace Server.Test
             DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Iron, -10);
             Player after = DatabaseInterface.ReadPlayer("Oliver");
             Assert.AreEqual(before.Iron - 10, after.Iron);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void DeletePlayerTest()
+        {
+            DatabaseInterface.PutPlayer("Dummy");
+            Player player = DatabaseInterface.ReadPlayer("Dummy");
+            Assert.IsNotNull(player);
+            DatabaseInterface.DeletePlayer("Dummy");
         }
 
         [TestMethod]
@@ -216,6 +226,79 @@ namespace Server.Test
             TradeOffer offer = DatabaseInterface.GetTradeOffer(2);
             Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
                 offer.RecieverName, (ResourceType)offer.Type, offer.Count, offer.Price);
+        }
+
+        [TestMethod]
+        [TestCategory("Database notifications")]
+        public void DependencyOnPlayersTest()
+        {
+            DatabaseInterface.DependencyInitialization();
+            DatabaseInterface.SetupDatabaseListeners();
+            Console.WriteLine("Name\tWood");
+            int i = 1;
+            while (i < 6)
+            {
+                if (i == 2)
+                {
+                    DatabaseInterface.UpdatePlayerResource("Alex", ResourceType.Wood, 100);
+                }
+                if (i == 4)
+                {
+                    DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wood, 100);
+                }
+
+                Console.WriteLine(i);
+                foreach (Player player in DatabaseInterface.players)
+                {
+                    Console.WriteLine("{0}\t{1}", player.Name, player.Wood);
+                }
+                Console.WriteLine("Manual update");
+                foreach (Player player in DatabaseInterface.ReadAllPlayers())
+                {
+                    Console.WriteLine("{0}\t{1}", player.Name, player.Wood);
+                }
+                Console.WriteLine();
+
+                System.Threading.Thread.Sleep(1000);
+                i++;
+            }
+
+            DatabaseInterface.DependencyTermination();
+        }
+
+        [TestMethod]
+        [TestCategory("Database notifications")]
+        public void DependencyOnResourceOffersTest()
+        {
+            DatabaseInterface.DependencyInitialization();
+            DatabaseInterface.SetupDatabaseListeners();
+            ResourceOffer offer = new ResourceOffer(1, "Oliver", (ResourceType)1, 1, 1, "Alex", 2);
+
+            Console.WriteLine("Name\tBid");
+            int i = 1;
+            while (i < 6)
+            {
+                if (i == 2)
+                {
+                    DatabaseInterface.UpdateResourceOffer(offer);
+                }
+                Console.WriteLine(i + " - Event updated");
+                foreach (Player player in DatabaseInterface.players)
+                {
+                    Console.WriteLine("{0}\t{1}", offer.HighestBidder, offer.HighestBid);
+                }
+                Console.WriteLine("Manual update");
+                foreach (Player player in DatabaseInterface.ReadAllPlayers())
+                {
+                    Console.WriteLine("{0}\t{1}", offer.HighestBidder, offer.HighestBid);
+                }
+                Console.WriteLine();
+
+                System.Threading.Thread.Sleep(1000);
+                i++;
+            }
+
+            DatabaseInterface.DependencyTermination();
         }
     }
 }
