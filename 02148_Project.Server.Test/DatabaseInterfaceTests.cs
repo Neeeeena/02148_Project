@@ -68,11 +68,11 @@ namespace Server.Test
         public void UpdatePlayerResourcesTest()
         {
             // Get the data before
-            Player playerBefore = DatabaseInterface.ReadPlayer("Alex");
+            Player playerBefore = DatabaseInterface.ReadPlayer("Nina");
 
             // Create and update the new data
             Random random = new Random();
-            Player update = new Player("Alex", random.Next(), random.Next(), random.Next(),
+            Player update = new Player("Nina", random.Next(), random.Next(), random.Next(),
                 random.Next(), random.Next(), random.Next(), random.Next(), random.Next());
             DatabaseInterface.UpdatePlayer(update);
 
