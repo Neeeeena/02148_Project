@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using _02148_Project.Model;
+using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=master;User ID=local;Password=1234";
+        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234";
         private static SqlConnection connection;
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace _02148_Project
             }
         }
 
+        #region Player
         /// <summary>
         /// Create a player from the parsed name.
         /// Throws a SQL exception, if the name allready exsits in the table
@@ -59,24 +61,6 @@ namespace _02148_Project
             OpenConnection();
             SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
             return command.ExecuteReader();
-        }
-
-        /// <summary>
-        /// Place a resource on the marketsplace
-        /// </summary>
-        internal static int PlaceResources(ResourceOffer offer)
-        {
-            OpenConnection();
-            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
-                + "OUTPUT INSERTED.Id "
-                + "VALUES (@Name, @Resource, @Count, @Price);";
-   
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", offer.SellerName);
-            command.Parameters.AddWithValue("@Resource", offer.Type);
-            command.Parameters.AddWithValue("@Count", offer.Count);
-            command.Parameters.AddWithValue("@Price", offer.Price);
-            return (int) command.ExecuteScalar();
         }
 
         /// <summary>
@@ -138,6 +122,26 @@ namespace _02148_Project
             command.Parameters.AddWithValue("@Name", name);
             return command.ExecuteReader();
         }
+        #endregion
+
+        #region ResourceOffer
+        /// <summary>
+        /// Place a resource on the marketsplace
+        /// </summary>
+        internal static int PlaceResources(ResourceOffer offer)
+        {
+            OpenConnection();
+            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
+                + "OUTPUT INSERTED.Id "
+                + "VALUES (@Name, @Resource, @Count, @Price);";
+
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", offer.SellerName);
+            command.Parameters.AddWithValue("@Resource", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
+            return (int)command.ExecuteScalar();
+        }
 
         /// <summary>
         /// Read all the resource from the market
@@ -147,8 +151,7 @@ namespace _02148_Project
         {
             OpenConnection();
             string query = "SELECT * "
-                + "FROM Market "
-                + "LEFT JOIN Players On Market.SellerName = Players.Name;";
+                + "FROM Market ";
             SqlCommand command = new SqlCommand(query, connection);
 
             return command.ExecuteReader();
@@ -208,9 +211,15 @@ namespace _02148_Project
             command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
             command.Parameters.AddWithValue("@Bid", offer.HighestBid);
 
-            command.ExecuteNonQuery();
+            // If no rows where updated 
+            if (command.ExecuteNonQuery() == 0)
+            {
+                throw new ResourceOfferException("No rows where updated", offer);
+            }
         }
+        #endregion
 
+        #region TradeOffer
         /// <summary>
         /// Get a trade offer from the database by deleting it and returning the data
         /// </summary>
@@ -258,7 +267,9 @@ namespace _02148_Project
             command.Parameters.AddWithValue("@Price", offer.Price);
             return (int)command.ExecuteScalar();
         }
+        #endregion
 
+        #region Message
         /// <summary>
         /// Sends a message by placing the chat object in the database
         /// </summary>
@@ -292,5 +303,23 @@ namespace _02148_Project
             SqlCommand command = new SqlCommand(query, connection);
             return command.ExecuteReader();
         }
+        #endregion
+
+        #region SQL_Notifications
+
+        private static void DependencyInitialization()
+        {
+            SqlDependency.Start(connectionString);
+        }
+
+        private SqlCommand dependencyCommand;
+
+        public static void MonitorPlayers()
+        {
+            string query = "SELECT * FROM Players";
+            
+        }
+
+        #endregion
     }
 }

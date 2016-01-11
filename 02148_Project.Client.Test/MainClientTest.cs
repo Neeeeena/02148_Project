@@ -38,7 +38,7 @@ namespace _02148_Project.Client.Test
         }
 
         [TestMethod]
-        [TestCategory("Client")]
+        [TestCategory("Client - Trade Offer")]
         public void SendTradeOfferTest()
         {
             sender.SendTradeOfferToPlayer(new TradeOffer(sender.player.Name, reciever.player.Name, 
@@ -46,7 +46,7 @@ namespace _02148_Project.Client.Test
         }
 
         [TestMethod]
-        [TestCategory("Client")]
+        [TestCategory("Client - Trade Offer")]
         public void AcceptTradeOfferTest()
         {
             int ironAmount = 10;
@@ -66,5 +66,22 @@ namespace _02148_Project.Client.Test
             Assert.AreEqual(sender.player.Stone, afterSender.Stone);
             Assert.AreEqual(sender.player.Iron + ironAmount, afterSender.Iron);
         }
+
+        [TestMethod]
+        [TestCategory("Client - Trade Offer")]
+        public void DeclineTradeOffetTest()
+        {
+            int ironAmount = 10;
+            int stoneAmount = 50;
+            sender.SendTradeOfferToPlayer(new TradeOffer(sender.player.Name, reciever.player.Name,
+                ResourceType.Stone, stoneAmount, ResourceType.Iron, ironAmount));
+            sender.allTradeOffers = DatabaseInterface.ReadAllTradeOffers(reciever.player.Name);
+            TradeOffer offer = sender.allTradeOffers.Find(delegate (TradeOffer o) { return o.RecieverName == reciever.player.Name; });
+
+            // Get new resource values
+            Player afterReciever = DatabaseInterface.ReadPlayer(reciever.player.Name);
+            Player afterSender = DatabaseInterface.ReadPlayer(sender.player.Name);
+        }
+
     }
 }
