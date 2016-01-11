@@ -14,6 +14,7 @@ namespace _02148_Project.Model
         Stone, 
         Iron, 
         Straw, 
-        Food
+        Food,
+        Gold
     }
 }

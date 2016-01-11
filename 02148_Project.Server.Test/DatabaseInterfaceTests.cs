@@ -1,78 +1,221 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using _02148_Project;
+using _02148_Project.Model;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace _02148_Project.Server.Test
+namespace Server.Test
 {
     [TestClass]
     public class DatabaseInterfaceTests
     {
-        [ClassInitialize]
-        public static void Before(TestContext context)
+        /// <summary>
+        /// Method to output a offer to the test output
+        /// </summary>
+        /// <param name="offer">Offer to output</param>
+        private static void PrintOffer(ResourceOffer offer)
         {
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+                offer.Id, offer.SellerName, offer.Type, offer.Count,
+                offer.Price, offer.HighestBidder, offer.HighestBid);
         }
 
-        [ClassCleanup]
-        public static void Cleanup()
+        [TestMethod]
+        [TestCategory("Player")]
+        public void CreatePlayerTest()
         {
-            DatabaseInterface.CloseConnection();
-            Console.WriteLine("Connection clossed");
+            try
+            {
+                DatabaseInterface.PutPlayer("Oliver");
+            } 
+            catch (Exception ex)
+            {
+                Assert.AreEqual("Username already taken", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void GetPlayersObjectsTest()
+        {
+            List<Player> players = DatabaseInterface.ReadAllPlayers();
+            
+            Console.WriteLine("Players in the database as objects");
+            Console.WriteLine("Name");
+            foreach (Player player in players)
+            {
+                Console.WriteLine("{0}", player.Name);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void ReadPlayerWithResourcesTest()
+        {
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
+
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}", 
+                player.Name, player.Wood, player.Clay, player.Wool, player.Stone,
+                player.Iron, player.Straw, player.Food, player.Gold);
+
+            Assert.AreEqual("Oliver", player.Name);
+            Assert.AreEqual(80, player.Wood);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void UpdatePlayerResourcesTest()
+        {
+            // Get the data before
+            Player playerBefore = DatabaseInterface.ReadPlayer("Nina");
+
+            // Create and update the new data
+            Random random = new Random();
+            Player update = new Player("Nina", random.Next(), random.Next(), random.Next(),
+                random.Next(), random.Next(), random.Next(), random.Next(), random.Next());
+            DatabaseInterface.UpdatePlayer(update);
+
+            // Output the results
+            Player player = DatabaseInterface.ReadPlayer("Alex");
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                player.Name, player.Wood, player.Clay, player.Wool, player.Stone,
+                player.Iron, player.Straw, player.Food, player.Gold);
+
+            Assert.AreNotEqual(playerBefore.Wood, player.Wood);
+            Assert.AreNotEqual(playerBefore.Gold, player.Gold);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void UpdatePlayerWithOnlyOneResourceTest()
+        {
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
+            DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Gold, 10);
+            Player after = DatabaseInterface.ReadPlayer("Oliver");
+            Assert.AreEqual(player.Gold + 10, after.Gold);
+        }
+
+        [TestMethod]
+        [TestCategory("Player")]
+        public void SubtractOneResourceTypeFromPlayerTest()
+        {
+            Player before = DatabaseInterface.ReadPlayer("Oliver");
+            DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Iron, -10);
+            Player after = DatabaseInterface.ReadPlayer("Oliver");
+            Assert.AreEqual(before.Iron - 10, after.Iron);
+        }
+
+        [TestMethod]
+        [TestCategory("ResourceOffer")]
+        public void ReadResourceOfferTest()
+        {
+            ResourceOffer offer = DatabaseInterface.ReadResourceOffer(2);
+            Assert.AreEqual(ResourceType.Iron, offer.Type);
+            Assert.AreEqual(50, offer.Price);
+        }
+
+        [TestMethod]
+        [TestCategory("ResourceOffer")]
+        public void ReadResourceOffersFromMarketTest()
+        {
+            List<ResourceOffer> offers = DatabaseInterface.ReadAllResourceOffers();
+
+            Console.WriteLine("Id\tSeller\tType\tCount\tPrice\tBidder\tHigest Bid");
+            foreach (ResourceOffer offer in offers)
+            {
+                PrintOffer(offer);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("ResourceOffer")]
+        public void GetResourceOfferFromMarketTest()
+        {
+            ResourceOffer offer = DatabaseInterface.GetResourceOffer(5);
+
+            if (offer != null)
+            {
+                PrintOffer(offer);
+            }
+            Console.WriteLine("End of test");
         }
         
         [TestMethod]
-        public void GetPlayersTest()
+        [TestCategory("ResourceOffer")]
+        public void PutResourceOfferOnMarketTest()
         {
-            SqlDataReader reader = DatabaseInterface.ReadPlayers();
-            
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    Console.WriteLine("{0}", reader.GetString(0));
-                }
-            }
-            else
-            {
-                Console.WriteLine("No rows found.");
-            }
-            reader.Close();
+            ResourceOffer offer = new ResourceOffer("Oliver", ResourceType.Iron, 40, 60);
+            offer.Id = DatabaseInterface.PutResourceOfferOnMarket(offer);
+            PrintOffer(offer);
         }
 
         [TestMethod]
-        public void PlaceMarketTest()
+        [TestCategory("ResourceOffer")]
+        public void UpdateResourceOfferTest()
         {
-            Console.WriteLine(DatabaseInterface.PlaceResources("Oliver", 5, 200, 150));
+            int id = 4; // Used to select the resource in the database to test on
+            // Get the current offer on the market
+            ResourceOffer beforeOffer = DatabaseInterface.ReadResourceOffer(id);
+            Random random = new Random();
+            int count = random.Next();
+
+            // Create the new offer to update
+            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, count, 60, "Alex", 45);
+            DatabaseInterface.UpdateResourceOffer(offer);
+
+            ResourceOffer updatedOffer = DatabaseInterface.ReadResourceOffer(id);
+            Assert.AreEqual(count, updatedOffer.Count);
+            Assert.AreNotEqual(beforeOffer.Count, updatedOffer.Count);
+            Assert.AreEqual(45, updatedOffer.HighestBid);
+            Assert.AreEqual("Alex", updatedOffer.HighestBidder);
         }
 
         [TestMethod]
-        public void GetResourcesFromMarketTest()
+        [TestCategory("Chat")]
+        public void SendMessageTest()
         {
-            SqlDataReader reader = DatabaseInterface.ReadResourcesOnMarket();
+            Message msg = new Message("Hello Alex", "Oliver", "Alex");
+            DatabaseInterface.SendMessage(msg);
+        }
 
-            if (reader.HasRows)
+        [TestMethod]
+        [TestCategory("Chat")]
+        public void RecieveMessageTest()
+        {
+            Message msg = DatabaseInterface.GetMessage("Alex");
+            Console.WriteLine("{0}\t{1}\t{2}", msg.Context, msg.SenderName, msg.RecieverName);
+        }
+
+
+        [TestMethod]
+        [TestCategory("Trade Offer")]
+        public void PutTradeOfferInDatabaseTest()
+        {
+            TradeOffer offer = new TradeOffer("Oliver", "Alex", ResourceType.Stone, 15, ResourceType.Gold, 10);
+            DatabaseInterface.PutTradeOffer(offer);
+        }
+
+        [TestMethod]
+        [TestCategory("Trade Offer")]
+        public void ReadTradeOffersInDatabaseTest()
+        {
+            List<TradeOffer> offers = DatabaseInterface.ReadAllTradeOffers("Alex");
+            Console.WriteLine("Id\tSeller\tReciever\tType\tCount\tPrice");
+            foreach (TradeOffer offer in offers)
             {
-                while (reader.Read())
-                {
-                    if (reader.IsDBNull(5))
-                    {
-                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", reader.GetInt32(0),
-                            reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3),
-                            reader.GetInt32(4));
-                    } 
-                    else
-                    {
-                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}", reader.GetInt32(0),
-                            reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3),
-                            reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
-                    }
-                }
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
+                    offer.RecieverName, (ResourceType)offer.Type, offer.Count, offer.Price);
             }
-            else
-            {
-                Console.WriteLine("No rows found.");
-            }
-            reader.Close();
+        }
+
+        [TestMethod]
+        [TestCategory("Trade Offer")]
+        public void GetTradeOfferInDatabaseTest()
+        {
+            TradeOffer offer = DatabaseInterface.GetTradeOffer(2);
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
+                offer.RecieverName, (ResourceType)offer.Type, offer.Count, offer.Price);
         }
     }
 }

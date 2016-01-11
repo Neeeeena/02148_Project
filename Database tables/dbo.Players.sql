@@ -1,4 +1,13 @@
 ﻿CREATE TABLE [dbo].[Players] (
-    [Name] VARCHAR (32) NOT NULL PRIMARY KEY
+    [Name] VARCHAR (32) NOT NULL,
+    [Wood] INT NOT NULL DEFAULT 0, 
+    [Clay] INT NOT NULL DEFAULT 0, 
+    [Wool] INT NOT NULL DEFAULT 0, 
+    [Stone] INT NOT NULL DEFAULT 0, 
+    [Iron] INT NOT NULL DEFAULT 0, 
+    [Straw] INT NOT NULL DEFAULT 0, 
+    [Food] INT NOT NULL DEFAULT 0, 
+    [Gold] INT NOT NULL DEFAULT 0, 
+    PRIMARY KEY CLUSTERED ([Name] ASC)
 );
 

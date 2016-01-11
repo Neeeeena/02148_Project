@@ -1,165 +1,403 @@
-﻿using System;
+﻿using _02148_Project.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
-using System.Data;
-using _02148_Project.Model;
+using _02148_Project.Model.Exceptions;
+using System;
 
 namespace _02148_Project
 {
     public static class DatabaseInterface
     {
-        private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        private static SqlConnection connection;
-
         /// <summary>
-        /// Create a new SqlConnection with the given connection string and open it
+        /// Get a resource offer from a data reader object
         /// </summary>
-        public static void OpenConnection()
+        /// <param name="reader">SQL Data reader object with the relevant data</param>
+        /// <returns>The Resource offer from the reader object</returns>
+        private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            if (reader.IsDBNull(6))
+            {
+                return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
+                    reader.GetInt32(3), reader.GetInt32(4));
+            }
+            else
+            {
+                return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
+                    reader.GetInt32(3), reader.GetInt32(4), reader.GetString(5), reader.GetInt32(6));
+            }
         }
 
         /// <summary>
-        /// Close the connection to the database, and set the object to null
+        /// Get a player object from the reader
         /// </summary>
-        public static void CloseConnection()
+        /// <param name="reader">Reader with the data</param>
+        /// <returns>The player in the reader object</returns>
+        private static Player GetPlayerFromReader(SqlDataReader reader)
         {
-            connection.Close();
-            connection = null;
+            return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
+                                reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
+                                reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8));
+        }
+
+        /// <summary>
+        /// Get a tradeoffer objet from the reader results
+        /// </summary>
+        /// <param name="reader">Reader with the data</param>
+        /// <returns>A trade offer object</returns>
+        private static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
+        {
+            return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
+                (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
+        }
+
+        /// <summary>
+        /// Used for generel exception handling for sql exceptions from the handler 
+        /// </summary>
+        /// <param name="ex">Exception to handel</param>
+        private static void SqlExceptionHandling(SqlException ex)
+        {
+            if (ex.ErrorCode == 26)
+            {
+                throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+            }
+            else if (ex.Number == -2146232060)
+            {
+                throw new ConnectionException(ConnectionException.Error.LoginFailure);
+            }
+            else
+            {
+                throw new Exception("Unknown error occurred");
+            }
         }
 
 
         /// <summary>
-        /// Create a player from the parsed name.
-        /// Throws a SQL exception, if the name allready exsits in the table
+        /// Read all the players from the database as objects 
+        /// </summary>
+        /// <returns>A list of Players</returns>
+        public static List<Player> ReadAllPlayers()
+        {
+            List<Player> players = new List<Player>();
+            try
+            {
+                DatabaseHandler.OpenConnection();
+                SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
+
+                // Get all the players from the results
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        players.Add(GetPlayerFromReader(reader));
+                    }
+                }
+                reader.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return players;
+        }
+
+
+        /// <summary>
+        /// Read a players data from the database, and returns the player object
         /// </summary>
         /// <param name="name">Name of the player</param>
-        public static void CreatePlayer(string name)
+        /// <returns>A player object with all the relevant data</returns>
+        public static Player ReadPlayer(string name)
         {
-            OpenConnection();
-            string query = "INSERT INTO Players (Name) VALUES (@Name);";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", name);
-            command.ExecuteNonQuery();
+            SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
+            Player player = null;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                player = GetPlayerFromReader(reader);
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return player;
         }
 
         /// <summary>
-        /// Get all the players from the database
+        /// Update a specific resource type for a player
         /// </summary>
-        /// <returns>Rows from the database with player data</returns>
-        public static SqlDataReader ReadPlayers()
+        /// <param name="name">Name of the player to update</param>
+        /// <param name="type">Type of resource to update</param>
+        /// <param name="count">Amount to add to the players resources</param>
+        public static void UpdatePlayerResource(string name, ResourceType type, int count)
         {
-            OpenConnection();
-            SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
-            return command.ExecuteReader();
+            try
+            {
+                DatabaseHandler.UpdatePlayerResource(name, type, count);
+            } 
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
-        /// Place a resource on the marketsplace
+        /// Update a player and all his resources
         /// </summary>
-        public static int PlaceResources(string sellerName, int resource, int count, int price)
+        /// <param name="player">Player to update in the database</param>
+        public static void UpdatePlayer(Player player)
         {
-            OpenConnection();
-            string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
-                + "OUTPUT INSERTED.Id "
-                + "VALUES (@Name, @Resource, @Count, @Price);";
-   
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", sellerName);
-            command.Parameters.AddWithValue("@Resource", resource);
-            command.Parameters.AddWithValue("@Count", count);
-            command.Parameters.AddWithValue("@Price", price);
-            return (int) command.ExecuteScalar();
+            try
+            {
+                DatabaseHandler.UpdatePlayerData(player);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
-        /// Read all the resource from the market
+        /// Create a player with the given name
         /// </summary>
-        /// <returns>A SQL reader object with the result data</returns>
-        public static SqlDataReader ReadResourcesOnMarket()
+        /// <param name="name">Name of the player</param>
+        public static void PutPlayer(string name)
         {
-            OpenConnection();
-            string query = "SELECT * "
-                + "FROM Market "
-                + "LEFT JOIN Players On Market.SellerName = Players.Name;";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
+            try
+            {
+                DatabaseHandler.CreatePlayer(name);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627)
+                {
+                    throw new PlayerException("Username already taken", name);
+                }
+                else
+                {
+                    SqlExceptionHandling(ex); 
+                }
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
         /// <summary>
-        /// Get a resource from the market by reading it and then deleting it. 
+        /// Read a resource offer on the market, without removing it
         /// </summary>
-        /// <param name="id">Id of the resource offer to get</param>
-        /// <returns>A SqlDataReader object with the data</returns>
-        public static SqlDataReader ReadResourceOnMarket(int id)
+        /// <param name="id">Id of the resource offer to read</param>
+        /// <returns>The offer from the database</returns>
+        public static ResourceOffer ReadResourceOffer(int id)
         {
-            OpenConnection();
-            string query = "SELECT * FROM Market "
-                + " LEFT JOIN Players ON Market.SellerName = Players.Name "
-                + " WHERE Market.Id = " + id + ";";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
-        }
-
-        public static void UpdateResourceOffer(int id, string sellerName, ResourceType type, 
-            int count, int price, string highestBidder, int highestBid)
-        {
-            OpenConnection();
-            string query = "UPDATE Market "
-                + "SET SellerName = @SellerName, ResourceType = @Type, "
-                + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
-                + "WHERE Market.Id = " + id + ";";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@SellerName", sellerName);
-            command.Parameters.AddWithValue("@Type", type);
-            command.Parameters.AddWithValue("@Count", count);
-            command.Parameters.AddWithValue("@Price", price);
-            command.Parameters.AddWithValue("@Bidder", highestBidder ?? Convert.DBNull);
-            command.Parameters.AddWithValue("@Bid", highestBid);
-
-            command.ExecuteNonQuery();
+            SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
+            ResourceOffer offer = null;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                offer = GetResourceOfferFromReader(reader);
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offer;
         }
 
         /// <summary>
-        /// Delete a Resource from the market 
+        /// Read a list of resource offers from the market
         /// </summary>
-        /// <param name="id">Id of the market to remove</param>
-        public static void DeleteResourceFromMarket(int id)
+        /// <returns>A list of resources offers</returns>
+        public static List<ResourceOffer> ReadAllResourceOffers()
         {
-            OpenConnection();
-            string query = "DELETE FROM Market WHERE Id = " + id + ";";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.ExecuteNonQuery();
+            List<ResourceOffer> offers = new List<ResourceOffer>();
+            SqlDataReader reader = DatabaseHandler.ReadAllResourcesOnMarket();
+
+            if (reader.HasRows) // Check if the reader has any results. 
+            {
+                while (reader.Read())
+                {
+                    offers.Add(GetResourceOfferFromReader(reader));
+                }
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offers;
         }
 
+        /// <summary>
+        /// Update a resource offer on the market
+        /// </summary>
+        /// <param name="offer">Offer to update</param>
+        public static void UpdateResourceOffer(ResourceOffer offer)
+        {
+            try
+            {
+                DatabaseHandler.UpdateResourceOffer(offer);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+        }
+
+        /// <summary>
+        /// Get the resource offer from the market 
+        /// </summary>
+        /// <param name="id">Id of the resource offer to remove</param>
+        /// <returns>The resource offer from the database</returns>
+        public static ResourceOffer GetResourceOffer(int id)
+        {
+            SqlDataReader reader = DatabaseHandler.GetResourceOnMarket(id);
+            ResourceOffer offer = null;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                offer = GetResourceOfferFromReader(reader);
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offer;
+        }
+
+        /// <summary>
+        /// Get a list of all the tradeoffers in the database to a given user
+        /// </summary>
+        /// <param name="reciever">Name of the reciever to the tradeoffer</param>
+        /// <returns>A list of tradeoffers</returns>
+        public static List<TradeOffer> ReadAllTradeOffers(string reciever)
+        {
+            SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
+            List<TradeOffer> offers = new List<TradeOffer>();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    offers.Add(GetTradeOfferFromReader(reader));
+                }
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offers;
+        }
+
+        /// <summary>
+        /// Get a tradeoffer from the database. This will remove it
+        /// </summary>
+        /// <param name="id">Of the trade offer</param>
+        /// <returns>The requested tradeoffer</returns>
+        public static TradeOffer GetTradeOffer(int id)
+        {
+            SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
+            TradeOffer offer = null;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                offer = GetTradeOfferFromReader(reader);
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offer;
+        }
+        
+        /// <summary>
+        /// Put a trade offer on to the market
+        /// </summary>
+        /// <param name="offer"></param>
+        public static int PutTradeOffer(TradeOffer offer)
+        {
+            int id = 0;
+            try
+            {
+                id = DatabaseHandler.PlaceTradeOffer(offer);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return id;
+        }
+
+        /// <summary>
+        /// Put a resource offer on the market
+        /// </summary>
+        /// <param name="offer">Offer to place on the market</param>
+        public static int PutResourceOfferOnMarket(ResourceOffer offer)
+        {
+            int id = 0;
+            try
+            {
+                id = DatabaseHandler.PlaceResources(offer);
+            } 
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return id;
+        }
+
+        /// <summary>
+        /// Send a message to the server
+        /// </summary>
+        /// <param name="msg">Message to send</param>
         public static void SendMessage(Message msg)
         {
-            OpenConnection();
-            string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
-                + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Message", msg.Context);
-            command.Parameters.AddWithValue("@Sender", msg.SenderName);
-            command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
-            command.Parameters.AddWithValue("@ToAll", msg.ToAll);
-            command.ExecuteNonQuery();
+            try
+            {
+                DatabaseHandler.SendMessage(msg);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
         }
 
-        public static SqlDataReader GetMessage(String reciever)
+        /// <summary>
+        /// Get/reciev a message from the server to the specifed reciever
+        /// </summary>
+        /// <param name="reciever">Name of the reciever</param>
+        /// <returns>The latest message to the reciever</returns>
+        public static Message GetMessage(string reciever)
         {
-            OpenConnection();
-            SqlCommand command = new SqlCommand("SELECT * FROM Chat WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC", connection);
-            return command.ExecuteReader();
+            SqlDataReader reader = DatabaseHandler.GetMessage(reciever);
+            Message msg = null;
+            if (reader.HasRows)
+            {
+                reader.Read();
+                msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                reader.Dispose();
+                DatabaseHandler.CloseConnection();
+            }
+            else
+            {
+                throw new MessageException("No message where found", new Message(null, null, reciever));
+            }
+            return msg;
         }
-                
     }
 }

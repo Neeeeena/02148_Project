@@ -15,7 +15,7 @@ namespace _02148_Project.Model
         public ResourceType Type { get; set; }
 
         public int Count { get; set; }
-
+        
         public int Price { get; set; }
 
         public string HighestBidder { get; set; }

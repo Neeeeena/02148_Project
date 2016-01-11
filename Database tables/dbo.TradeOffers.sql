@@ -4,6 +4,7 @@
     [RecieverName] VARCHAR (32) NOT NULL,
     [ResourceType] INT          NOT NULL,
     [Count]        INT          NOT NULL,
+	[PriceType]	   INT          NOT NULL, 
     [Price]        INT          NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_TradeOffers_Players_1] FOREIGN KEY ([RecieverName]) REFERENCES [dbo].[Players] ([Name]),
