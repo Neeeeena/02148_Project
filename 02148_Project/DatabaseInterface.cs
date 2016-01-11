@@ -8,6 +8,7 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
+        #region ConvertMethods
         /// <summary>
         /// Get a resource offer from a data reader object
         /// </summary>
@@ -49,6 +50,7 @@ namespace _02148_Project
             return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
                 (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
         }
+        #endregion
 
         /// <summary>
         /// Used for generel exception handling for sql exceptions from the handler 
@@ -70,7 +72,7 @@ namespace _02148_Project
             }
         }
 
-
+        #region Player
         /// <summary>
         /// Read all the players from the database as objects 
         /// </summary>
@@ -194,6 +196,29 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Delete a player with the parsed username
+        /// </summary>
+        /// <param name="name">User to delete</param>
+        public static void DeletePlayer(string name)
+        {
+            try
+            {
+                DatabaseHandler.DeletePlayer(name);
+            } 
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+        }
+
+        #endregion
+
+        #region ResourceOffer
+        /// <summary>
         /// Read a resource offer on the market, without removing it
         /// </summary>
         /// <param name="id">Id of the resource offer to read</param>
@@ -273,6 +298,30 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Put a resource offer on the market
+        /// </summary>
+        /// <param name="offer">Offer to place on the market</param>
+        public static int PutResourceOfferOnMarket(ResourceOffer offer)
+        {
+            int id = 0;
+            try
+            {
+                id = DatabaseHandler.PlaceResources(offer);
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return id;
+        }
+        #endregion
+
+        #region TradeOffer
+        /// <summary>
         /// Get a list of all the tradeoffers in the database to a given user
         /// </summary>
         /// <param name="reciever">Name of the reciever to the tradeoffer</param>
@@ -334,29 +383,9 @@ namespace _02148_Project
             }
             return id;
         }
+        #endregion
 
-        /// <summary>
-        /// Put a resource offer on the market
-        /// </summary>
-        /// <param name="offer">Offer to place on the market</param>
-        public static int PutResourceOfferOnMarket(ResourceOffer offer)
-        {
-            int id = 0;
-            try
-            {
-                id = DatabaseHandler.PlaceResources(offer);
-            } 
-            catch (SqlException ex)
-            {
-                SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
-            return id;
-        }
-
+        #region Messages
         /// <summary>
         /// Send a message to the server
         /// </summary>
@@ -395,5 +424,83 @@ namespace _02148_Project
             }
             return msg;
         }
+        #endregion 
+
+        #region Notifications
+        public static void DependencyInitialization()
+        {
+            DatabaseHandler.DependencyInitialization();
+        }
+
+        public static void DependencyTermination()
+        {
+            DatabaseHandler.DependencyTermination();
+        }
+
+        /// <summary>
+        /// Setup all the listeners for the database tables
+        /// </summary>
+        public static void SetupDatabaseListeners()
+        {
+            DatabaseHandler.MonitorChat();
+            DatabaseHandler.MonitorPlayers();
+            DatabaseHandler.MonitorResourceOffers();
+            DatabaseHandler.MonitorTradeOffers();
+        }
+
+
+        #region OnChange_Methods
+
+        public static List<Player> players = new List<Player>();
+        public static List<ResourceOffer> resouceOffers = new List<ResourceOffer>();
+        public static List<TradeOffer> tradeOffers = new List<TradeOffer>();
+        public static Message message = null;
+
+        /// <summary>
+        /// On change methode for when the players table changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal static void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        {
+            SqlDependency dependency = sender as SqlDependency;
+            dependency.OnChange -= OnChange_Players;
+
+            // Need to update the correct field, not players in this class
+            players = ReadAllPlayers();
+            DatabaseHandler.MonitorPlayers();
+        }
+
+        /// <summary>
+        /// On change methode, for when the resource offers changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal static void OnChange_ResourceOffers(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_ResourceOffers;
+            resouceOffers = ReadAllResourceOffers();
+            DatabaseHandler.MonitorResourceOffers();
+        }
+
+        internal static void OnChange_TradeOffers(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_TradeOffers;
+            // Call methode to update all the relevant trade offers
+            //tradeOffers = ReadAllTradeOffers();
+            DatabaseHandler.MonitorTradeOffers();
+        }
+
+        internal static void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_Chat;
+            // Call methode to update the latest message 
+            //message = GetMessage();
+            DatabaseHandler.MonitorChat();
+        }
+
+        #endregion
+
+        #endregion
     }
 }
