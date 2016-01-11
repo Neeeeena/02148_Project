@@ -5,40 +5,21 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
-    if (ev.target.parentNode.nodeName == "DIV") {
-        ev.target.parentNode.removeChild(ev.target.parentNode.lastChild);
-    }
-    ev.dataTransfer.setData("text", ev.target.id);
-    ev.dataTransfer.setData("text/html", ev.target.dataset.price);
+    ev.dataTransfer.setData("text/id", ev.target.id);
+
 }
 
 function drop(ev) {
-    console.log("cid " + ev.target.id);
-    if (ev.target.nodeName == "DIV") {
-        ev.preventDefault();
 
-        var id = ev.dataTransfer.getData("text");
-        var price = ev.dataTransfer.getData("text/html");
-        console.log("text: " + id);
-        console.log("price: " + price);
-        var img = document.getElementById(id);
-        var newChild = document.createElement("div");
-        var para = document.createElement("p");
-        para.className = "pricetext";
-        para.textContent = "price: " + price;
-        newChild.appendChild(img);
-        newChild.appendChild(para);
-        ev.target.appendChild(newChild);
-        
-    } else {
-        ev.preventDefault();
-        var price = ev.dataTransfer.getData("text/html");
-        var para = document.createElement("p");
-        para.className = "pricetext";
-        para.textContent = "price: " + price;
-        ev.target.parentNode.appendChild(para);
+    ev.preventDefault();
 
-    }
+    var id = ev.dataTransfer.getData("text/id");
+    var img = document.getElementById(id);
+    ev.target.appendChild(img);
+    console.log("ID " + id);
+    var hid = document.getElementById("test");
+    hid.setAttribute("value", id);
+    console.log("HID " + hid.value);
 
 
     
