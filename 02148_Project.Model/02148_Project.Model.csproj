@@ -43,6 +43,7 @@
     <Compile Include="Exceptions\ConnectionException.cs" />
     <Compile Include="Exceptions\MessageException.cs" />
     <Compile Include="Exceptions\PlayerException.cs" />
+    <Compile Include="Exceptions\ResourceOfferException.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

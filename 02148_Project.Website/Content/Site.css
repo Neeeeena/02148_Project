@@ -7,8 +7,8 @@ body {
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -106,7 +106,7 @@ input[type="select"] {
         color:#302E2A; 
     }
 
-    .col-1{ width: 8.33%; outline: 1px solid #302E2A;}
+    .col-1{ width: 12.5%; outline: 1px solid #302E2A;}
 
 
 
@@ -122,4 +122,16 @@ input[type="select"] {
 
 .col-1 p{
     font-size:13px;
+}
+
+#sellBox {
+    color:goldenrod;
+    width:70px;
+    height:70px;
+    background-color:aliceblue;
+    text-align: center; 
+}
+
+input.hidden {
+    display:none;
 }
