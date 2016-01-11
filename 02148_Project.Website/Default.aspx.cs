@@ -13,7 +13,7 @@ namespace _02148_Project.Website
 
     public partial class _Default : Page
     {
-        public List<ResourceOffer> localresources;
+        public List<LocalResource> localresources;
         public List<ResourceOffer> marketresources;
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
@@ -22,7 +22,8 @@ namespace _02148_Project.Website
             
             if (!Page.IsPostBack)
             {
-                localresources = new List<ResourceOffer>();
+                MainClient.createPlayer("Martin");
+                localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
                 RenderMarket();
                 RenderLocalResources();
@@ -30,6 +31,8 @@ namespace _02148_Project.Website
             }
             else
             {
+                RenderMarket();
+                RenderLocalResources();
                 repMarketResources.DataSource = marketresources;
                 repMarketResources.DataBind();
                 repLocalResources.DataSource = localresources;
@@ -53,11 +56,11 @@ namespace _02148_Project.Website
         protected void RenderLocalResources()
         {
             //Add 5 resources
-            for (int i = 0; i <= 5; i++)
-            {
-                localresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
-            }
-
+            //for (int i = 0; i <= 5; i++)
+            //{
+            //    localresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
+            //}
+            localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
 
@@ -73,15 +76,15 @@ namespace _02148_Project.Website
         {
 
             var sid = hiddenValue.Value;
-            var soldElement = localresources.Find(se => se.Id == Int32.Parse(sid));
-            soldElement.Price = Int32.Parse(inputPrice.Value);
-            localresources.Remove(soldElement);
-            MainClient.PlaceResourceOfferOnMarket(soldElement);
-            marketresources.Add(soldElement);
-            repLocalResources.DataSource = localresources;
-            repLocalResources.DataBind();
-            repMarketResources.DataSource = marketresources;
-            repMarketResources.DataBind();
+            var soldElement = localresources.Find(se => se.Id == sid);
+            //soldElement.Price = Int32.Parse(inputPrice.Value);
+            //localresources.Remove(soldElement);
+            //MainClient.PlaceResourceOfferOnMarket(soldElement);
+            //marketresources.Add(soldElement);
+            //repLocalResources.DataSource = localresources;
+            //repLocalResources.DataBind();
+            //repMarketResources.DataSource = marketresources;
+            //repMarketResources.DataBind();
 
 
 

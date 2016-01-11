@@ -28,15 +28,21 @@ namespace _02148_Project.Client
         {
             //Setup all fields before game, like username, goldamount at start, etc.
             //Code Behind probably
+
         }
 
         public static void createPlayer(string name)
         {
             player = new Player(name);
             DatabaseInterface.PutPlayer(name);
+            //Kun for test
+            DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
         }
 
-
+        public static void deletePlayer(string name)
+        {
+            DatabaseInterface.
+        }
 
         public static void setUpdateTimer()
         {
@@ -86,37 +92,37 @@ namespace _02148_Project.Client
             string idGenerator = "a";
             UpdateOwnGoldAndResources();
             List<LocalResource> result = new List<LocalResource>();
-            for(int i = 0; i <= player.Clay; i++)
+            for(int i = 0; i < player.Clay; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator,Type= "clay"});
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Food; i++)
+            for (int i = 0; i < player.Food; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "food" });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Iron; i++)
+            for (int i = 0; i < player.Iron; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "iron" });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Stone; i++)
+            for (int i = 0; i < player.Stone; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "stone" });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Straw; i++)
+            for (int i = 0; i < player.Straw; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "straw" });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Wood; i++)
+            for (int i = 0; i < player.Wood; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "wood" });
                 idGenerator += "a";
             }
-            for (int i = 0; i <= player.Wool; i++)
+            for (int i = 0; i < player.Wool; i++)
             {
                 result.Add(new LocalResource() { Id = idGenerator, Type = "wool" });
                 idGenerator += "a";
