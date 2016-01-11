@@ -1,7 +1,8 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="_02148_Project.Website._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-<script type="text/javascript" src="Scripts/DragDrop.js"></script>
+
+<!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
     <div class="container-fluid">
   <div class="row-fluid">
@@ -23,47 +24,51 @@
 				    </tr>
 	  		    </table>
             </div>
-
         </div>
         <div class="span8">
     <div class="jumbotron" id="marked" >
-        <h3>Marked</h3>
-       <div class="grid-container outline">
-           
-        <div class="row">
-            <div class="col-1" id="cell1"  ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1"id="cell2" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell3" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell4" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell5" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell6" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell7" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="col-1" id="cell8" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell9" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell10" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell11" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell12" ondrop="drop(event)" ondragover="allowDrop(event)"></div>  
-        </div> 
-        <div class="row">
-            <div class="col-1" id="cell13" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell14" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell15" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell16" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell17" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell18" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell19" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-            <div class="col-1" id="cell20" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell21" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell22" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell23" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-            <div class="col-1" id="cell24" ondrop="drop(event)" ondragover="allowDrop(event)"></div> 
-        </div>  
-    </div>
+        <asp:Repeater ID="repMarketResources" runat="server" >
+          <HeaderTemplate>
+            <table>
+              <thead>
+                <tr>
+                    <th id="headlineMarket"><h3 >Market</h3></th>
+                </tr>
+              </thead>
+              <tbody>
+          </HeaderTemplate>
+          <ItemTemplate>
+            <tr class="floating">
+              <td>
+                  <div class="resource">
+                        <img id="<%#Eval("Id")%>" src="Images/firewood.png"  />
+                        <div style="clear: both" runat="server" Visible="<%# (Container.ItemIndex+1) % 6 == 0 %>"></div>     
+                 </div>
+              </td>
+            </tr>
+          </ItemTemplate>
+          <FooterTemplate>
+            </tbody>
+            </table>
+          </FooterTemplate>
+    </asp:Repeater>
+            <p>Sell resources here!</p>
+            <div id="sellBox"  ondrop="drop(event)" ondragover="allowDrop(event)">
+
+            </div>
+            <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
+            <div id="sellInput" runat="server">
+                How much do you want to sell it for? <br />
+                <INPUT runat="server" id="inputPrice" type="text">
+                <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+            </div>
+
         </div>
 
     <div class="jumbotron">
 
-        <asp:Repeater ID="localResources" runat="server" >
+        <asp:Repeater ID="repLocalResources" runat="server" >
           <HeaderTemplate>
             <table>
               <thead>
@@ -77,7 +82,7 @@
             <tr class="floating">
               <td>
                   <div class="resource" >
-                            <img id="<%#Eval("Id")%>"  data-price="<%#Eval("Price")%>" ondragstart="drag(event)" draggable="true" src="Images/firewood.png"  />
+                       <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="Images/firewood.png"  />
                  </div>
               </td>
             </tr>
@@ -92,7 +97,35 @@
 </div>
   </div>
 </div>
+<script type="text/javascript">
 
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text/id", ev.target.id);
+
+    }
+
+    function drop(ev) {
+
+        ev.preventDefault();
+
+        var id = ev.dataTransfer.getData("text/id");
+        var img = document.getElementById(id);
+        ev.target.appendChild(img);
+        console.log("ID " + id);
+        var hid = document.getElementById("MainContent_hiddenValue");
+        hid.setAttribute("value", id);
+        console.log("HID " + hid.value);
+
+
+
+    }
+
+</script>
 
 
 </asp:Content>
