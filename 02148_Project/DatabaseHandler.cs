@@ -312,7 +312,7 @@ namespace _02148_Project
             SqlDependency.Start(connectionString);
         }
 
-        private SqlCommand dependencyCommand;
+        private static SqlCommand dependencyCommand;
 
         public static void MonitorPlayers()
         {
