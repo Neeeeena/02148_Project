@@ -8,6 +8,28 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
+
+        //private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
+        //private static Player GetPlayerFromReader(SqlDataReader reader)
+        //private static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
+        //public static List<Player> ReadAllPlayers()
+        //public static Player ReadPlayer(string name)
+        //public static void UpdatePlayerResource(string name, ResourceType type, int count)
+        //public static void UpdatePlayer(Player player)
+        //public static void PutPlayer(string name)
+        //public static ResourceOffer ReadResourceOffer(int id)
+        //public static List<ResourceOffer> ReadAllResourceOffers()
+        //public static void UpdateResourceOffer(ResourceOffer offer)
+        //public static ResourceOffer GetResourceOffer(int id)
+        //public static List<TradeOffer> ReadAllTradeOffers(string reciever)
+        //public static TradeOffer GetTradeOffer(int id)
+        //public static int PutTradeOffer(TradeOffer offer)
+        //public static int PutResourceOfferOnMarket(ResourceOffer offer)
+        //public static void SendMessage(Message msg)
+        //public static Message GetMessage(string reciever)
+
+
+
         /// <summary>
         /// Get a resource offer from a data reader object
         /// </summary>

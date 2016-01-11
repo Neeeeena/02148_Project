@@ -8,8 +8,11 @@ using System.Timers;
 using _02148_Project.Model;
 namespace _02148_Project
 {
-    class MainServer
+    static class MainServer
     {
+        static int nextid = 0;
+
+
 
         //Initializing game
         public static void initGame(List<Player> players)
@@ -52,14 +55,15 @@ namespace _02148_Project
 
                 //Setting random price and count
                 int count = new Random().Next(3);
-                int price = (new Random().Next(4, 8)) * (count);
+                int price = (new Random().Next(4, 8)) * (count/2+1);
 
                 //Creating array of the enum values
                 Array resTypes = Enum.GetValues(typeof(ResourceType));
 
                 //Picking a random resource from the array, except the last, which is gold
                 ResourceType res = (ResourceType)resTypes.GetValue(r.Next(resTypes.Length-1));
-                ResourceOffer ro = new ResourceOffer("Market", res, count, price);
+                ResourceOffer ro = new ResourceOffer(nextid, "Market", res, count, price, null, price);
+                
                 DatabaseInterface.PutResourceOfferOnMarket(ro);
             }
 
@@ -67,15 +71,18 @@ namespace _02148_Project
 
         }
 
-        //Creating timer, that calls create advert every 10 seconds.
-        public static void advertTimer()
+        //Creating timer, that calls create advert every 5 seconds.
+        private static void advertTimer()
         {
             System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 10000;
+            timer.Interval = 5000;
             timer.AutoReset = true;
             timer.Elapsed += createAdvert;
             timer.Start();
         }
+
+
+        
 
     }
 }
