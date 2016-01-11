@@ -198,7 +198,7 @@ namespace _02148_Project
             string query = "UPDATE Market "
                 + "SET SellerName = @SellerName, ResourceType = @Type, "
                 + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
-                + "WHERE Market.Id = " + offer.Id + ";";
+                + "WHERE Market.Id = " + offer.Id + " AND Market.Bid < @Bid;";
 
             SqlCommand command = new SqlCommand(query, connection);
             command.Parameters.AddWithValue("@SellerName", offer.SellerName);

@@ -33,7 +33,7 @@ namespace _02148_Project.Client.Test
             sender.allResourcesOnMarket = DatabaseInterface.ReadAllResourceOffers();
             ResourceOffer offer = sender.allResourcesOnMarket.Find(delegate (ResourceOffer o) { return true; });
             offer.HighestBidder = reciever.player.Name;
-            offer.HighestBid = 100;
+            offer.HighestBid = 200;
             sender.BidOnResource(offer);
         }
 
@@ -49,14 +49,22 @@ namespace _02148_Project.Client.Test
         [TestCategory("Client")]
         public void AcceptTradeOfferTest()
         {
+            int ironAmount = 10;
+            int stoneAmount = 50;
             sender.SendTradeOfferToPlayer(new TradeOffer(sender.player.Name, reciever.player.Name,
-                ResourceType.Stone, 100, ResourceType.Iron, 50));
+                ResourceType.Stone, stoneAmount, ResourceType.Iron, ironAmount));
             sender.allTradeOffers = DatabaseInterface.ReadAllTradeOffers(reciever.player.Name);
             TradeOffer offer = sender.allTradeOffers.Find(delegate (TradeOffer o) { return o.RecieverName == reciever.player.Name; });
             reciever.AcceptTradeOffer(offer.Id);
-            Player after = DatabaseInterface.ReadPlayer(reciever.player.Name);
 
-            Assert.AreEqual(reciever.player.Stone + 100, after.Stone);
+            // Get new resource values
+            Player afterReciever = DatabaseInterface.ReadPlayer(reciever.player.Name);
+            Player afterSender = DatabaseInterface.ReadPlayer(sender.player.Name);
+
+            Assert.AreEqual(reciever.player.Stone + stoneAmount, afterReciever.Stone);
+            Assert.AreEqual(reciever.player.Iron, afterReciever.Iron);
+            Assert.AreEqual(sender.player.Stone, afterSender.Stone);
+            Assert.AreEqual(sender.player.Iron + ironAmount, afterSender.Iron);
         }
     }
 }
