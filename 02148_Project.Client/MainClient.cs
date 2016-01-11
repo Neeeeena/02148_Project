@@ -9,35 +9,43 @@ using System.Timers;
 
 namespace _02148_Project.Client
 {
-    public class MainClient
+    public static class MainClient
     {
 
-        public List<ResourceOffer> allResourcesOnMarket;
-        public List<TradeOffer> allYourRecievedTradeOffers;
-        public List<TradeOffer> allYourSentTradeOffers;
-        public List<Message> collectedMessages = new List<Message>();
-        public List<Player> allOtherPlayers;
+        //public List<ResourceOffer> allResourcesOnMarket;
+        //public List<TradeOffer> allYourRecievedTradeOffers;
+        public static List<TradeOffer> allYourSentTradeOffers;
+        //public List<Message> collectedMessages = new List<Message>();
+        public static List<Player> allOtherPlayers;
         
-        public Player player;
+        public static Player player;
 
-        public Timer updateTimer;
+        public static Timer updateTimer;
 
-        public List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
+        public static List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
         
-        public void GameSetup()
+        public static void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
             //Code Behind probably
         }
 
-        public void setUpdateTimer()
+        public static void createPlayer(string name)
+        {
+            player = new Player(name);
+            DatabaseInterface.PutPlayer(name);
+        }
+
+
+
+        public static void setUpdateTimer()
         {
             updateTimer = new Timer(1000);
             updateTimer.AutoReset = true;
             updateTimer.Elapsed += GetUpdatesFromTupleSpace;
         }
 
-        private void GetUpdatesFromTupleSpace(object sender, ElapsedEventArgs e)
+        private static void GetUpdatesFromTupleSpace(object sender, ElapsedEventArgs e)
         {
             UpdateResourcesOnMarket();
             UpdateOwnGoldAndResources();
@@ -48,17 +56,17 @@ namespace _02148_Project.Client
 
         // Market stuff:
 
-        public void UpdateResourcesOnMarket()
+        public static List<ResourceOffer> UpdateResourcesOnMarket()
         {
-            allResourcesOnMarket = DatabaseInterface.ReadAllResourceOffers();
+            return DatabaseInterface.ReadAllResourceOffers();
         }
 
-        public void BidOnResource(ResourceOffer offer)
+        public static void BidOnResource(ResourceOffer offer)
         {
             DatabaseInterface.UpdateResourceOffer(offer);
         }
 
-        public void PlaceResourceOfferOnMarket(ResourceOffer offer)
+        public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
         {
             DatabaseInterface.PutResourceOfferOnMarket(offer);
         }
@@ -68,19 +76,62 @@ namespace _02148_Project.Client
 
 
         // Own player gold and resource stuff
-        public void UpdateOwnGoldAndResources()
+        public static void UpdateOwnGoldAndResources()
         {
             player = DatabaseInterface.ReadPlayer(player.Name);
         }
 
-        public void ReadOtherPlayersGold()
+        public static List<LocalResource> GetLocalResources()
+        {
+            string idGenerator = "a";
+            UpdateOwnGoldAndResources();
+            List<LocalResource> result = new List<LocalResource>();
+            for(int i = 0; i <= player.Clay; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator,Type= "clay"});
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Food; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "food" });
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Iron; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "iron" });
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Stone; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "stone" });
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Straw; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "straw" });
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Wood; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "wood" });
+                idGenerator += "a";
+            }
+            for (int i = 0; i <= player.Wool; i++)
+            {
+                result.Add(new LocalResource() { Id = idGenerator, Type = "wool" });
+                idGenerator += "a";
+            }
+            return result;
+        }
+
+        public static void ReadOtherPlayersGold()
         {
             allOtherPlayers = DatabaseInterface.ReadAllPlayers();
             removeYourself();
         }
 
         // Used by ReadOtherPlayersGold
-        private void removeYourself()
+        private static void removeYourself()
         {
             for (int i = 0; i < allOtherPlayers.Count; i++)
             {
@@ -96,12 +147,12 @@ namespace _02148_Project.Client
         // Trade offer stuff:
 
         // Hent trade-offers til dig
-        public void ReadAllTradeOffersForYou()
+        public static List<TradeOffer> ReadAllTradeOffersForYou()
         {
-            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(player.Name);
+            return DatabaseInterface.ReadAllTradeOffers(player.Name);
         }
 
-        public void SendTradeOfferToPlayer(TradeOffer offer)
+        public static void SendTradeOfferToPlayer(TradeOffer offer)
         {
             //Set en timer på trade-offeret
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
@@ -124,7 +175,7 @@ namespace _02148_Project.Client
             // Evt add til allYourSentTradeOffers                        
         }
 
-        private void TakeBackTradeOffer(object sender, ElapsedEventArgs e)
+        private static void TakeBackTradeOffer(object sender, ElapsedEventArgs e)
         {
             // Ældste timer er altid på position 0
             int id = timersWithId.ElementAt(0).Item2;
@@ -136,7 +187,7 @@ namespace _02148_Project.Client
             timersWithId.RemoveAt(0);
         }
 
-        public void AcceptTradeOffer(int id)
+        public static void AcceptTradeOffer(int id)
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             SubtractResource(offer.PriceType, offer.Price);
@@ -146,7 +197,7 @@ namespace _02148_Project.Client
             SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
         }
 
-        public void DeclineTradeOffer(int id)
+        public static void DeclineTradeOffer(int id)
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
@@ -156,19 +207,19 @@ namespace _02148_Project.Client
 
         // Message stuff:
 
-        public void GetNewMessage()
+        public static Message GetNewMessage()
         {
-            Message msg = DatabaseInterface.GetMessage(player.Name);
-            if(msg != null) collectedMessages.Add(msg);          
+            return DatabaseInterface.GetMessage(player.Name);
+      
         }
 
         // Exception skal kastes
-        public void SendNewMessage(Message msg)
+        public static void SendNewMessage(Message msg)
         {
             DatabaseInterface.SendMessage(msg);
         }
 
-        public void SendNewMessageToAll(Message msg)
+        public static void SendNewMessageToAll(Message msg)
         {
             List<Player> players = new List<Player>();
             players = DatabaseInterface.ReadAllPlayers();
@@ -183,7 +234,7 @@ namespace _02148_Project.Client
         }
 
 
-        private void SubtractResource(ResourceType type, int count)
+        private static void SubtractResource(ResourceType type, int count)
         {
             switch (type)
             {

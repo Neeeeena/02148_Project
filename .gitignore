@@ -1,0 +1,18 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/02148_Project.Server.Test/obj/Debug/build.force
+/02148_Project.Server.Test/obj/Debug
+/02148_Project.Client.Test/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/02148_Project.Client.Test/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/02148_Project.Client.Test/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/02148_Project.Client.Test/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/02148_Project.Client.Test/obj/Debug
+/02148_Project.Client/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs
+/02148_Project.Client/obj/Debug/TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs
+/02148_Project.Client/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+/02148_Project.Client/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/02148_Project.Client/obj/Debug/build.force
+/02148_Project.Client/obj/Debug
+/02148_Project/obj/Debug/build.force

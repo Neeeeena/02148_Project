@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Advert.cs" />
     <Compile Include="DatabaseHandler.cs" />
     <Compile Include="DatabaseInterface.cs" />
     <Compile Include="MainServer.cs" />

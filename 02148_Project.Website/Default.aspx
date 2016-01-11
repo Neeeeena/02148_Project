@@ -59,7 +59,7 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text">
+                <INPUT runat="server" id="inputPrice" type="text" value="Hej Alexander!">
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>

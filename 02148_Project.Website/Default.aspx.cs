@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using _02148_Project.Model;
+using _02148_Project.Client;
 
 namespace _02148_Project.Website
 {
@@ -18,13 +19,14 @@ namespace _02148_Project.Website
         protected void Page_Load(object sender, EventArgs e)
         {
             
-            //if (!Page.IsPostBack)
-            if(localresources == null && marketresources == null)
+            
+            if (!Page.IsPostBack)
             {
                 localresources = new List<ResourceOffer>();
                 marketresources = new List<ResourceOffer>();
                 RenderMarket();
                 RenderLocalResources();
+
             }
             else
             {
@@ -33,27 +35,29 @@ namespace _02148_Project.Website
                 repLocalResources.DataSource = localresources;
                 repLocalResources.DataBind();
             }
-            
+
         }
 
-        protected void RenderLocalResources()
+        protected void RenderMarket()
         {
-            for (int i = 7; i <= 9; i++)
-            {
-                marketresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
-            }
+            //for (int i = 7; i <= 9; i++)
+            //{
+            //    marketresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
+            //}
+            marketresources = MainClient.UpdateResourcesOnMarket();
             repMarketResources.DataSource = marketresources;
             repMarketResources.DataBind();
 
         }
 
-        protected void RenderMarket()
+        protected void RenderLocalResources()
         {
             //Add 5 resources
             for (int i = 0; i <= 5; i++)
             {
                 localresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
             }
+
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
 
@@ -72,6 +76,7 @@ namespace _02148_Project.Website
             var soldElement = localresources.Find(se => se.Id == Int32.Parse(sid));
             soldElement.Price = Int32.Parse(inputPrice.Value);
             localresources.Remove(soldElement);
+            MainClient.PlaceResourceOfferOnMarket(soldElement);
             marketresources.Add(soldElement);
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
