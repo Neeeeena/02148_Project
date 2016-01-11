@@ -1,9 +1,0 @@
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.Client.dll
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.Client.pdb
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\obj\Debug\02148_Project.Client.dll
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\obj\Debug\02148_Project.Client.pdb
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.dll
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.Model.dll
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.Model.pdb
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\bin\Debug\02148_Project.pdb
-C:\Users\olive\Source\Repos\02148_Project\02148_Project.Client\obj\Debug\02148_Project.Client.csprojResolveAssemblyReference.cache

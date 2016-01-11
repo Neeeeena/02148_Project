@@ -66,7 +66,7 @@ namespace _02148_Project
             }
             else
             {
-                throw new Exception("Unknown error occurred");
+                throw ex;
             }
         }
 
@@ -392,10 +392,6 @@ namespace _02148_Project
                 msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
                 reader.Dispose();
                 DatabaseHandler.CloseConnection();
-            }
-            else
-            {
-                throw new MessageException("No message where found", new Message(null, null, reciever));
             }
             return msg;
         }
