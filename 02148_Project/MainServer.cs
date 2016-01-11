@@ -10,8 +10,8 @@ namespace _02148_Project
 {
     static class MainServer
     {
-        static int nextid = 0;
-
+        //static int nextid = 0;
+        static List<Advert> adverts = new List<Advert>();
 
 
         //Initializing game
@@ -54,17 +54,18 @@ namespace _02148_Project
                 Console.WriteLine("CREATING ADVERT!!!!");
 
                 //Setting random price and count
-                int count = new Random().Next(3);
-                int price = (new Random().Next(4, 8)) * (count/2+1);
+                int count = 1;//new Random().Next(3)+1;
+                int price = 0;//(new Random().Next(4, 8)) * (count/2+1);
 
                 //Creating array of the enum values
                 Array resTypes = Enum.GetValues(typeof(ResourceType));
 
                 //Picking a random resource from the array, except the last, which is gold
                 ResourceType res = (ResourceType)resTypes.GetValue(r.Next(resTypes.Length-1));
-                ResourceOffer ro = new ResourceOffer(nextid, "Market", res, count, price, null, price);
-                
-                DatabaseInterface.PutResourceOfferOnMarket(ro);
+                ResourceOffer ro = new ResourceOffer(0, "Market", res, count, price);
+                int id = DatabaseInterface.PutResourceOfferOnMarket(ro);
+                adverts.Add(new Advert(id));
+
             }
 
 

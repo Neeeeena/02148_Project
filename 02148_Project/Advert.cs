@@ -14,7 +14,7 @@ namespace _02148_Project
 
 
         int id;
-        int stopwatchThreshold = 50;
+        int stopwatchThreshold = 50000;
 
         //The timer is used for calling the event "closeAdvert(..)"
         System.Timers.Timer timer;
