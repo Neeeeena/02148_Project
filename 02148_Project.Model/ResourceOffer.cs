@@ -17,6 +17,8 @@ namespace _02148_Project.Model
         public int Count { get; set; }
         
         public int Price { get; set; }
+        //Just for GUI purposes
+        public string ImageSrc { get; set; }
 
         public string HighestBidder { get; set; }
 
@@ -26,7 +28,10 @@ namespace _02148_Project.Model
             : this(0, name, type, count, price) { }
 
         public ResourceOffer(int id, string sellerName, ResourceType type, int count, int price) 
-            : this(id, sellerName, type, count, price, null, 0) { }
+            : this(id, sellerName, type, count, price, null, 0)
+        {
+            ImageSrc = Type.GetImageSrc();
+        }
 
         /// <summary>
         /// Create a new resource offer object
@@ -48,6 +53,7 @@ namespace _02148_Project.Model
             Price = price;
             HighestBidder = highestBidder;
             HighestBid = highestBid;
+            ImageSrc = Type.GetImageSrc();
         }
     }
 }

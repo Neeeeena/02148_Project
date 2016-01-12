@@ -7,10 +7,12 @@ using _02148_Project;
 using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
 using System.Timers;
+using _02148_Project.Model.Exceptions;
+using System.Data.SqlClient;
 
 namespace _02148_Project.Client
 {
-    public static class MainClient
+    public class MainClient
     {
 
         //public List<ResourceOffer> allResourcesOnMarket;
@@ -18,34 +20,42 @@ namespace _02148_Project.Client
         public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
         public static List<Player> allOtherPlayers;
-
+        
         public static Player player;
 
         public static Timer updateTimer;
 
         public static List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
-
+        
         public static void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
             //Code Behind probably
-
         }
 
-        public static void createPlayer(string name)
+        public static string createPlayer(string name)
         {
             player = new Player(name);
+            try
+            {
             DatabaseInterface.PutPlayer(name);
-            //Kun for test
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;                
+            }
+            //////////////// Kun for test
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
+            DatabaseInterface.UpdatePlayerResource(name, ResourceType.Clay, 1);
+            ////////////////
+            return "";
         }
 
         public static void deletePlayer(string name)
         {
             DatabaseInterface.DeletePlayer(name);
         }
-
-
+   
         public static void setUpdateTimer()
         {
             updateTimer = new Timer(1000);
@@ -57,7 +67,7 @@ namespace _02148_Project.Client
         {
             UpdateResourcesOnMarket();
             UpdateOwnGoldAndResources();
-            ReadOtherPlayersGold();
+            ReadOtherPlayers();
             ReadAllTradeOffersForYou();
             GetNewMessage();
         }
@@ -75,7 +85,7 @@ namespace _02148_Project.Client
             ResourceOffer prevOffer = DatabaseInterface.ReadResourceOffer(offer.Id);
             try
             {
-                DatabaseInterface.UpdateResourceOffer(offer);
+            DatabaseInterface.UpdateResourceOffer(offer);
             }
             catch (ConnectionException e) {
 
@@ -112,6 +122,11 @@ namespace _02148_Project.Client
         {
             player = DatabaseInterface.ReadPlayer(player.Name);
         }
+        //Kun for test!
+        public static void ReadAPlayer()
+        {
+            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Paul");
+        }
 
         public static List<LocalResource> GetLocalResources()
         {
@@ -120,43 +135,43 @@ namespace _02148_Project.Client
             List<LocalResource> result = new List<LocalResource>();
             for (int i = 0; i < player.Clay; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Clay });
+                result.Add(new LocalResource(ResourceType.Clay) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Food; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Food });
+                result.Add(new LocalResource(ResourceType.Food) { Id = idGenerator });
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Iron; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Iron });
+                result.Add(new LocalResource(ResourceType.Iron) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Stone; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Stone });
+                result.Add(new LocalResource(ResourceType.Stone) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Straw; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Straw });
+                result.Add(new LocalResource(ResourceType.Straw) { Id = idGenerator });
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Wood; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wood });
+                result.Add(new LocalResource(ResourceType.Wood) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Wool; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wool });
+                result.Add(new LocalResource(ResourceType.Wool) { Id = idGenerator});
                 idGenerator += "a";
             }
             return result;
         }
 
-        public static void ReadOtherPlayersGold()
+        public static void ReadOtherPlayers()
         {
             allOtherPlayers = DatabaseInterface.ReadAllPlayers();
             removeYourself();
@@ -174,7 +189,7 @@ namespace _02148_Project.Client
                 }
             }
         }
-
+        
 
         // Trade offer stuff:
 
@@ -188,7 +203,7 @@ namespace _02148_Project.Client
         {
             //Set en timer på trade-offeret
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
-
+        
             //put det op
             int id = DatabaseInterface.PutTradeOffer(offer);
             SubtractResource(offer.Type, offer.Count);
@@ -226,13 +241,13 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
-            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));
+            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
         }
 
         public static void DeclineTradeOffer(int id)
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count);
+            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
             SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
         }
 
@@ -242,7 +257,7 @@ namespace _02148_Project.Client
         public static Message GetNewMessage()
         {
             return DatabaseInterface.GetMessage(player.Name);
-
+      
         }
 
         // Exception skal kastes
@@ -295,6 +310,44 @@ namespace _02148_Project.Client
                     player.Wool -= count;
                     break;
             }
+        }
+
+        /// <summary>
+        /// On change methode for when the players table changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        {
+            SqlDependency dependency = sender as SqlDependency;
+            dependency.OnChange -= OnChange_Players;
+
+            // Need to update the correct field, not players in this class
+            ReadOtherPlayers();
+            GetLocalResources();
+            DatabaseInterface.MonitorPlayers(OnChange_Players);
+        }
+
+        public void OnChange_ResourceOffer(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
+            // Find a way to update with the latest resource offers
+            UpdateResourcesOnMarket();
+            DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
+        }
+
+        public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
+            // Find a way to update tradeoffers
+            DatabaseInterface.MonitorTradeOffer(OnChange_ResourceOffer);
+        }
+
+        public void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_Chat;
+            // Find a way to get the latest message
+            DatabaseInterface.MonitorChat(OnChange_Chat);
         }
 
         //Constructions with their required resources to build

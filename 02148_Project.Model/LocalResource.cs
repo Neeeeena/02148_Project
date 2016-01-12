@@ -10,5 +10,11 @@ namespace _02148_Project.Model
     {
         public string Id { get; set; }
         public ResourceType Type { get; set; }
+        public string ImageSrc { get; set; }
+        public LocalResource(ResourceType type)
+        {
+            Type = type;
+            ImageSrc = Type.GetImageSrc();
+        }
     }
 }
