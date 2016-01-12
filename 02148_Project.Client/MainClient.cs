@@ -18,13 +18,13 @@ namespace _02148_Project.Client
         public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
         public static List<Player> allOtherPlayers;
-        
+
         public static Player player;
 
         public static Timer updateTimer;
 
         public static List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
-        
+
         public static void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
@@ -44,7 +44,7 @@ namespace _02148_Project.Client
         {
             DatabaseInterface.DeletePlayer(name);
         }
-   
+
 
         public static void setUpdateTimer()
         {
@@ -86,13 +86,13 @@ namespace _02148_Project.Client
             MainServer.bidAccepted(offer.Id);
 
             //Transfering the money back to the previous highest bidder, if one exists
-            if(prevOffer.HighestBidder != null)
+            if (prevOffer.HighestBidder != null)
                 DatabaseInterface.UpdatePlayerResource(prevOffer.HighestBidder, ResourceType.Gold, prevOffer.HighestBid);
 
             //Taking money from the new highest bidder
-            DatabaseInterface.UpdatePlayerResource(offer.HighestBidder, ResourceType.Gold, - offer.HighestBid);
+            DatabaseInterface.UpdatePlayerResource(offer.HighestBidder, ResourceType.Gold, -offer.HighestBid);
 
-            
+
             //When the auction is ended, the user has already spent the money, and only the wares have to be transfered
 
         }
@@ -118,9 +118,9 @@ namespace _02148_Project.Client
             string idGenerator = "a";
             UpdateOwnGoldAndResources();
             List<LocalResource> result = new List<LocalResource>();
-            for(int i = 0; i < player.Clay; i++)
+            for (int i = 0; i < player.Clay; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator,Type=ResourceType.Clay});
+                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Clay });
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Food; i++)
@@ -174,7 +174,7 @@ namespace _02148_Project.Client
                 }
             }
         }
-        
+
 
         // Trade offer stuff:
 
@@ -188,7 +188,7 @@ namespace _02148_Project.Client
         {
             //Set en timer på trade-offeret
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
-        
+
             //put det op
             int id = DatabaseInterface.PutTradeOffer(offer);
             SubtractResource(offer.Type, offer.Count);
@@ -214,7 +214,7 @@ namespace _02148_Project.Client
             //Try get
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             //If gotten
-            if(offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+            if (offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
 
             timersWithId.RemoveAt(0);
         }
@@ -226,23 +226,23 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
-            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
+            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));
         }
 
         public static void DeclineTradeOffer(int id)
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
+            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count);
             SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
         }
 
 
-        // Message stuff:
+        // Message stuff:x
 
         public static Message GetNewMessage()
         {
             return DatabaseInterface.GetMessage(player.Name);
-      
+
         }
 
         // Exception skal kastes
@@ -255,7 +255,7 @@ namespace _02148_Project.Client
         {
             List<Player> players = new List<Player>();
             players = DatabaseInterface.ReadAllPlayers();
-            foreach(Player p in players)
+            foreach (Player p in players)
             {
                 if (p.Name != player.Name)
                 {
@@ -296,5 +296,54 @@ namespace _02148_Project.Client
                     break;
             }
         }
+
+        //Constructions with their required resources to build
+        static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
+            Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
+                Tuple.Create(2,ResourceType.Wood),
+                Tuple.Create(2,ResourceType.Wool),
+                Tuple.Create(2,ResourceType.Straw) }),
+            Tuple.Create(Construction.Forge, new Tuple<int,ResourceType>[] {
+                Tuple.Create(4,ResourceType.Stone),
+                Tuple.Create(4,ResourceType.Food),
+                Tuple.Create(5,ResourceType.Iron) }),
+            Tuple.Create(Construction.Mason, new Tuple<int,ResourceType>[] {
+                Tuple.Create(2,ResourceType.Stone),
+                Tuple.Create(2,ResourceType.Clay),
+                Tuple.Create(5,ResourceType.Iron), }),
+            Tuple.Create(Construction.Mill, new Tuple<int,ResourceType>[] {
+                Tuple.Create(6,ResourceType.Wood),
+                Tuple.Create(4,ResourceType.Straw),
+                Tuple.Create(2,ResourceType.Food),
+                Tuple.Create(1,ResourceType.Wool)  }),
+            Tuple.Create(Construction.Farm, new Tuple<int,ResourceType>[] {
+                Tuple.Create(6,ResourceType.Food),
+                Tuple.Create(4,ResourceType.Straw),
+                Tuple.Create(4,ResourceType.Clay),
+                Tuple.Create(1,ResourceType.Wood) }),
+            Tuple.Create(Construction.Townhall, new Tuple<int,ResourceType>[] {
+                Tuple.Create(40,ResourceType.Gold),
+                Tuple.Create(5,ResourceType.Clay),
+                Tuple.Create(5,ResourceType.Wood),
+                Tuple.Create(10,ResourceType.Food) })
+        };
+
+
+        public static void constructConstruction(Construction type)
+        {
+            foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+                if (cp.Item1 == type)
+                    foreach (Tuple<int, ResourceType> priceres in cp.Item2)
+                    {
+                        DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, - priceres.Item1);
+                    }
+                    //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
+                    //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+                    return;
+
+            //THROW ERROR (construction does not exist)
+        }
     }
+
+
 }
