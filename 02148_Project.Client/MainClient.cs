@@ -70,7 +70,9 @@ namespace _02148_Project.Client
 
         public static void BidOnResource(ResourceOffer offer)
         {
+            //Try update offer
             DatabaseInterface.UpdateResourceOffer(offer);
+            //Catch exception hvis bid var lavere
         }
 
         public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
