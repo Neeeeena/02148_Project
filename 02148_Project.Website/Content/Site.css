@@ -128,10 +128,21 @@ input[type="select"] {
     color:goldenrod;
     width:70px;
     height:70px;
-    background-color:aliceblue;
+    background-color:blanchedalmond;
     text-align: center; 
 }
 
 input.hidden {
     display:none;
+}
+
+#marked {
+    position:relative;
+}
+#markedContent{
+    height:400px;
+    width:500px;
+    position:absolute;
+    top:250px;
+    left:50px;
 }

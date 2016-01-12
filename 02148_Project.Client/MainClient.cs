@@ -37,6 +37,7 @@ namespace _02148_Project.Client
             DatabaseInterface.PutPlayer(name);
             //Kun for test
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
+            DatabaseInterface.UpdatePlayerResource(name, ResourceType.Clay, 1);
         }
 
         public static void deletePlayer(string name)
@@ -88,6 +89,11 @@ namespace _02148_Project.Client
         {
             player = DatabaseInterface.ReadPlayer(player.Name);
         }
+        //Kun for test!
+        public static void ReadAPlayer()
+        {
+            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Paul");
+        }
 
         public static List<LocalResource> GetLocalResources()
         {
@@ -96,37 +102,37 @@ namespace _02148_Project.Client
             List<LocalResource> result = new List<LocalResource>();
             for(int i = 0; i < player.Clay; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator,Type=ResourceType.Clay});
+                result.Add(new LocalResource(ResourceType.Clay) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Food; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Food });
+                result.Add(new LocalResource(ResourceType.Food) { Id = idGenerator });
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Iron; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Iron });
+                result.Add(new LocalResource(ResourceType.Iron) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Stone; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Stone });
+                result.Add(new LocalResource(ResourceType.Stone) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Straw; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Straw });
+                result.Add(new LocalResource(ResourceType.Straw) { Id = idGenerator });
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Wood; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wood });
+                result.Add(new LocalResource(ResourceType.Wood) { Id = idGenerator});
                 idGenerator += "a";
             }
             for (int i = 0; i < player.Wool; i++)
             {
-                result.Add(new LocalResource() { Id = idGenerator, Type = ResourceType.Wool });
+                result.Add(new LocalResource(ResourceType.Wool) { Id = idGenerator});
                 idGenerator += "a";
             }
             return result;

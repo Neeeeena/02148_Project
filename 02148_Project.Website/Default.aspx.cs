@@ -22,22 +22,28 @@ namespace _02148_Project.Website
             
             if (!Page.IsPostBack)
             {
+
                 //MainClient.deletePlayer("Martin");
-                MainClient.createPlayer("Paul");
+                MainClient.ReadAPlayer();
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
-                RenderMarket();
-                RenderLocalResources();
+               // RenderMarket();
+                //RenderLocalResources();
 
             }
             else
             {
-                RenderMarket();
-                RenderLocalResources();
-                repMarketResources.DataSource = marketresources;
-                repMarketResources.DataBind();
-                repLocalResources.DataSource = localresources;
-                repLocalResources.DataBind();
+                if(MainClient.player != null)
+                {
+                    RenderMarket();
+                    RenderLocalResources();
+                    repMarketResources.DataSource = marketresources;
+                    repMarketResources.DataBind();
+                    repLocalResources.DataSource = localresources;
+                    repLocalResources.DataBind();
+
+                }
+                
             }
 
         }
@@ -85,6 +91,14 @@ namespace _02148_Project.Website
 
 
 
+        }
+
+        protected void submitName_Click(object sender, EventArgs e)
+        {
+            var name = nameInput.Value;
+            MainClient.createPlayer(name);
+            RenderLocalResources();
+            RenderMarket();
         }
     }
 }
