@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Data;
 using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
+using _02148_Project;
 
 namespace _02148_Project
 {
@@ -326,7 +327,7 @@ namespace _02148_Project
         }
         #endregion
 
-        #region Notifications
+        #region Notifications      
         /// <summary>
         /// Start the sql dependency notifications
         /// </summary>
@@ -344,74 +345,39 @@ namespace _02148_Project
             SqlDependency.Stop(connectionString);
         }
 
+        /// <summary>
+        /// Setup listeners for database tables. This is done with one connection
+        /// </summary>
+        internal static void SetupDatabaseListeners(DatabaseInterface.OnChange_Player playerMethode, 
+            DatabaseInterface.OnChange_ResourceOffers resourceOfferMethode,
+            DatabaseInterface.OnChange_TradeOffers tradeOfferMethode, 
+            DatabaseInterface.OnChange_Chat chatMethode)
+        {
+            MonitorPlayers(playerMethode);
+            MonitorResourceOffers(resourceOfferMethode);
+            MonitorTradeOffers(tradeOfferMethode);
+            MonitorChat(chatMethode);
+        }
 
         /// <summary>
         /// Setup method for monitoring changes in the player database
         /// </summary>
-        internal static void MonitorPlayers()
+        internal static void MonitorPlayers(DatabaseInterface.OnChange_Player playerMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Name, Wood, Clay, Wool, " +
                 "Stone, Iron, Straw, Food, Gold FROM dbo.Players",
-                DatabaseHandler.connection))
+                connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Players);
+                dependency.OnChange += new OnChangeEventHandler(playerMethode);
                 command.ExecuteNonQuery();
             }
         }
-
-        /// <summary>
-        /// Setup listeners for database tables. This is done with one connection
-        /// </summary>
-        internal static void SetupDatabaseListeners()
-        {
-            //OpenConnection();
-            //string playerQuery = "SELECT Name, Wood, Clay, Wool, Stone, Iron, Straw, Food, Gold FROM dbo.Players";
-            //string resourceOfferQuery = "SELECT Id, SellerName, ResourceType, "
-            //    + "Count, Price, HighestBidder, Bid FROM dbo.Market";
-            //string tradeOfferQuery = "SELECT Id, SellerName, RecieverName, "
-            //    + "ResourceType, Count, PriceType, Price FROM TradeOffers;";
-            //string chatQuery = "SELECT Id, Message, SenderName, RecieverName FROM dbo.Chat";
-
-            //SqlCommand command = new SqlCommand(playerQuery, connection);
-            //// Setup listener for player
-            //SqlDependency dependency = new SqlDependency(command);
-            //dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Players);
-            //command.ExecuteNonQuery();
-            //command.Dispose();
-
-            //// Setup listener for resource offers
-            //command = new SqlCommand(resourceOfferQuery, connection);
-            //dependency = new SqlDependency(command);
-            //dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_ResourceOffers);
-            //command.ExecuteNonQuery();
-            //command.Dispose();
-
-            //// Setup listener for trade offer
-            //command = new SqlCommand(tradeOfferQuery, connection);
-            //dependency = new SqlDependency(command);
-            //dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_TradeOffers);
-            //command.ExecuteNonQuery();
-            //command.Dispose();
-
-            //// Setup listener for chat
-            //command = new SqlCommand(chatQuery, connection);
-            //dependency = new SqlDependency(command);
-            //dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Chat);
-            //command.ExecuteNonQuery();
-            //command.Dispose();
-
-            MonitorChat();
-            MonitorPlayers();
-            MonitorResourceOffers();
-            MonitorTradeOffers();
-        }
-
         /// <summary>
         /// Setup monitor/event lister for resource offer data
         /// </summary>
-        internal static void MonitorResourceOffers()
+        internal static void MonitorResourceOffers(DatabaseInterface.OnChange_ResourceOffers resourceOfferMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, ResourceType, "
@@ -420,7 +386,7 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_ResourceOffers);
+                dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
                 command.ExecuteNonQuery();
             }
         }
@@ -428,7 +394,7 @@ namespace _02148_Project
         /// <summary>
         /// Setup listener for the trade offers table
         /// </summary>
-        internal static void MonitorTradeOffers()
+        internal static void MonitorTradeOffers(DatabaseInterface.OnChange_TradeOffers tradeOfferMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
@@ -436,12 +402,12 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_TradeOffers);
+                dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
                 command.ExecuteNonQuery();
             }
         }
 
-        public static void MonitorChat()
+        internal static void MonitorChat(DatabaseInterface.OnChange_Chat chatMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
@@ -449,7 +415,7 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Chat);
+                dependency.OnChange += new OnChangeEventHandler(chatMethode);
                 command.ExecuteNonQuery();
             }
         }

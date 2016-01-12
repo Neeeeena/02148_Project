@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using _02148_Project;
 using _02148_Project.Model;
 using System.Timers;
+using System.Data.SqlClient;
 
 namespace _02148_Project.Client
 {
-    public static class MainClient
+    public class MainClient
     {
 
         //public List<ResourceOffer> allResourcesOnMarket;
@@ -28,7 +29,6 @@ namespace _02148_Project.Client
         {
             //Setup all fields before game, like username, goldamount at start, etc.
             //Code Behind probably
-
         }
 
         public static void createPlayer(string name)
@@ -56,7 +56,7 @@ namespace _02148_Project.Client
         {
             UpdateResourcesOnMarket();
             UpdateOwnGoldAndResources();
-            ReadOtherPlayersGold();
+            ReadOtherPlayers();
             ReadAllTradeOffersForYou();
             GetNewMessage();
         }
@@ -132,7 +132,7 @@ namespace _02148_Project.Client
             return result;
         }
 
-        public static void ReadOtherPlayersGold()
+        public static void ReadOtherPlayers()
         {
             allOtherPlayers = DatabaseInterface.ReadAllPlayers();
             removeYourself();
@@ -271,6 +271,44 @@ namespace _02148_Project.Client
                     player.Wool -= count;
                     break;
             }
+        }
+
+        /// <summary>
+        /// On change methode for when the players table changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        {
+            SqlDependency dependency = sender as SqlDependency;
+            dependency.OnChange -= OnChange_Players;
+
+            // Need to update the correct field, not players in this class
+            ReadOtherPlayers();
+            GetLocalResources();
+            DatabaseInterface.MonitorPlayers(OnChange_Players);
+        }
+
+        public void OnChange_ResourceOffer(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
+            // Find a way to update with the latest resource offers
+            UpdateResourcesOnMarket();
+            DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
+        }
+
+        public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
+            // Find a way to update tradeoffers
+            DatabaseInterface.MonitorTradeOffer(OnChange_ResourceOffer);
+        }
+
+        public void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        {
+            (sender as SqlDependency).OnChange -= OnChange_Chat;
+            // Find a way to get the latest message
+            DatabaseInterface.MonitorChat(OnChange_Chat);
         }
     }
 }
