@@ -80,6 +80,7 @@ namespace _02148_Project.Client
             catch (ConnectionException e) {
 
                 //parse error msg to user
+                return;
             }
 
             MainServer.bidAccepted(offer.Id);
