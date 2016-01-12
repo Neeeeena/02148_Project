@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using _02148_Project;
 using _02148_Project.Model;
 using System.Timers;
+using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project.Client
 {
@@ -31,19 +32,27 @@ namespace _02148_Project.Client
 
         }
 
-        public static void createPlayer(string name)
+        public static string createPlayer(string name)
         {
             player = new Player(name);
-            DatabaseInterface.PutPlayer(name);
-            //Kun for test
+            try
+            {
+                DatabaseInterface.PutPlayer(name);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;                
+            }
+            //////////////// Kun for test
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
+            ////////////////
+            return "";
         }
 
         public static void deletePlayer(string name)
         {
             DatabaseInterface.DeletePlayer(name);
-        }
-   
+        }   
 
         public static void setUpdateTimer()
         {
@@ -68,11 +77,19 @@ namespace _02148_Project.Client
             return DatabaseInterface.ReadAllResourceOffers();
         }
 
-        public static void BidOnResource(ResourceOffer offer)
+        public static bool BidOnResource(ResourceOffer offer)
         {
             //Try update offer
-            DatabaseInterface.UpdateResourceOffer(offer);
+            try
+            {
+                DatabaseInterface.UpdateResourceOffer(offer);
+            }
             //Catch exception hvis bid var lavere
+            catch (ResourceOfferException)
+            {
+                return false;
+            }
+            return true;            
         }
 
         public static void PlaceResourceOfferOnMarket(ResourceOffer offer)

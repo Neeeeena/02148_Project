@@ -235,7 +235,7 @@ namespace _02148_Project
             // If no rows where updated 
             if (command.ExecuteNonQuery() == 0)
             {
-                throw new ResourceOfferException("No rows where updated", offer);
+                throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
             }
         }
         #endregion
