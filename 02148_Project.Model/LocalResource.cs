@@ -9,6 +9,6 @@ namespace _02148_Project.Model
     public class LocalResource
     {
         public string Id { get; set; }
-        public string Type { get; set; }
+        public ResourceType Type { get; set; }
     }
 }

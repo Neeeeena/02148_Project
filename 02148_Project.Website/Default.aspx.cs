@@ -22,7 +22,8 @@ namespace _02148_Project.Website
             
             if (!Page.IsPostBack)
             {
-                MainClient.createPlayer("Martin");
+                //MainClient.deletePlayer("Martin");
+                MainClient.createPlayer("Paul");
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
                 RenderMarket();
@@ -77,14 +78,10 @@ namespace _02148_Project.Website
 
             var sid = hiddenValue.Value;
             var soldElement = localresources.Find(se => se.Id == sid);
-            //soldElement.Price = Int32.Parse(inputPrice.Value);
-            //localresources.Remove(soldElement);
-            //MainClient.PlaceResourceOfferOnMarket(soldElement);
-            //marketresources.Add(soldElement);
-            //repLocalResources.DataSource = localresources;
-            //repLocalResources.DataBind();
-            //repMarketResources.DataSource = marketresources;
-            //repMarketResources.DataBind();
+            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, Int32.Parse(inputPrice.Value));
+            MainClient.PlaceResourceOfferOnMarket(newOffer);
+            RenderLocalResources();
+            RenderMarket();
 
 
 

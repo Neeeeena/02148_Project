@@ -17,7 +17,7 @@
 					    <td>
 					        <!-- <img src="untitled.png" width="30" height="25">
 						        <p ID=houseCount>0</p>-->
-						    <button type="button" class="btn btn-primary btn-block btn-lg" id="houseButton" disabled="true">
+						    <button type="button" class="btn btn-primary btn-block btn-lg" id="houseButton">
 							    BUY (2W, 2T)
 						    </button>
 					    </td>

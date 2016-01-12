@@ -442,10 +442,7 @@ namespace _02148_Project
         /// </summary>
         public static void SetupDatabaseListeners()
         {
-            DatabaseHandler.MonitorChat();
-            DatabaseHandler.MonitorPlayers();
-            DatabaseHandler.MonitorResourceOffers();
-            DatabaseHandler.MonitorTradeOffers();
+            DatabaseHandler.SetupDatabaseListeners();
         }
 
 
