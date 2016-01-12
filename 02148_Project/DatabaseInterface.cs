@@ -68,7 +68,7 @@ namespace _02148_Project
             }
             else
             {
-                throw ex;
+                //throw ex;
             }
         }
 
