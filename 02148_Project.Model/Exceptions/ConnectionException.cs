@@ -32,5 +32,6 @@ namespace _02148_Project.Model.Exceptions
         {
             this.Type = type;
         }
+
     }
 }

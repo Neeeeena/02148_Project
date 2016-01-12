@@ -233,7 +233,8 @@ namespace Server.Test
         public void DependencyOnPlayersTest()
         {
             DatabaseInterface.DependencyInitialization();
-            DatabaseInterface.SetupDatabaseListeners();
+            DatabaseInterface.SetupDatabaseListeners(OnChange_Players_Example, 
+                OnChange_ResourceOffers, OnChange_TradeOffers, OnChange_Chat);
             Console.WriteLine("Name\tWood");
             int i = 1;
             while (i < 6)
@@ -247,8 +248,8 @@ namespace Server.Test
                     DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wood, 100);
                 }
 
-                Console.WriteLine(i);
-                foreach (Player player in DatabaseInterface.players)
+                Console.WriteLine(i + " - Eventbased update");
+                foreach (Player player in players)
                 {
                     Console.WriteLine("{0}\t{1}", player.Name, player.Wood);
                 }
@@ -266,39 +267,49 @@ namespace Server.Test
             DatabaseInterface.DependencyTermination();
         }
 
-        [TestMethod]
-        [TestCategory("Database notifications")]
-        public void DependencyOnResourceOffersTest()
+        public static List<Player> players = new List<Player>();
+
+        /// <summary>
+        /// On change methode for when the players table changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void OnChange_Players_Example(object sender, SqlNotificationEventArgs e)
         {
-            DatabaseInterface.DependencyInitialization();
-            DatabaseInterface.SetupDatabaseListeners();
-            ResourceOffer offer = new ResourceOffer(1, "Oliver", (ResourceType)1, 1, 1, "Alex", 2);
+            SqlDependency dependency = sender as SqlDependency;
+            dependency.OnChange -= OnChange_Players_Example;
 
-            Console.WriteLine("Name\tBid");
-            int i = 1;
-            while (i < 6)
-            {
-                if (i == 2)
-                {
-                    DatabaseInterface.UpdateResourceOffer(offer);
-                }
-                Console.WriteLine(i + " - Event updated");
-                foreach (Player player in DatabaseInterface.players)
-                {
-                    Console.WriteLine("{0}\t{1}", offer.HighestBidder, offer.HighestBid);
-                }
-                Console.WriteLine("Manual update");
-                foreach (Player player in DatabaseInterface.ReadAllPlayers())
-                {
-                    Console.WriteLine("{0}\t{1}", offer.HighestBidder, offer.HighestBid);
-                }
-                Console.WriteLine();
+            // Need to update the correct field, not players in this class
+            players = DatabaseInterface.ReadAllPlayers();
+            DatabaseInterface.MonitorPlayers(OnChange_Players_Example);
+        }
 
-                System.Threading.Thread.Sleep(1000);
-                i++;
-            }
+        /// <summary>
+        /// On change methode, for when the resource offers changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnChange_ResourceOffers(object sender, SqlNotificationEventArgs e)
+        {
+            //(sender as SqlDependency).OnChange -= OnChange_ResourceOffers;
+            //resouceOffers = ReadAllResourceOffers();
+            //DatabaseHandler.MonitorResourceOffers();
+        }
 
-            DatabaseInterface.DependencyTermination();
+        private void OnChange_TradeOffers(object sender, SqlNotificationEventArgs e)
+        {
+            //(sender as SqlDependency).OnChange -= OnChange_TradeOffers;
+            //// Call methode to update all the relevant trade offers
+            ////tradeOffers = ReadAllTradeOffers();
+            //DatabaseHandler.MonitorTradeOffers();
+        }
+
+        private void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        {
+            //(sender as SqlDependency).OnChange -= OnChange_Chat;
+            //// Call methode to update the latest message 
+            ////message = GetMessage();
+            //DatabaseHandler.MonitorChat();
         }
     }
 }

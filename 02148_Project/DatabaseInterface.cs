@@ -52,6 +52,7 @@ namespace _02148_Project
         }
         #endregion
 
+        #region ErrorHandling
         /// <summary>
         /// Used for generel exception handling for sql exceptions from the handler 
         /// </summary>
@@ -60,17 +61,20 @@ namespace _02148_Project
         {
             if (ex.ErrorCode == 26)
             {
-                throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+                //ConnectionException.Error.UnableToLocateDatabase
+                throw new ConnectionException("Unable to locate the database");
             }
             else if (ex.Number == -2146232060)
             {
-                throw new ConnectionException(ConnectionException.Error.LoginFailure);
+                //ConnectionException.Error.LoginFailure
+                throw new ConnectionException("Login failed");
             }
             else
             {
-                throw ex;
+                throw new ConnectionException("Unknown error occured");
             }
         }
+        #endregion
 
         #region Player
         /// <summary>
@@ -424,9 +428,14 @@ namespace _02148_Project
             }
             return msg;
         }
-        #endregion 
+        #endregion
 
         #region Notifications
+        public delegate void OnChange_Player(object sender, SqlNotificationEventArgs e);
+        public delegate void OnChange_ResourceOffers(object sender, SqlNotificationEventArgs e);
+        public delegate void OnChange_TradeOffers(object sender, SqlNotificationEventArgs e);
+        public delegate void OnChange_Chat(object sender, SqlNotificationEventArgs e);
+
         public static void DependencyInitialization()
         {
             DatabaseHandler.DependencyInitialization();
@@ -440,66 +449,31 @@ namespace _02148_Project
         /// <summary>
         /// Setup all the listeners for the database tables
         /// </summary>
-        public static void SetupDatabaseListeners()
+        public static void SetupDatabaseListeners(OnChange_Player player, OnChange_ResourceOffers resourceOffer, 
+            OnChange_TradeOffers tradeOffer, OnChange_Chat chat)
         {
-            DatabaseHandler.MonitorChat();
-            DatabaseHandler.MonitorPlayers();
-            DatabaseHandler.MonitorResourceOffers();
-            DatabaseHandler.MonitorTradeOffers();
+            DatabaseHandler.SetupDatabaseListeners(player, resourceOffer, tradeOffer, chat);
         }
 
-
-        #region OnChange_Methods
-
-        public static List<Player> players = new List<Player>();
-        public static List<ResourceOffer> resouceOffers = new List<ResourceOffer>();
-        public static List<TradeOffer> tradeOffers = new List<TradeOffer>();
-        public static Message message = null;
-
-        /// <summary>
-        /// On change methode for when the players table changes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal static void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        public static void MonitorPlayers(OnChange_Player player)
         {
-            SqlDependency dependency = sender as SqlDependency;
-            dependency.OnChange -= OnChange_Players;
-
-            // Need to update the correct field, not players in this class
-            players = ReadAllPlayers();
-            DatabaseHandler.MonitorPlayers();
+            DatabaseHandler.MonitorPlayers(player);
         }
 
-        /// <summary>
-        /// On change methode, for when the resource offers changes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal static void OnChange_ResourceOffers(object sender, SqlNotificationEventArgs e)
+        public static void MonitorResourceOffers(OnChange_ResourceOffers resourceOffer)
         {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffers;
-            resouceOffers = ReadAllResourceOffers();
-            DatabaseHandler.MonitorResourceOffers();
+            DatabaseHandler.MonitorResourceOffers(resourceOffer);
         }
 
-        internal static void OnChange_TradeOffers(object sender, SqlNotificationEventArgs e)
+        public static void MonitorTradeOffer(OnChange_TradeOffers tradeOffer)
         {
-            (sender as SqlDependency).OnChange -= OnChange_TradeOffers;
-            // Call methode to update all the relevant trade offers
-            //tradeOffers = ReadAllTradeOffers();
-            DatabaseHandler.MonitorTradeOffers();
+            DatabaseHandler.MonitorTradeOffers(tradeOffer);
         }
 
-        internal static void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        public static void MonitorChat(OnChange_Chat chat)
         {
-            (sender as SqlDependency).OnChange -= OnChange_Chat;
-            // Call methode to update the latest message 
-            //message = GetMessage();
-            DatabaseHandler.MonitorChat();
+            DatabaseHandler.MonitorChat(chat);
         }
-
-        #endregion
 
         #endregion
     }

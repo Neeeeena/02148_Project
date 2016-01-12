@@ -7,13 +7,14 @@ using System.Data.SqlClient;
 using System.Data;
 using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
+using _02148_Project;
 
 namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
 
         /// <summary>
@@ -235,7 +236,7 @@ namespace _02148_Project
             // If no rows where updated 
             if (command.ExecuteNonQuery() == 0)
             {
-                throw new ResourceOfferException("No rows where updated", offer);
+                throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
             }
         }
         #endregion
@@ -326,7 +327,7 @@ namespace _02148_Project
         }
         #endregion
 
-        #region Notifications
+        #region Notifications      
         /// <summary>
         /// Start the sql dependency notifications
         /// </summary>
@@ -344,27 +345,39 @@ namespace _02148_Project
             SqlDependency.Stop(connectionString);
         }
 
+        /// <summary>
+        /// Setup listeners for database tables. This is done with one connection
+        /// </summary>
+        internal static void SetupDatabaseListeners(DatabaseInterface.OnChange_Player playerMethode, 
+            DatabaseInterface.OnChange_ResourceOffers resourceOfferMethode,
+            DatabaseInterface.OnChange_TradeOffers tradeOfferMethode, 
+            DatabaseInterface.OnChange_Chat chatMethode)
+        {
+            MonitorPlayers(playerMethode);
+            MonitorResourceOffers(resourceOfferMethode);
+            MonitorTradeOffers(tradeOfferMethode);
+            MonitorChat(chatMethode);
+        }
 
         /// <summary>
         /// Setup method for monitoring changes in the player database
         /// </summary>
-        internal static void MonitorPlayers()
+        internal static void MonitorPlayers(DatabaseInterface.OnChange_Player playerMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Name, Wood, Clay, Wool, " +
                 "Stone, Iron, Straw, Food, Gold FROM dbo.Players",
-                DatabaseHandler.connection))
+                connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Players);
+                dependency.OnChange += new OnChangeEventHandler(playerMethode);
                 command.ExecuteNonQuery();
             }
         }
-
         /// <summary>
         /// Setup monitor/event lister for resource offer data
         /// </summary>
-        internal static void MonitorResourceOffers()
+        internal static void MonitorResourceOffers(DatabaseInterface.OnChange_ResourceOffers resourceOfferMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, ResourceType, "
@@ -373,7 +386,7 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_ResourceOffers);
+                dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
                 command.ExecuteNonQuery();
             }
         }
@@ -381,7 +394,7 @@ namespace _02148_Project
         /// <summary>
         /// Setup listener for the trade offers table
         /// </summary>
-        internal static void MonitorTradeOffers()
+        internal static void MonitorTradeOffers(DatabaseInterface.OnChange_TradeOffers tradeOfferMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
@@ -389,12 +402,12 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_TradeOffers);
+                dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
                 command.ExecuteNonQuery();
             }
         }
 
-        public static void MonitorChat()
+        internal static void MonitorChat(DatabaseInterface.OnChange_Chat chatMethode)
         {
             OpenConnection();
             using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
@@ -402,7 +415,7 @@ namespace _02148_Project
                 connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(DatabaseInterface.OnChange_Chat);
+                dependency.OnChange += new OnChangeEventHandler(chatMethode);
                 command.ExecuteNonQuery();
             }
         }
