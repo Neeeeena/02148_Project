@@ -238,10 +238,6 @@ C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\b
 C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.csprojResolveAssemblyReference.cache
 C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.dll
 C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\obj\Debug\02148_Project.Website.pdb
-C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\bin\02148_Project.Client.dll
-C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\bin\02148_Project.dll
-C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\bin\02148_Project.Client.pdb
-C:\Users\User\Documents\GitHubVisualStudio\02148_Project\02148_Project.Website\bin\02148_Project.pdb
 C:\Users\Carl\Source\Repos\02148_Project4\02148_Project.Website\bin\roslyn\csc.exe
 C:\Users\Carl\Source\Repos\02148_Project4\02148_Project.Website\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 C:\Users\Carl\Source\Repos\02148_Project4\02148_Project.Website\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
