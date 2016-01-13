@@ -4,11 +4,13 @@
 
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
-    <div class="container-fluid">
+<div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
         <p>This is where you buy houses, a blacksmith etc.</p>
+        <input runat="server" type="text" id="nameInput" value="Write a mofo username!" />
+        <asp:Button runat="server" ID="submitName" OnClick="submitName_Click" Text="Submit"/>
     </div>
         <div class="span2">
             <div "> 
@@ -23,16 +25,30 @@
 					    </td>
 				    </tr>
 	  		    </table>
+
+            <p>Sell resources here!</p>
+            <div style="background-image:url(Images/sellbox.png); width:70px; height:70px"   id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+            </div>
+            <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
+            <div id="sellInput" runat="server">
+                How much do you want to sell it for? <br />
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
+                <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+            </div>
+
+
             </div>
         </div>
         <div class="span8">
-    <div class="jumbotron" id="marked" >
+    <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
+        <div id="markedContent">
         <asp:Repeater ID="repMarketResources" runat="server" >
           <HeaderTemplate>
             <table>
               <thead>
                 <tr>
-                    <th id="headlineMarket"><h3 >Market</h3></th>
                 </tr>
               </thead>
               <tbody>
@@ -41,8 +57,7 @@
             <tr class="floating">
               <td>
                   <div class="resource">
-                        <img id="<%#Eval("Id")%>" src="Images/firewood.png"  />
-                        <div style="clear: both" runat="server" Visible="<%# (Container.ItemIndex+1) % 6 == 0 %>"></div>     
+                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />  
                  </div>
               </td>
             </tr>
@@ -52,18 +67,7 @@
             </table>
           </FooterTemplate>
     </asp:Repeater>
-            <p>Sell resources here!</p>
-            <div id="sellBox"  ondrop="drop(event)" ondragover="allowDrop(event)">
-
             </div>
-            <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
-            <div id="sellInput" runat="server">
-                How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Hej Alexander!">
-                <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
-                <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
-            </div>
-
         </div>
 
     <div class="jumbotron">
@@ -82,7 +86,7 @@
             <tr class="floating">
               <td>
                   <div class="resource" >
-                       <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="Images/firewood.png"  />
+                       <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="<%#Eval("ImageSrc")%>"  />
                  </div>
               </td>
             </tr>
@@ -92,8 +96,7 @@
             </table>
           </FooterTemplate>
     </asp:Repeater>
-                
-    </div>
+        </div>        
 </div>
   </div>
 </div>

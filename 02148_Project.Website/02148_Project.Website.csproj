@@ -182,7 +182,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Rules.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -245,13 +244,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Rules.aspx.cs">
-      <DependentUpon>Rules.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Rules.aspx.designer.cs">
-      <DependentUpon>Rules.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -294,6 +286,10 @@
     <ProjectReference Include="..\02148_Project.Model\02148_Project.Model.csproj">
       <Project>{8a46cc17-4fb7-4121-8874-708b443e89e1}</Project>
       <Name>02148_Project.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\02148_Project\02148_Project.Server.csproj">
+      <Project>{1fb89982-af6e-44e6-b202-974dfe5ed9f4}</Project>
+      <Name>02148_Project.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

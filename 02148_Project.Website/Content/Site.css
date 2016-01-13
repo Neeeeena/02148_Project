@@ -80,7 +80,6 @@ input[type="select"] {
 .span2 {
     width: 20%;
     float: right;
-    background-color:#E8793D;
     border-radius:6px;
 }
 
@@ -125,13 +124,25 @@ input[type="select"] {
 }
 
 #sellBox {
-    color:goldenrod;
-    width:70px;
-    height:70px;
-    background-color:aliceblue;
     text-align: center; 
+}
+#sellBox img {
+    display:block;
+    width:50px;
+    height:50px;
 }
 
 input.hidden {
     display:none;
+}
+
+#marked {
+    position:relative;
+}
+#markedContent{
+    height:400px;
+    width:500px;
+    position:absolute;
+    top:250px;
+    left:50px;
 }

@@ -363,6 +363,29 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Read alll trade offers send by the given user
+        /// </summary>
+        /// <param name="sender">Name of user how have send trade offer</param>
+        /// <returns>A list of trade offers, which the user has send</returns>
+        public static List<TradeOffer> ReadAllSendTradeOffers(string sender)
+        {
+            SqlDataReader reader = DatabaseHandler.ReadAllSendTradeOffers(sender);
+            List<TradeOffer> offers = new List<TradeOffer>();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    offers.Add(GetTradeOfferFromReader(reader));
+                }
+            }
+            reader.Dispose();
+            DatabaseHandler.CloseConnection();
+            return offers;
+        }
+
+
+        /// <summary>
         /// Get a tradeoffer from the database. This will remove it
         /// </summary>
         /// <param name="id">Of the trade offer</param>
@@ -477,6 +500,7 @@ namespace _02148_Project
         public static void SetupDatabaseListeners(OnChange_Player player, OnChange_ResourceOffers resourceOffer, 
             OnChange_TradeOffers tradeOffer, OnChange_Chat chat)
         {
+            DatabaseHandler.DependencyInitialization();
             DatabaseHandler.SetupDatabaseListeners(player, resourceOffer, tradeOffer, chat);
         }
 
