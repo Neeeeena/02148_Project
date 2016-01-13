@@ -8,6 +8,9 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
+        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+
         #region ConvertMethods
         /// <summary>
         /// Get a resource offer from a data reader object
@@ -16,7 +19,7 @@ namespace _02148_Project
         /// <returns>The Resource offer from the reader object</returns>
         internal static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
-            if (reader.IsDBNull(6))
+            if (reader.IsDBNull(5))
             {
                 return new ResourceOffer(reader.GetInt32(0), reader.GetString(1), (ResourceType)reader.GetInt32(2),
                     reader.GetInt32(3), reader.GetInt32(4));
@@ -90,27 +93,29 @@ namespace _02148_Project
             List<Player> players = new List<Player>();
             try
             {
-                DatabaseHandler.OpenConnection();
-                SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
+                return DatabaseHandler.ReadAllPlayers();
+
+                //DatabaseHandler.OpenConnection();
+                //SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
 
                 // Get all the players from the results
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        players.Add(GetPlayerFromReader(reader));
-                    }
-                }
-                reader.Dispose();
+                //if (reader.HasRows)
+                //{
+                //    while (reader.Read())
+                //    {
+                //        players.Add(GetPlayerFromReader(reader));
+                //    }
+                //}
+                //reader.Dispose();
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
+            //finally
+            //{
+            //    DatabaseHandler.CloseConnection();
+            //}
             return players;
         }
 
@@ -122,15 +127,16 @@ namespace _02148_Project
         /// <returns>A player object with all the relevant data</returns>
         public static Player ReadPlayer(string name)
         {
-            SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
-            Player player = null;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                player = GetPlayerFromReader(reader);
-            }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
+            Player player = DatabaseHandler.ReadPlayerData(name);
+            //SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
+            //Player player = null;
+            //if (reader.HasRows)
+            //{
+            //    reader.Read();
+            //    player = GetPlayerFromReader(reader);
+            //}
+            //reader.Dispose();
+            //DatabaseHandler.CloseConnection();
             if (player == null) throw new PlayerException("Player not found", name);
             return player;
         }
@@ -234,16 +240,17 @@ namespace _02148_Project
         /// <returns>The offer from the database</returns>
         public static ResourceOffer ReadResourceOffer(int id)
         {
-            SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
-            ResourceOffer offer = null;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                offer = GetResourceOfferFromReader(reader);
-            }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
-            return offer;
+            return DatabaseHandler.ReadResourceOnMarket(id);
+            //SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
+            //ResourceOffer offer = null;
+            //if (reader.HasRows)
+            //{
+            //    reader.Read();
+            //    offer = GetResourceOfferFromReader(reader);
+            //}
+            //reader.Dispose();
+            //DatabaseHandler.CloseConnection();
+            //return offer;
         }
 
         /// <summary>
@@ -295,15 +302,15 @@ namespace _02148_Project
         /// <returns>The resource offer from the database</returns>
         public static ResourceOffer GetResourceOffer(int id)
         {
-            SqlDataReader reader = DatabaseHandler.GetResourceOnMarket(id);
-            ResourceOffer offer = null;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                offer = GetResourceOfferFromReader(reader);
-            }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
+            ResourceOffer offer = DatabaseHandler.GetResourceOnMarket(id);
+            //SqlDataReader reader = DatabaseHandler.GetResourceOnMarket(id);
+            //if (reader.HasRows)
+            //{
+            //    reader.Read();
+            //    offer = GetResourceOfferFromReader(reader);
+            //}
+            //reader.Dispose();
+            //DatabaseHandler.CloseConnection();
             return offer;
         }
 
@@ -341,25 +348,25 @@ namespace _02148_Project
             List<TradeOffer> offers = new List<TradeOffer>();
             try
             {
-                SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
-
-                if (reader != null && reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        offers.Add(GetTradeOfferFromReader(reader));
-                    }
-                }
-                reader.Dispose();
+                offers = DatabaseHandler.ReadAllTradeOffers(reciever);
+                //SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
+                //if (reader != null && reader.HasRows)
+                //{
+                //    while (reader.Read())
+                //    {
+                //        offers.Add(GetTradeOfferFromReader(reader));
+                //    }
+                //}
+                //reader.Dispose();
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-            DatabaseHandler.CloseConnection();
-            }
+            //finally
+            //{
+            // DatabaseHandler.CloseConnection();
+            //}
             return offers;
         }
 
@@ -370,19 +377,20 @@ namespace _02148_Project
         /// <returns>A list of trade offers, which the user has send</returns>
         public static List<TradeOffer> ReadAllSendTradeOffers(string sender)
         {
-            SqlDataReader reader = DatabaseHandler.ReadAllSendTradeOffers(sender);
-            List<TradeOffer> offers = new List<TradeOffer>();
+            return DatabaseHandler.ReadAllSendTradeOffers(sender);
+            //SqlDataReader reader = DatabaseHandler.ReadAllSendTradeOffers(sender);
+            //List<TradeOffer> offers = new List<TradeOffer>();
 
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    offers.Add(GetTradeOfferFromReader(reader));
-                }
-            }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
-            return offers;
+            //if (reader.HasRows)
+            //{
+            //    while (reader.Read())
+            //    {
+            //        offers.Add(GetTradeOfferFromReader(reader));
+            //    }
+            //}
+            //reader.Dispose();
+            //DatabaseHandler.CloseConnection();
+            //return offers;
         }
 
 
@@ -396,22 +404,23 @@ namespace _02148_Project
             TradeOffer offer = null;
             try
             {
-            SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
-            if (reader.HasRows)
-            {
-                reader.Read();
-                offer = GetTradeOfferFromReader(reader);
-            }
-            reader.Dispose();
+                return DatabaseHandler.GetTradeOffer(id);
+                //SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
+                //if (reader.HasRows)
+                //{
+                //    reader.Read();
+                //    offer = GetTradeOfferFromReader(reader);
+                //}
+                //reader.Dispose();
             }
             catch(SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-            DatabaseHandler.CloseConnection();
-            }
+            //finally
+            //{
+            //    DatabaseHandler.CloseConnection();
+            //}
             return offer;
         }
         
@@ -466,16 +475,17 @@ namespace _02148_Project
         /// <returns>The latest message to the reciever</returns>
         public static Message GetMessage(string reciever)
         {
-            SqlDataReader reader = DatabaseHandler.GetMessage(reciever);
-            Message msg = null;
-            if (reader.HasRows)
-            {
-                reader.Read();
-                msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
-                reader.Dispose();
-                DatabaseHandler.CloseConnection();
-            }
-            return msg;
+            return DatabaseHandler.GetMessage(reciever);
+            //SqlDataReader reader = DatabaseHandler.GetMessage(reciever);
+            //Message msg = null;
+            //if (reader.HasRows)
+            //{
+            //    reader.Read();
+            //    msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+            //    reader.Dispose();
+            //    DatabaseHandler.CloseConnection();
+            //}
+            //return msg;
         }
         #endregion
 

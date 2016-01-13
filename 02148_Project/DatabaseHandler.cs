@@ -14,7 +14,7 @@ namespace _02148_Project
     internal static class DatabaseHandler
     {
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
-        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
 
         /// <summary>
@@ -61,6 +61,7 @@ namespace _02148_Project
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Name", name);
+                    command.ExecuteNonQuery();
                 }
             }
             //OpenConnection();
@@ -73,11 +74,32 @@ namespace _02148_Project
         /// Get all the players from the database
         /// </summary>
         /// <returns>Rows from the database with player data</returns>
-        internal static SqlDataReader ReadAllPlayers()
+        internal static List<Player> ReadAllPlayers()
         {
-            OpenConnection();
-            SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM Players";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    List<Player> players = new List<Player>();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                players.Add(DatabaseInterface.GetPlayerFromReader(reader));
+                            }
+                        }
+                        return players;
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -86,25 +108,33 @@ namespace _02148_Project
         /// <param name="player">Player to update</param>
         internal static void UpdatePlayerData(Player player)
         {
-            OpenConnection();
-            string query = "UPDATE Players "
-                + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
-                + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
-                + "Food = @Food, Gold = @Gold "
-                + "WHERE Name = @Name;";
-            SqlCommand command = new SqlCommand(query, connection);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "UPDATE Players "
+                    + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+                    + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+                    + "Food = @Food, Gold = @Gold "
+                    + "WHERE Name = @Name;";
 
-            command.Parameters.AddWithValue("@Wood", player.Wood);
-            command.Parameters.AddWithValue("@Clay", player.Clay);
-            command.Parameters.AddWithValue("@Wool", player.Wool);
-            command.Parameters.AddWithValue("@Stone", player.Stone);
-            command.Parameters.AddWithValue("@Iron", player.Iron);
-            command.Parameters.AddWithValue("@Straw", player.Straw);
-            command.Parameters.AddWithValue("@Food", player.Food);
-            command.Parameters.AddWithValue("@Gold", player.Gold);
-            command.Parameters.AddWithValue("@Name", player.Name);
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Wood", player.Wood);
+                    command.Parameters.AddWithValue("@Clay", player.Clay);
+                    command.Parameters.AddWithValue("@Wool", player.Wool);
+                    command.Parameters.AddWithValue("@Stone", player.Stone);
+                    command.Parameters.AddWithValue("@Iron", player.Iron);
+                    command.Parameters.AddWithValue("@Straw", player.Straw);
+                    command.Parameters.AddWithValue("@Food", player.Food);
+                    command.Parameters.AddWithValue("@Gold", player.Gold);
+                    command.Parameters.AddWithValue("@Name", player.Name);
 
-            command.ExecuteNonQueryAsync();
+                    command.ExecuteNonQuery();
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.ExecuteNonQueryAsync();
         }
 
         /// <summary>
@@ -115,13 +145,26 @@ namespace _02148_Project
         /// <param name="count">Amount of resources to add</param>
         internal static void UpdatePlayerResource(string name, ResourceType type, int count)
         {
-            OpenConnection();
-            string query = "UPDATE Players " 
-                + "SET " + type.ToString() + " = " + type.ToString() + " + " + count + " "
-                + "WHERE Name = @Name;";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", name);
-            command.ExecuteNonQuery();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "UPDATE Players "
+                    + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+                    + "WHERE Name = @Name;";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@Count", count);
+                    command.ExecuteNonQuery();
+                }
+            }
+            //    OpenConnection();
+            //string query = "UPDATE Players " 
+            //    + "SET " + type.ToString() + " = " + type.ToString() + " + " + count + " "
+            //    + "WHERE Name = @Name;";
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.Parameters.AddWithValue("@Name", name);
+            //command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -130,14 +173,33 @@ namespace _02148_Project
         /// </summary>
         /// <param name="name">Name of the player</param>
         /// <returns>The data reader object with the returned data</returns>
-        internal static SqlDataReader ReadPlayerData(string name)
+        internal static Player ReadPlayerData(string name)
         {
-            OpenConnection();
             string query = "SELECT * FROM Players WHERE Name = @Name;";
-            SqlCommand command = new SqlCommand(query, connection);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return DatabaseInterface.GetPlayerFromReader(reader);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
 
-            command.Parameters.AddWithValue("@Name", name);
-            return command.ExecuteReader();
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -146,11 +208,19 @@ namespace _02148_Project
         /// <param name="name">User to delete</param>
         internal static void DeletePlayer(string name)
         {
-            OpenConnection();
             string query = "DELETE FROM Players WHERE Name = @Name;";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", name);
-            command.ExecuteNonQuery();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.ExecuteNonQuery();
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.ExecuteNonQuery();
         }
         #endregion
 
@@ -160,17 +230,27 @@ namespace _02148_Project
         /// </summary>
         internal static int PlaceResources(ResourceOffer offer)
         {
-            OpenConnection();
             string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
                 + "OUTPUT INSERTED.Id "
                 + "VALUES (@Name, @Resource, @Count, @Price);";
 
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", offer.SellerName);
-            command.Parameters.AddWithValue("@Resource", offer.Type);
-            command.Parameters.AddWithValue("@Count", offer.Count);
-            command.Parameters.AddWithValue("@Price", offer.Price);
-            return (int)command.ExecuteScalar();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", offer.SellerName);
+                    command.Parameters.AddWithValue("@Resource", offer.Type);
+                    command.Parameters.AddWithValue("@Count", offer.Count);
+                    command.Parameters.AddWithValue("@Price", offer.Price);
+
+                    return (int)command.ExecuteScalar();
+                }
+            }
+
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return (int)command.ExecuteScalar();
         }
 
         /// <summary>
@@ -183,18 +263,20 @@ namespace _02148_Project
             {
                 connection.Open();
                 string query = "SELECT * FROM Market ";
-                SqlCommand command = new SqlCommand(query, connection);
-                using (var reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    List<ResourceOffer> offer = new List<ResourceOffer>();
-                    if (reader.HasRows)
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        List<ResourceOffer> offer = new List<ResourceOffer>();
+                        if (reader.HasRows)
                         {
-                            offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
+                            while (reader.Read())
+                            {
+                                offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
+                            }
                         }
+                        return offer;
                     }
-                    return offer;
                 }
             }
         }
@@ -204,13 +286,33 @@ namespace _02148_Project
         /// </summary>
         /// <param name="id">Of the offer to read</param>
         /// <returns>A SQL data reader object with the query result</returns>
-        internal static SqlDataReader ReadResourceOnMarket(int id)
+        internal static ResourceOffer ReadResourceOnMarket(int id)
         {
-            OpenConnection();
             string query = "SELECT * FROM Market WHERE Id = @Id;";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Id", id);
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return DatabaseInterface.GetResourceOfferFromReader(reader);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -218,13 +320,31 @@ namespace _02148_Project
         /// </summary>
         /// <param name="id">Id of the resource offer to get</param>
         /// <returns>A SqlDataReader object with the data</returns>
-        internal static SqlDataReader GetResourceOnMarket(int id)
+        internal static ResourceOffer GetResourceOnMarket(int id)
         {
-            OpenConnection();
             string query = "DELETE FROM Market OUTPUT DELETED.* WHERE Id = " + id;
-            SqlCommand command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return DatabaseInterface.GetResourceOfferFromReader(reader);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -239,24 +359,28 @@ namespace _02148_Project
         /// <param name="highestBid">The bid on the resources</param>
         internal static void UpdateResourceOffer(ResourceOffer offer)
         {
-            OpenConnection();
             string query = "UPDATE Market "
                 + "SET SellerName = @SellerName, ResourceType = @Type, "
                 + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
                 + "WHERE Market.Id = " + offer.Id + " AND Market.Bid < @Bid;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@SellerName", offer.SellerName);
-            command.Parameters.AddWithValue("@Type", offer.Type);
-            command.Parameters.AddWithValue("@Count", offer.Count);
-            command.Parameters.AddWithValue("@Price", offer.Price);
-            command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
-            command.Parameters.AddWithValue("@Bid", offer.HighestBid);
-
-            // If no rows where updated 
-            if (command.ExecuteNonQuery() == 0)
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@SellerName", offer.SellerName);
+                    command.Parameters.AddWithValue("@Type", offer.Type);
+                    command.Parameters.AddWithValue("@Count", offer.Count);
+                    command.Parameters.AddWithValue("@Price", offer.Price);
+                    command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
+                    command.Parameters.AddWithValue("@Bid", offer.HighestBid);
+
+                    // If no rows where updated 
+                    if (command.ExecuteNonQuery() == 0)
+                    {
+                        throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
+                    }
+                }
             }
         }
         #endregion
@@ -267,12 +391,31 @@ namespace _02148_Project
         /// </summary>
         /// <param name="id">Id of the offer</param>
         /// <returns>A SQL data reader object with the results from the query</returns>
-        internal static SqlDataReader GetTradeOffer(int id)
+        internal static TradeOffer GetTradeOffer(int id)
         {
-            OpenConnection();
             string query = "DELETE FROM TradeOffers OUTPUT DELETED.* WHERE Id = " + id;
-            SqlCommand command = new SqlCommand(query, connection);
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return DatabaseInterface.GetTradeOfferFromReader(reader);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -281,20 +424,30 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reciever">Name of the reciever</param>
         /// <returns>The data reader object with results from the query</returns>
-        internal static SqlDataReader ReadAllTradeOffers(string reciever)
+        internal static List<TradeOffer> ReadAllTradeOffers(string reciever)
         {
-            OpenConnection();
             string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
-            SqlCommand command = new SqlCommand(query, connection);
-            
-            try
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                return command.ExecuteReader();            
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<TradeOffer> offers = new List<TradeOffer>();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                offers.Add(DatabaseInterface.GetTradeOfferFromReader(reader));
+                            }
+                        }
+                        return offers;
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection); 
         }
 
         /// <summary>
@@ -302,12 +455,31 @@ namespace _02148_Project
         /// </summary>
         /// <param name="sender">Name of the user who send the trade offer</param>
         /// <returns>A SQL data reader object with the data from the query</returns>
-        internal static SqlDataReader ReadAllSendTradeOffers(string sender)
+        internal static List<TradeOffer> ReadAllSendTradeOffers(string sender)
         {
-            OpenConnection();
             string query = "SELECT * FROM TradeOffers WHERE SellerName = '" + sender + "';";
-            SqlCommand command = new SqlCommand(query, connection);
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<TradeOffer> offers = new List<TradeOffer>();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                offers.Add(DatabaseInterface.GetTradeOfferFromReader(reader));
+                            }
+                        }
+                        return offers;
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return command.ExecuteReader();
         }
 
         /// <summary>
@@ -316,19 +488,27 @@ namespace _02148_Project
         /// <param name="offer">The offer to place on the market</param>
         internal static int PlaceTradeOffer(TradeOffer offer)
         {
-            OpenConnection();
             string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, PriceType, Price) "
                 + "OUTPUT INSERTED.Id "
                 + "VALUES (@Seller, @Reciever, @Type, @Count, @PriceType, @Price);";
-            SqlCommand command = new SqlCommand(query, connection);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Seller", offer.SellerName);
+                    command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
+                    command.Parameters.AddWithValue("@Type", offer.Type);
+                    command.Parameters.AddWithValue("@Count", offer.Count);
+                    command.Parameters.AddWithValue("@PriceType", offer.PriceType);
+                    command.Parameters.AddWithValue("@Price", offer.Price);
 
-            command.Parameters.AddWithValue("@Seller", offer.SellerName);
-            command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
-            command.Parameters.AddWithValue("@Type", offer.Type);
-            command.Parameters.AddWithValue("@Count", offer.Count);
-            command.Parameters.AddWithValue("@PriceType", offer.PriceType);
-            command.Parameters.AddWithValue("@Price", offer.Price);
-            return (int)command.ExecuteScalar();
+                    return (int)command.ExecuteScalar();
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return (int)command.ExecuteScalar();
         }
         #endregion
 
@@ -339,15 +519,22 @@ namespace _02148_Project
         /// <param name="msg">Message to send</param>
         internal static void SendMessage(Message msg)
         {
-            OpenConnection();
             string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
                 + "VALUES (@Message, @Sender, @Reciever);";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Message", msg.Context);
-            command.Parameters.AddWithValue("@Sender", msg.SenderName);
-            command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
-            command.ExecuteNonQuery();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Message", msg.Context);
+                    command.Parameters.AddWithValue("@Sender", msg.SenderName);
+                    command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+                    command.ExecuteNonQuery();
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -356,15 +543,34 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reciever">Name of the reciever for whom the message should be</param>
         /// <returns>The data reader object from the sql query</returns>
-        internal static SqlDataReader GetMessage(string reciever)
+        internal static Message GetMessage(string reciever)
         {
-            OpenConnection();
             string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
                 + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
                 + "DELETE FROM toprow "
                 + "OUTPUT DELETED.*;";
-            SqlCommand command = new SqlCommand(query, connection);
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                        }
+                        else
+                        {
+                            return null; 
+                        }
+                    }
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //return command.ExecuteReader();
         }
         #endregion
 

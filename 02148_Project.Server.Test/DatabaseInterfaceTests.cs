@@ -68,16 +68,16 @@ namespace Server.Test
         public void UpdatePlayerResourcesTest()
         {
             // Get the data before
-            Player playerBefore = DatabaseInterface.ReadPlayer("Nina");
+            Player playerBefore = DatabaseInterface.ReadPlayer("Oliver");
 
             // Create and update the new data
             Random random = new Random();
-            Player update = new Player("Nina", random.Next(), random.Next(), random.Next(),
+            Player update = new Player("Oliver", random.Next(), random.Next(), random.Next(),
                 random.Next(), random.Next(), random.Next(), random.Next(), random.Next());
             DatabaseInterface.UpdatePlayer(update);
 
             // Output the results
-            Player player = DatabaseInterface.ReadPlayer("Alex");
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
             Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
                 player.Name, player.Wood, player.Clay, player.Wool, player.Stone,
                 player.Iron, player.Straw, player.Food, player.Gold);
@@ -122,7 +122,7 @@ namespace Server.Test
         {
             ResourceOffer offer = DatabaseInterface.ReadResourceOffer(2);
             Assert.AreEqual(ResourceType.Iron, offer.Type);
-            Assert.AreEqual(50, offer.Price);
+            Assert.AreEqual(60, offer.Price);
         }
 
         [TestMethod]
@@ -164,20 +164,21 @@ namespace Server.Test
         [TestCategory("ResourceOffer")]
         public void UpdateResourceOfferTest()
         {
-            int id = 4; // Used to select the resource in the database to test on
+            int id = 2; // Used to select the resource in the database to test on
             // Get the current offer on the market
             ResourceOffer beforeOffer = DatabaseInterface.ReadResourceOffer(id);
             Random random = new Random();
-            int count = random.Next();
+            int count = 50;
 
             // Create the new offer to update
-            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, count, 60, "Alex", 45);
+            ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, 
+                count, 60, "Alex", count);
             DatabaseInterface.UpdateResourceOffer(offer);
 
             ResourceOffer updatedOffer = DatabaseInterface.ReadResourceOffer(id);
             Assert.AreEqual(count, updatedOffer.Count);
             Assert.AreNotEqual(beforeOffer.Count, updatedOffer.Count);
-            Assert.AreEqual(45, updatedOffer.HighestBid);
+            Assert.AreEqual(count, updatedOffer.HighestBid);
             Assert.AreEqual("Alex", updatedOffer.HighestBidder);
         }
 
@@ -223,9 +224,9 @@ namespace Server.Test
         [TestCategory("Trade Offer")]
         public void GetTradeOfferInDatabaseTest()
         {
-            TradeOffer offer = DatabaseInterface.GetTradeOffer(2);
+            TradeOffer offer = DatabaseInterface.GetTradeOffer(1);
             Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
-                offer.RecieverName, (ResourceType)offer.Type, offer.Count, offer.Price);
+                offer.RecieverName, offer.Type, offer.Count, offer.Price);
         }
 
         [TestMethod]
