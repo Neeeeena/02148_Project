@@ -69,6 +69,10 @@ namespace _02148_Project
                 //ConnectionException.Error.LoginFailure
                 throw new ConnectionException("Login failed");
             }
+            else if (ex.Number == 267)
+            {
+                throw new ConnectionException("Object can not be found");
+            }
             else
             {
                 throw new ConnectionException("Unknown error occured");
@@ -127,6 +131,7 @@ namespace _02148_Project
             }
             reader.Dispose();
             DatabaseHandler.CloseConnection();
+            if (player == null) throw new PlayerException("Player not found", name);
             return player;
         }
 
@@ -333,18 +338,28 @@ namespace _02148_Project
         /// <returns>A list of tradeoffers</returns>
         public static List<TradeOffer> ReadAllTradeOffers(string reciever)
         {
-            SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
             List<TradeOffer> offers = new List<TradeOffer>();
-
-            if (reader != null && reader.HasRows)
+            try
             {
-                while (reader.Read())
+                SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
+
+                if (reader != null && reader.HasRows)
                 {
-                    offers.Add(GetTradeOfferFromReader(reader));
+                    while (reader.Read())
+                    {
+                        offers.Add(GetTradeOfferFromReader(reader));
+                    }
                 }
+                reader.Dispose();
             }
-            reader.Dispose();
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
             DatabaseHandler.CloseConnection();
+            }
             return offers;
         }
 
@@ -378,15 +393,25 @@ namespace _02148_Project
         /// <returns>The requested tradeoffer</returns>
         public static TradeOffer GetTradeOffer(int id)
         {
-            SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
             TradeOffer offer = null;
+            try
+            {
+            SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
             if (reader.HasRows)
             {
                 reader.Read();
                 offer = GetTradeOfferFromReader(reader);
             }
             reader.Dispose();
+            }
+            catch(SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
             DatabaseHandler.CloseConnection();
+            }
             return offer;
         }
         
