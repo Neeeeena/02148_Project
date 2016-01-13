@@ -133,6 +133,7 @@ namespace _02148_Project.Website
             // Find a way to update with the latest resource offers
             marketresources = MainClient.UpdateResourcesOnMarket();
 
+            RenderMarket();
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
@@ -142,8 +143,8 @@ namespace _02148_Project.Website
             // Update all trade offer fields
             if (MainClient.player != null)
             {
-                allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
-                allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
+            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
+            allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
             }
 
             DatabaseInterface.MonitorTradeOffer(OnChange_TradeOffer);
@@ -155,7 +156,7 @@ namespace _02148_Project.Website
             // Get the latest message and save it locally
             if (MainClient.player != null)
             {
-                message = DatabaseInterface.GetMessage(MainClient.player.Name);
+            message = DatabaseInterface.GetMessage(MainClient.player.Name);
             }
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
