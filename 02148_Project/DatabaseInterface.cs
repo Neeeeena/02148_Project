@@ -61,15 +61,17 @@ namespace _02148_Project
         {
             if (ex.ErrorCode == 26)
             {
-                throw new ConnectionException(ConnectionException.Error.UnableToLocateDatabase);
+                //ConnectionException.Error.UnableToLocateDatabase
+                throw new ConnectionException("Unable to locate the database");
             }
             else if (ex.Number == -2146232060)
             {
-                throw new ConnectionException(ConnectionException.Error.LoginFailure);
+                //ConnectionException.Error.LoginFailure
+                throw new ConnectionException("Login failed");
             }
             else
             {
-                throw ex;
+                throw new ConnectionException("Unknown error occured");
             }
         }
         #endregion

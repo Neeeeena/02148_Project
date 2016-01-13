@@ -13,7 +13,8 @@ namespace _02148_Project
 
 
 
-        int id;
+        public int id { get; set; }
+
         int stopwatchThreshold = 50000;
 
         //The timer is used for calling the event "closeAdvert(..)"
@@ -48,8 +49,9 @@ namespace _02148_Project
 
         private void sellToPlayer(ResourceOffer ro)
         {
-            //Take the gold
-            DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ResourceType.Gold, - ro.Price);
+            //Take the gold - NO
+            //Gold is already in quarantine
+            //DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ResourceType.Gold, - ro.Price);
 
             //Give the ware
             DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ro.Type, ro.Count);

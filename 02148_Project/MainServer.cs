@@ -8,7 +8,7 @@ using System.Timers;
 using _02148_Project.Model;
 namespace _02148_Project
 {
-    static class MainServer
+    public static class MainServer
     {
         //static int nextid = 0;
         static List<Advert> adverts = new List<Advert>();
@@ -80,6 +80,17 @@ namespace _02148_Project
             timer.AutoReset = true;
             timer.Elapsed += createAdvert;
             timer.Start();
+        }
+
+        public static void bidAccepted(int id)
+        {
+            foreach(Advert a in adverts)
+                if(a.id == id)
+                {
+                    a.bidAccepted();
+                    return;
+                }
+                     
         }
 
 
