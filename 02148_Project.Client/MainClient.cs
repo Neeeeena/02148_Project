@@ -49,9 +49,17 @@ namespace _02148_Project.Client
             return "";
         }
 
-        public static void deletePlayer(string name)
+        public static string deletePlayer(string name)
         {
-            DatabaseInterface.DeletePlayer(name);
+            // Check object not found error code
+            try {
+                DatabaseInterface.DeletePlayer(name);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
    
         public static void setUpdateTimer()
@@ -72,6 +80,7 @@ namespace _02148_Project.Client
 
         // Market stuff:
 
+        // Kan ikke returne string
         public static List<ResourceOffer> UpdateResourcesOnMarket()
         {
             return DatabaseInterface.ReadAllResourceOffers();
@@ -92,10 +101,18 @@ namespace _02148_Project.Client
             return true;            
         }
 
-        public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
+        public static string PlaceResourceOfferOnMarket(ResourceOffer offer)
         {
-            DatabaseInterface.PutResourceOfferOnMarket(offer);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
+            try
+            {
+                DatabaseInterface.PutResourceOfferOnMarket(offer);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
         // SERVER SKAL HAVE EN GetResourceFromMarked og så en UpdatePlayerTable hvor den -guld og +resource på en spiller.
@@ -103,10 +120,19 @@ namespace _02148_Project.Client
 
 
         // Own player gold and resource stuff
-        public static void UpdateOwnGoldAndResources()
+        public static string UpdateOwnGoldAndResources()
         {
-            player = DatabaseInterface.ReadPlayer(player.Name);
+            try
+            {
+                player = DatabaseInterface.ReadPlayer(player.Name);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
+
 
         public static List<LocalResource> GetLocalResources()
         {
@@ -151,6 +177,7 @@ namespace _02148_Project.Client
             return result;
         }
 
+        // Kan ikke returne string
         public static void ReadOtherPlayers()
         {
             allOtherPlayers = DatabaseInterface.ReadAllPlayers();
@@ -169,39 +196,54 @@ namespace _02148_Project.Client
                 }
             }
         }
-        
+
 
         // Trade offer stuff:
 
         // Hent trade-offers til dig
+        // Kan ikke returne string
         public static List<TradeOffer> ReadAllTradeOffersForYou()
         {
-            return DatabaseInterface.ReadAllTradeOffers(player.Name);
+            try {
+                return DatabaseInterface.ReadAllTradeOffers(player.Name);
+            }
+            catch(Exception ex)
+            {
+                return new List<TradeOffer>();
+            }
         }
 
-        public static void SendTradeOfferToPlayer(TradeOffer offer)
+        public static string SendTradeOfferToPlayer(TradeOffer offer)
         {
             //Set en timer på trade-offeret
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
-        
+
             //put det op
-            int id = DatabaseInterface.PutTradeOffer(offer);
-            SubtractResource(offer.Type, offer.Count);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
+            try {
+                int id = DatabaseInterface.PutTradeOffer(offer);
+                SubtractResource(offer.Type, offer.Count);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
 
-            Timer timer = new Timer(10000);
-            timer.Elapsed += TakeBackTradeOffer;
-            timer.AutoReset = false;
+                Timer timer = new Timer(10000);
+                timer.Elapsed += TakeBackTradeOffer;
+                timer.AutoReset = false;
 
-            Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
+                Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
 
-            timersWithId.Add(meh);
+                timersWithId.Add(meh);
 
-            timer.Start();
+                timer.Start();
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
 
             // Evt add til allYourSentTradeOffers                        
         }
 
+        // Event så kan ikke returne string
         private static void TakeBackTradeOffer(object sender, ElapsedEventArgs e)
         {
             // Ældste timer er altid på position 0
@@ -214,26 +256,41 @@ namespace _02148_Project.Client
             timersWithId.RemoveAt(0);
         }
 
-        public static void AcceptTradeOffer(int id)
+        public static string AcceptTradeOffer(int id)
         {
-            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            SubtractResource(offer.PriceType, offer.Price);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
-            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
+            try {
+                TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+                SubtractResource(offer.PriceType, offer.Price);
+                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+                SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";        
         }
 
-        public static void DeclineTradeOffer(int id)
+        public static string DeclineTradeOffer(int id)
         {
-            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
-            SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
+            try
+            {
+                TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count);
+                SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
 
         // Message stuff:
-
+        //Kan ikke returne string
         public static Message GetNewMessage()
         {
             return DatabaseInterface.GetMessage(player.Name);
@@ -241,23 +298,37 @@ namespace _02148_Project.Client
         }
 
         // Exception skal kastes
-        public static void SendNewMessage(Message msg)
+        public static string SendNewMessage(Message msg)
         {
-            DatabaseInterface.SendMessage(msg);
+            try {
+                DatabaseInterface.SendMessage(msg);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
-        public static void SendNewMessageToAll(Message msg)
+        public static string SendNewMessageToAll(Message msg)
         {
-            List<Player> players = new List<Player>();
-            players = DatabaseInterface.ReadAllPlayers();
-            foreach(Player p in players)
-            {
-                if (p.Name != player.Name)
+            try {
+                List<Player> players = new List<Player>();
+                players = DatabaseInterface.ReadAllPlayers();
+                foreach (Player p in players)
                 {
-                    msg.RecieverName = p.Name;
-                    DatabaseInterface.SendMessage(msg);
+                    if (p.Name != player.Name)
+                    {
+                        msg.RecieverName = p.Name;
+                        DatabaseInterface.SendMessage(msg);
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
 
