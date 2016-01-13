@@ -11,7 +11,6 @@ namespace _02148_Project.Model
     {
         Cottage,
         Forge,
-        Mason,
         Mill,
         Farm,
         Townhall,
