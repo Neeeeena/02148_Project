@@ -7,7 +7,6 @@ using _02148_Project;
 using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
 using System.Timers;
-using _02148_Project.Model.Exceptions;
 using System.Data.SqlClient;
 
 namespace _02148_Project.Client
@@ -17,7 +16,7 @@ namespace _02148_Project.Client
 
         //public List<ResourceOffer> allResourcesOnMarket;
         //public List<TradeOffer> allYourRecievedTradeOffers;
-        public static List<TradeOffer> allYourSentTradeOffers;
+        //public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
         public static List<Player> allOtherPlayers;
         
@@ -313,43 +312,22 @@ namespace _02148_Project.Client
         }
 
         /// <summary>
-        /// On change methode for when the players table changes
+        /// Setup database listeners to update fields when there is any changes 
+        /// to the database/tuple space
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        /// <param name="players"></param>
+        /// <param name="resources"></param>
+        /// <param name="trades"></param>
+        /// <param name="chat"></param>
+        public static void SetupDatabaseListeners(DatabaseInterface.OnChange_Player players, 
+            DatabaseInterface.OnChange_ResourceOffers resources,
+            DatabaseInterface.OnChange_TradeOffers trades, 
+            DatabaseInterface.OnChange_Chat chat)
         {
-            SqlDependency dependency = sender as SqlDependency;
-            dependency.OnChange -= OnChange_Players;
-
-            // Need to update the correct field, not players in this class
-            ReadOtherPlayers();
-            GetLocalResources();
-            DatabaseInterface.MonitorPlayers(OnChange_Players);
+            DatabaseInterface.SetupDatabaseListeners(players, resources, trades, chat);
         }
 
-        public void OnChange_ResourceOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update with the latest resource offers
-            UpdateResourcesOnMarket();
-            DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
-        }
-
-        public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update tradeoffers
-            DatabaseInterface.MonitorTradeOffer(OnChange_ResourceOffer);
-        }
-
-        public void OnChange_Chat(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_Chat;
-            // Find a way to get the latest message
-            DatabaseInterface.MonitorChat(OnChange_Chat);
-        }
-
+        
         //Constructions with their required resources to build
         static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
             Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
