@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="span8">
-    <div style="background-image:url(Images/market.png); repeat: no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
+    <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
         <asp:Repeater ID="repMarketResources" runat="server" >
           <HeaderTemplate>
