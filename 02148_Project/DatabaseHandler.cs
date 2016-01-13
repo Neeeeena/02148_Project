@@ -276,7 +276,7 @@ namespace _02148_Project
         internal static SqlDataReader ReadAllSendTradeOffers(string sender)
         {
             OpenConnection();
-            string query = "SELECT * FROM TradeOffers WHERE SenderName = '" + sender + "';";
+            string query = "SELECT * FROM TradeOffers WHERE SellerName = '" + sender + "';";
             SqlCommand command = new SqlCommand(query, connection);
             return command.ExecuteReader();
         }
