@@ -226,8 +226,8 @@ namespace _02148_Project.Client
         public static List<TradeOffer> ReadAllTradeOffersForYou()
         {
             try {
-            return DatabaseInterface.ReadAllTradeOffers(player.Name);
-        }
+                return DatabaseInterface.ReadAllTradeOffers(player.Name);
+            }
             catch(Exception ex)
             {
                 return new List<TradeOffer>();
