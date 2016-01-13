@@ -10,6 +10,7 @@ namespace _02148_Project.Model
     {
         public string Name { get; set; }
 
+        //Resources START
         public int Wood { get; set; }
 
         public int Clay { get; set; }
@@ -25,6 +26,18 @@ namespace _02148_Project.Model
         public int Food { get; set; }
 
         public int Gold { get; set; }
+        //Resources END
+
+        //Constructions START
+        public int Cottage { get; set; }
+        public int Forge { get; set; }
+        public int Mason { get; set; }
+        public int Mill { get; set; }
+        public int Farm { get; set; }
+        public int Townhall { get; set; }
+        public int Goldmine { get; set; }
+        //Constructions END
+
 
         /// <summary>
         /// Create a player object with a name
@@ -58,6 +71,13 @@ namespace _02148_Project.Model
             this.Straw = straw;
             this.Food = food;
             this.Gold = gold;
+            this.Cottage = 0;
+            this.Forge = 0;
+            this.Mason = 0;
+            this.Mill = 0;
+            this.Farm = 0;
+            this.Townhall = 0;
+            this.Goldmine = 0;
         }
     }
 }

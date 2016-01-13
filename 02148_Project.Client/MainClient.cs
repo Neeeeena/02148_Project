@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using _02148_Project;
 using _02148_Project.Model;
-using System.Timers;
 using _02148_Project.Model.Exceptions;
+using System.Timers;
 using System.Data.SqlClient;
 
 namespace _02148_Project.Client
@@ -16,7 +16,7 @@ namespace _02148_Project.Client
 
         //public List<ResourceOffer> allResourcesOnMarket;
         //public List<TradeOffer> allYourRecievedTradeOffers;
-        public static List<TradeOffer> allYourSentTradeOffers;
+        //public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
         public static List<Player> allOtherPlayers;
         
@@ -78,19 +78,32 @@ namespace _02148_Project.Client
             return DatabaseInterface.ReadAllResourceOffers();
         }
 
-        public static bool BidOnResource(ResourceOffer offer)
+        //Missing tests
+        public static void BidOnResource(ResourceOffer offer)
         {
-            //Try update offer
+            ResourceOffer prevOffer = DatabaseInterface.ReadResourceOffer(offer.Id);
             try
-        {
-            DatabaseInterface.UpdateResourceOffer(offer);
-        }
-            //Catch exception hvis bid var lavere
-            catch (ResourceOfferException)
             {
-                return false;
+            DatabaseInterface.UpdateResourceOffer(offer);
             }
-            return true;            
+            catch (ConnectionException e) {
+
+                //parse error msg to user
+                return;
+            }
+
+            MainServer.bidAccepted(offer.Id);
+
+            //Transfering the money back to the previous highest bidder, if one exists
+            if (prevOffer.HighestBidder != null)
+                DatabaseInterface.UpdatePlayerResource(prevOffer.HighestBidder, ResourceType.Gold, prevOffer.HighestBid);
+
+            //Taking money from the new highest bidder
+            DatabaseInterface.UpdatePlayerResource(offer.HighestBidder, ResourceType.Gold, -offer.HighestBid);
+
+
+            //When the auction is ended, the user has already spent the money, and only the wares have to be transfered
+
         }
 
         public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
@@ -119,7 +132,7 @@ namespace _02148_Project.Client
             string idGenerator = "a";
             UpdateOwnGoldAndResources();
             List<LocalResource> result = new List<LocalResource>();
-            for(int i = 0; i < player.Clay; i++)
+            for (int i = 0; i < player.Clay; i++)
             {
                 result.Add(new LocalResource(ResourceType.Clay) { Id = idGenerator});
                 idGenerator += "a";
@@ -215,7 +228,7 @@ namespace _02148_Project.Client
             //Try get
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             //If gotten
-            if(offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+            if (offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
 
             timersWithId.RemoveAt(0);
         }
@@ -238,7 +251,7 @@ namespace _02148_Project.Client
         }
 
 
-        // Message stuff:
+        // Message stuff:x
 
         public static Message GetNewMessage()
         {
@@ -256,7 +269,7 @@ namespace _02148_Project.Client
         {
             List<Player> players = new List<Player>();
             players = DatabaseInterface.ReadAllPlayers();
-            foreach(Player p in players)
+            foreach (Player p in players)
             {
                 if (p.Name != player.Name)
                 {
@@ -299,41 +312,69 @@ namespace _02148_Project.Client
         }
 
         /// <summary>
-        /// On change methode for when the players table changes
+        /// Setup database listeners to update fields when there is any changes 
+        /// to the database/tuple space
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        /// <param name="players"></param>
+        /// <param name="resources"></param>
+        /// <param name="trades"></param>
+        /// <param name="chat"></param>
+        public static void SetupDatabaseListeners(DatabaseInterface.OnChange_Player players, 
+            DatabaseInterface.OnChange_ResourceOffers resources,
+            DatabaseInterface.OnChange_TradeOffers trades, 
+            DatabaseInterface.OnChange_Chat chat)
         {
-            SqlDependency dependency = sender as SqlDependency;
-            dependency.OnChange -= OnChange_Players;
-
-            // Need to update the correct field, not players in this class
-            ReadOtherPlayers();
-            GetLocalResources();
-            DatabaseInterface.MonitorPlayers(OnChange_Players);
+            DatabaseInterface.SetupDatabaseListeners(players, resources, trades, chat);
         }
 
-        public void OnChange_ResourceOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update with the latest resource offers
-            UpdateResourcesOnMarket();
-            DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
-        }
+        
+        //Constructions with their required resources to build
+        static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
+            Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
+                Tuple.Create(2,ResourceType.Wood),
+                Tuple.Create(2,ResourceType.Wool),
+                Tuple.Create(2,ResourceType.Straw) }),
+            Tuple.Create(Construction.Forge, new Tuple<int,ResourceType>[] {
+                Tuple.Create(4,ResourceType.Stone),
+                Tuple.Create(4,ResourceType.Food),
+                Tuple.Create(5,ResourceType.Iron) }),
+            Tuple.Create(Construction.Mason, new Tuple<int,ResourceType>[] {
+                Tuple.Create(2,ResourceType.Stone),
+                Tuple.Create(2,ResourceType.Clay),
+                Tuple.Create(5,ResourceType.Iron), }),
+            Tuple.Create(Construction.Mill, new Tuple<int,ResourceType>[] {
+                Tuple.Create(6,ResourceType.Wood),
+                Tuple.Create(4,ResourceType.Straw),
+                Tuple.Create(2,ResourceType.Food),
+                Tuple.Create(1,ResourceType.Wool)  }),
+            Tuple.Create(Construction.Farm, new Tuple<int,ResourceType>[] {
+                Tuple.Create(6,ResourceType.Food),
+                Tuple.Create(4,ResourceType.Straw),
+                Tuple.Create(4,ResourceType.Clay),
+                Tuple.Create(1,ResourceType.Wood) }),
+            Tuple.Create(Construction.Townhall, new Tuple<int,ResourceType>[] {
+                Tuple.Create(40,ResourceType.Gold),
+                Tuple.Create(5,ResourceType.Clay),
+                Tuple.Create(5,ResourceType.Wood),
+                Tuple.Create(10,ResourceType.Food) })
+        };
 
-        public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update tradeoffers
-            DatabaseInterface.MonitorTradeOffer(OnChange_ResourceOffer);
-        }
 
-        public void OnChange_Chat(object sender, SqlNotificationEventArgs e)
+        public static void constructConstruction(Construction type)
         {
-            (sender as SqlDependency).OnChange -= OnChange_Chat;
-            // Find a way to get the latest message
-            DatabaseInterface.MonitorChat(OnChange_Chat);
+            foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+                if (cp.Item1 == type)
+                    foreach (Tuple<int, ResourceType> priceres in cp.Item2)
+                    {
+                        DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, - priceres.Item1);
+                    }
+                    //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
+                    //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+                    return;
+
+            //THROW ERROR (construction does not exist)
         }
     }
+
+
 }

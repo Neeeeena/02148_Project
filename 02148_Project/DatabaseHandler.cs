@@ -265,8 +265,25 @@ namespace _02148_Project
         {
             OpenConnection();
             string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
-            SqlCommand command = new SqlCommand(query, connection);
-            return command.ExecuteReader();
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                return command.ExecuteReader();
+            }
+        }
+
+        /// <summary>
+        /// Read all trade offers from the database, send by the given user
+        /// </summary>
+        /// <param name="sender">Name of the user who send the trade offer</param>
+        /// <returns>A SQL data reader object with the data from the query</returns>
+        internal static SqlDataReader ReadAllSendTradeOffers(string sender)
+        {
+            OpenConnection();
+            string query = "SELECT * FROM TradeOffers WHERE SenderName = '" + sender + "';";
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                return command.ExecuteReader();
+            }
         }
 
         /// <summary>
@@ -400,7 +417,7 @@ namespace _02148_Project
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
                 + "ResourceType, Count, PriceType, Price FROM TradeOffers;",
                 connection))
-            {
+            { 
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
                 command.ExecuteNonQuery();
