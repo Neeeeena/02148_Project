@@ -13,8 +13,9 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
-        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        private const string connectionString = @"Data Source=Alex-pc\MSSQLSERVER;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace _02148_Project
                             while (reader.Read())
                             {
                                 players.Add(DatabaseInterface.GetPlayerFromReader(reader));
-                            }
+        }
                         }
                         return players;
                     }
@@ -111,26 +112,26 @@ namespace _02148_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Players "
-                    + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
-                    + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
-                    + "Food = @Food, Gold = @Gold "
-                    + "WHERE Name = @Name;";
+            string query = "UPDATE Players "
+                + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+                + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+                + "Food = @Food, Gold = @Gold "
+                + "WHERE Name = @Name;";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Wood", player.Wood);
-                    command.Parameters.AddWithValue("@Clay", player.Clay);
-                    command.Parameters.AddWithValue("@Wool", player.Wool);
-                    command.Parameters.AddWithValue("@Stone", player.Stone);
-                    command.Parameters.AddWithValue("@Iron", player.Iron);
-                    command.Parameters.AddWithValue("@Straw", player.Straw);
-                    command.Parameters.AddWithValue("@Food", player.Food);
-                    command.Parameters.AddWithValue("@Gold", player.Gold);
-                    command.Parameters.AddWithValue("@Name", player.Name);
+            command.Parameters.AddWithValue("@Wood", player.Wood);
+            command.Parameters.AddWithValue("@Clay", player.Clay);
+            command.Parameters.AddWithValue("@Wool", player.Wool);
+            command.Parameters.AddWithValue("@Stone", player.Stone);
+            command.Parameters.AddWithValue("@Iron", player.Iron);
+            command.Parameters.AddWithValue("@Straw", player.Straw);
+            command.Parameters.AddWithValue("@Food", player.Food);
+            command.Parameters.AddWithValue("@Gold", player.Gold);
+            command.Parameters.AddWithValue("@Name", player.Name);
 
                     command.ExecuteNonQuery();
-                }
+        }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection);
@@ -148,15 +149,15 @@ namespace _02148_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Players "
+            string query = "UPDATE Players " 
                     + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
-                    + "WHERE Name = @Name;";
+                + "WHERE Name = @Name;";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
+            command.Parameters.AddWithValue("@Name", name);
                     command.Parameters.AddWithValue("@Count", count);
-                    command.ExecuteNonQuery();
-                }
+            command.ExecuteNonQuery();
+        }
             }
             //    OpenConnection();
             //string query = "UPDATE Players " 
@@ -181,14 +182,14 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
+            command.Parameters.AddWithValue("@Name", name);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             reader.Read();
                             return DatabaseInterface.GetPlayerFromReader(reader);
-                        }
+        }
                         else
                         {
                             return null;
@@ -214,9 +215,9 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
-                    command.ExecuteNonQuery();
-                }
+            command.Parameters.AddWithValue("@Name", name);
+            command.ExecuteNonQuery();
+        }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection);
@@ -239,13 +240,13 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", offer.SellerName);
-                    command.Parameters.AddWithValue("@Resource", offer.Type);
-                    command.Parameters.AddWithValue("@Count", offer.Count);
-                    command.Parameters.AddWithValue("@Price", offer.Price);
+            command.Parameters.AddWithValue("@Name", offer.SellerName);
+            command.Parameters.AddWithValue("@Resource", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
 
-                    return (int)command.ExecuteScalar();
-                }
+            return (int)command.ExecuteScalar();
+        }
             }
 
             //OpenConnection();
@@ -267,18 +268,18 @@ namespace _02148_Project
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        List<ResourceOffer> offer = new List<ResourceOffer>();
-                        if (reader.HasRows)
+                    List<ResourceOffer> offer = new List<ResourceOffer>();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
-                            }
+                            offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
                         }
-                        return offer;
                     }
+                    return offer;
                 }
             }
+        }
         }
 
         /// <summary>
@@ -294,14 +295,14 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
+            command.Parameters.AddWithValue("@Id", id);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.HasRows)
                         {
                             reader.Read();
                             return DatabaseInterface.GetResourceOfferFromReader(reader);
-                        }
+        }
                         else
                         {
                             return null;
@@ -368,19 +369,19 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@SellerName", offer.SellerName);
-                    command.Parameters.AddWithValue("@Type", offer.Type);
-                    command.Parameters.AddWithValue("@Count", offer.Count);
-                    command.Parameters.AddWithValue("@Price", offer.Price);
-                    command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
-                    command.Parameters.AddWithValue("@Bid", offer.HighestBid);
+            command.Parameters.AddWithValue("@SellerName", offer.SellerName);
+            command.Parameters.AddWithValue("@Type", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@Price", offer.Price);
+            command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
+            command.Parameters.AddWithValue("@Bid", offer.HighestBid);
 
-                    // If no rows where updated 
-                    if (command.ExecuteNonQuery() == 0)
-                    {
-                        throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
-                    }
-                }
+            // If no rows where updated 
+            if (command.ExecuteNonQuery() == 0)
+            {
+                throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
+            }
+        }
             }
         }
         #endregion
@@ -438,13 +439,13 @@ namespace _02148_Project
                         if (reader.HasRows)
                         {
                             while (reader.Read())
-                            {
+            {
                                 offers.Add(DatabaseInterface.GetTradeOfferFromReader(reader));
                             }
                         }
                         return offers;
                     }
-                }
+            }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection); 
@@ -496,15 +497,15 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Seller", offer.SellerName);
-                    command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
-                    command.Parameters.AddWithValue("@Type", offer.Type);
-                    command.Parameters.AddWithValue("@Count", offer.Count);
-                    command.Parameters.AddWithValue("@PriceType", offer.PriceType);
-                    command.Parameters.AddWithValue("@Price", offer.Price);
+            command.Parameters.AddWithValue("@Seller", offer.SellerName);
+            command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
+            command.Parameters.AddWithValue("@Type", offer.Type);
+            command.Parameters.AddWithValue("@Count", offer.Count);
+            command.Parameters.AddWithValue("@PriceType", offer.PriceType);
+            command.Parameters.AddWithValue("@Price", offer.Price);
 
-                    return (int)command.ExecuteScalar();
-                }
+            return (int)command.ExecuteScalar();
+        }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection);
@@ -526,11 +527,11 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Message", msg.Context);
-                    command.Parameters.AddWithValue("@Sender", msg.SenderName);
-                    command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
-                    command.ExecuteNonQuery();
-                }
+            command.Parameters.AddWithValue("@Message", msg.Context);
+            command.Parameters.AddWithValue("@Sender", msg.SenderName);
+            command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+            command.ExecuteNonQuery();
+        }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection);

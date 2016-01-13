@@ -411,10 +411,6 @@ namespace _02148_Project.Client
                 Tuple.Create(4,ResourceType.Stone),
                 Tuple.Create(4,ResourceType.Food),
                 Tuple.Create(5,ResourceType.Iron) }),
-            Tuple.Create(Construction.Mason, new Tuple<int,ResourceType>[] {
-                Tuple.Create(2,ResourceType.Stone),
-                Tuple.Create(2,ResourceType.Clay),
-                Tuple.Create(5,ResourceType.Iron), }),
             Tuple.Create(Construction.Mill, new Tuple<int,ResourceType>[] {
                 Tuple.Create(6,ResourceType.Wood),
                 Tuple.Create(4,ResourceType.Straw),
@@ -462,7 +458,6 @@ namespace _02148_Project.Client
             return 10 + r.Next(5) +
                    player.Cottage   * 1 +
                    player.Forge     * 2 + (player.Forge / 3) * r.Next(3) +
-                   player.Mason     * r.Next(3) +
                    player.Mill      * 1 +
                    player.Farm      * 1 + (player.Farm / 2) * r.Next(2) +
                    player.Townhall  * 4 +
