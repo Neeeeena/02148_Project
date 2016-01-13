@@ -31,7 +31,6 @@ namespace _02148_Project.Model
         //Constructions START
         public int Cottage { get; set; }
         public int Forge { get; set; }
-        public int Mason { get; set; }
         public int Mill { get; set; }
         public int Farm { get; set; }
         public int Townhall { get; set; }
