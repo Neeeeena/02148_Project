@@ -13,8 +13,9 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
-        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        private const string connectionString = @"Data Source=Alex-pc\MSSQLSERVER;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
+        //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace _02148_Project
         /// </summary>
         internal static void OpenConnection()
         {
-            connection = new SqlConnection(connectionString);
+                connection = new SqlConnection(connectionString);
             connection.OpenAsync();
             while (connection.State != ConnectionState.Open) { }
             //if (connection == null)
@@ -33,7 +34,7 @@ namespace _02148_Project
             //{
             //    connection.Open();
             //}
-        }
+            }
 
         /// <summary>
         /// Close the connection to the database, and set the object to null
@@ -57,11 +58,11 @@ namespace _02148_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO Players (Name) VALUES (@Name);";
+            string query = "INSERT INTO Players (Name) VALUES (@Name);";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Name", name);
-                }
+            command.Parameters.AddWithValue("@Name", name);
+        }
             }
             //OpenConnection();
             //SqlCommand command = new SqlCommand(query, connection);
@@ -180,10 +181,10 @@ namespace _02148_Project
         internal static List<ResourceOffer> ReadAllResourcesOnMarket()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
-            {
+        {
                 connection.Open();
                 string query = "SELECT * FROM Market ";
-                SqlCommand command = new SqlCommand(query, connection);
+            SqlCommand command = new SqlCommand(query, connection);
                 using (var reader = command.ExecuteReader())
                 {
                     List<ResourceOffer> offer = new List<ResourceOffer>();
@@ -289,8 +290,8 @@ namespace _02148_Project
             
             try
             {
-                return command.ExecuteReader();            
-            }
+            return command.ExecuteReader();    
+        }
             catch (Exception ex)
             {
                 return null;
@@ -453,15 +454,15 @@ namespace _02148_Project
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
-                    + "FROM dbo.Chat",
+            using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
+                + "FROM dbo.Chat",
                     con))
-                {
-                    SqlDependency dependency = new SqlDependency(command);
-                    dependency.OnChange += new OnChangeEventHandler(chatMethode);
-                    command.ExecuteNonQuery();
-                }
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(chatMethode);
+                command.ExecuteNonQuery();
             }
+        }
         }
         #endregion
     }
