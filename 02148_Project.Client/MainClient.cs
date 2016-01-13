@@ -150,7 +150,7 @@ namespace _02148_Project.Client
         //Kun for test!
         public static void ReadAPlayer()
         {
-            player = DatabaseInterface.ReadPlayer("Oliver");
+            player = DatabaseInterface.ReadPlayer("Nina");
             //DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wool, 1);
         }
 
