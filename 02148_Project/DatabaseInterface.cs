@@ -475,6 +475,7 @@ namespace _02148_Project
         public static void SetupDatabaseListeners(OnChange_Player player, OnChange_ResourceOffers resourceOffer, 
             OnChange_TradeOffers tradeOffer, OnChange_Chat chat)
         {
+            DatabaseHandler.DependencyInitialization();
             DatabaseHandler.SetupDatabaseListeners(player, resourceOffer, tradeOffer, chat);
         }
 

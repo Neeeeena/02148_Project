@@ -123,6 +123,7 @@ namespace _02148_Project.Website
             // Need to update the correct field, not players in this class
             MainClient.ReadOtherPlayers();
             localresources = MainClient.GetLocalResources();
+
             DatabaseInterface.MonitorPlayers(OnChange_Players);
         }
 
@@ -131,6 +132,7 @@ namespace _02148_Project.Website
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
             marketresources = MainClient.UpdateResourcesOnMarket();
+
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
@@ -138,8 +140,11 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_TradeOffer;
             // Update all trade offer fields
-            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
-            allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
+            if (MainClient.player != null)
+            {
+                allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
+                allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
+            }
 
             DatabaseInterface.MonitorTradeOffer(OnChange_TradeOffer);
         }
@@ -148,7 +153,10 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-            message = DatabaseInterface.GetMessage(MainClient.player.Name);
+            if (MainClient.player != null)
+            {
+                message = DatabaseInterface.GetMessage(MainClient.player.Name);
+            }
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion
