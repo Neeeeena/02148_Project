@@ -111,7 +111,7 @@ namespace _02148_Project.Client
         //Kun for test!
         public static void ReadAPlayer()
         {
-            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Paul");
+            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Geo");
         }
 
         public static List<LocalResource> GetLocalResources()
