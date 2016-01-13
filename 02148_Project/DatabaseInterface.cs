@@ -69,6 +69,10 @@ namespace _02148_Project
                 //ConnectionException.Error.LoginFailure
                 throw new ConnectionException("Login failed");
             }
+            else if (ex.Number == 267)
+            {
+                throw new ConnectionException("Object can not be found");
+            }
             else
             {
                 throw new ConnectionException("Unknown error occured");
@@ -127,6 +131,7 @@ namespace _02148_Project
             }
             reader.Dispose();
             DatabaseHandler.CloseConnection();
+            if (player == null) throw new PlayerException("Player not found", name);
             return player;
         }
 
@@ -332,7 +337,39 @@ namespace _02148_Project
         /// <returns>A list of tradeoffers</returns>
         public static List<TradeOffer> ReadAllTradeOffers(string reciever)
         {
-            SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
+            List<TradeOffer> offers = new List<TradeOffer>();
+            try
+            {
+                SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        offers.Add(GetTradeOfferFromReader(reader));
+                    }
+                }
+                reader.Dispose();
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
+            return offers;
+        }
+
+        /// <summary>
+        /// Read alll trade offers send by the given user
+        /// </summary>
+        /// <param name="sender">Name of user how have send trade offer</param>
+        /// <returns>A list of trade offers, which the user has send</returns>
+        public static List<TradeOffer> ReadAllSendTradeOffers(string sender)
+        {
+            SqlDataReader reader = DatabaseHandler.ReadAllSendTradeOffers(sender);
             List<TradeOffer> offers = new List<TradeOffer>();
 
             if (reader.HasRows)
@@ -347,6 +384,7 @@ namespace _02148_Project
             return offers;
         }
 
+
         /// <summary>
         /// Get a tradeoffer from the database. This will remove it
         /// </summary>
@@ -354,15 +392,25 @@ namespace _02148_Project
         /// <returns>The requested tradeoffer</returns>
         public static TradeOffer GetTradeOffer(int id)
         {
-            SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
             TradeOffer offer = null;
-            if (reader.HasRows)
+            try
             {
-                reader.Read();
-                offer = GetTradeOfferFromReader(reader);
+                SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);                
+                if (reader.HasRows)
+                {
+                    reader.Read();
+                    offer = GetTradeOfferFromReader(reader);
+                }
+                reader.Dispose();                
             }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
+            catch(SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            finally
+            {
+                DatabaseHandler.CloseConnection();
+            }
             return offer;
         }
         
@@ -452,6 +500,7 @@ namespace _02148_Project
         public static void SetupDatabaseListeners(OnChange_Player player, OnChange_ResourceOffers resourceOffer, 
             OnChange_TradeOffers tradeOffer, OnChange_Chat chat)
         {
+            DatabaseHandler.DependencyInitialization();
             DatabaseHandler.SetupDatabaseListeners(player, resourceOffer, tradeOffer, chat);
         }
 

@@ -7,7 +7,6 @@ using _02148_Project;
 using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
 using System.Timers;
-using _02148_Project.Model.Exceptions;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
@@ -18,7 +17,7 @@ namespace _02148_Project.Client
 
         //public List<ResourceOffer> allResourcesOnMarket;
         //public List<TradeOffer> allYourRecievedTradeOffers;
-        public static List<TradeOffer> allYourSentTradeOffers;
+        //public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
         public static List<Player> allOtherPlayers;
         
@@ -52,9 +51,17 @@ namespace _02148_Project.Client
             return "";
         }
 
-        public static void deletePlayer(string name)
+        public static string deletePlayer(string name)
         {
+            // Check object not found error code
+            try {
             DatabaseInterface.DeletePlayer(name);
+        }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
    
         public static void setUpdateTimer()
@@ -75,6 +82,7 @@ namespace _02148_Project.Client
 
         // Market stuff:
 
+        // Kan ikke returne string
         public static List<ResourceOffer> UpdateResourcesOnMarket()
         {
             return DatabaseInterface.ReadAllResourceOffers();
@@ -108,10 +116,18 @@ namespace _02148_Project.Client
 
         }
 
-        public static void PlaceResourceOfferOnMarket(ResourceOffer offer)
+        public static string PlaceResourceOfferOnMarket(ResourceOffer offer)
         {
+            try
+            {
             DatabaseInterface.PutResourceOfferOnMarket(offer);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
+        }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
         // SERVER SKAL HAVE EN GetResourceFromMarked og så en UpdatePlayerTable hvor den -guld og +resource på en spiller.
@@ -119,15 +135,25 @@ namespace _02148_Project.Client
 
 
         // Own player gold and resource stuff
-        public static void UpdateOwnGoldAndResources()
+        public static string UpdateOwnGoldAndResources()
         {
+            try
+            {
             player = DatabaseInterface.ReadPlayer(player.Name);
+        }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
         //Kun for test!
         public static void ReadAPlayer()
         {
-            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Paul");
+            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Nina");
+            DatabaseInterface.UpdatePlayerResource("Nina", ResourceType.Wool, 1);
         }
+
 
         public static List<LocalResource> GetLocalResources()
         {
@@ -172,6 +198,7 @@ namespace _02148_Project.Client
             return result;
         }
 
+        // Kan ikke returne string
         public static void ReadOtherPlayers()
         {
             allOtherPlayers = DatabaseInterface.ReadAllPlayers();
@@ -195,17 +222,25 @@ namespace _02148_Project.Client
         // Trade offer stuff:
 
         // Hent trade-offers til dig
+        // Kan ikke returne string
         public static List<TradeOffer> ReadAllTradeOffersForYou()
         {
+            try {
             return DatabaseInterface.ReadAllTradeOffers(player.Name);
         }
+            catch(Exception ex)
+            {
+                return new List<TradeOffer>();
+            }
+        }
 
-        public static void SendTradeOfferToPlayer(TradeOffer offer)
+        public static string SendTradeOfferToPlayer(TradeOffer offer)
         {
             //Set en timer på trade-offeret
             //Lav event med reader.hasRow (hvis true, tag den selv ned og update ressourcer, ellers gør intet)
         
             //put det op
+            try {
             int id = DatabaseInterface.PutTradeOffer(offer);
             SubtractResource(offer.Type, offer.Count);
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
@@ -219,10 +254,17 @@ namespace _02148_Project.Client
             timersWithId.Add(meh);
 
             timer.Start();
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
 
             // Evt add til allYourSentTradeOffers                        
         }
 
+        // Event så kan ikke returne string
         private static void TakeBackTradeOffer(object sender, ElapsedEventArgs e)
         {
             // Ældste timer er altid på position 0
@@ -235,8 +277,9 @@ namespace _02148_Project.Client
             timersWithId.RemoveAt(0);
         }
 
-        public static void AcceptTradeOffer(int id)
+        public static string AcceptTradeOffer(int id)
         {
+            try {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             SubtractResource(offer.PriceType, offer.Price);
             DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
@@ -244,17 +287,31 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
             SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
         }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";        
+        }
 
-        public static void DeclineTradeOffer(int id)
+        public static string DeclineTradeOffer(int id)
+        {
+            try
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
             SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
         }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
+        }
 
 
-        // Message stuff:x
-
+        // Message stuff:
+        //Kan ikke returne string
         public static Message GetNewMessage()
         {
             return DatabaseInterface.GetMessage(player.Name);
@@ -262,13 +319,21 @@ namespace _02148_Project.Client
         }
 
         // Exception skal kastes
-        public static void SendNewMessage(Message msg)
+        public static string SendNewMessage(Message msg)
         {
+            try {
             DatabaseInterface.SendMessage(msg);
         }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
+        }
 
-        public static void SendNewMessageToAll(Message msg)
+        public static string SendNewMessageToAll(Message msg)
         {
+            try {
             List<Player> players = new List<Player>();
             players = DatabaseInterface.ReadAllPlayers();
             foreach (Player p in players)
@@ -279,6 +344,12 @@ namespace _02148_Project.Client
                     DatabaseInterface.SendMessage(msg);
                 }
             }
+        }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "";
         }
 
 
@@ -314,42 +385,21 @@ namespace _02148_Project.Client
         }
 
         /// <summary>
-        /// On change methode for when the players table changes
+        /// Setup database listeners to update fields when there is any changes 
+        /// to the database/tuple space
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnChange_Players(object sender, SqlNotificationEventArgs e)
+        /// <param name="players"></param>
+        /// <param name="resources"></param>
+        /// <param name="trades"></param>
+        /// <param name="chat"></param>
+        public static void SetupDatabaseListeners(DatabaseInterface.OnChange_Player players, 
+            DatabaseInterface.OnChange_ResourceOffers resources,
+            DatabaseInterface.OnChange_TradeOffers trades, 
+            DatabaseInterface.OnChange_Chat chat)
         {
-            SqlDependency dependency = sender as SqlDependency;
-            dependency.OnChange -= OnChange_Players;
-
-            // Need to update the correct field, not players in this class
-            ReadOtherPlayers();
-            GetLocalResources();
-            DatabaseInterface.MonitorPlayers(OnChange_Players);
+            DatabaseInterface.SetupDatabaseListeners(players, resources, trades, chat);
         }
 
-        public void OnChange_ResourceOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update with the latest resource offers
-            UpdateResourcesOnMarket();
-            DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
-        }
-
-        public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
-            // Find a way to update tradeoffers
-            DatabaseInterface.MonitorTradeOffer(OnChange_ResourceOffer);
-        }
-
-        public void OnChange_Chat(object sender, SqlNotificationEventArgs e)
-        {
-            (sender as SqlDependency).OnChange -= OnChange_Chat;
-            // Find a way to get the latest message
-            DatabaseInterface.MonitorChat(OnChange_Chat);
-        }
 
         //Constructions with their required resources to build
         static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
@@ -401,7 +451,7 @@ namespace _02148_Project.Client
                     //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
                     //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
                     return;
-            
+
             //THROW ERROR (construction does not exist)
         }
 

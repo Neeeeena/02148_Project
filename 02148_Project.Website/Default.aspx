@@ -27,13 +27,13 @@
 	  		    </table>
 
             <p>Sell resources here!</p>
-            <div id="sellBox"  ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div style="background-image:url(Images/sellbox.png); width:70px; height:70px"   id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
             </div>
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Hej Alexander!">
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="span8">
-    <div style="background-image:url(Images/market.png); height: 500px;width: 600px" class="markedImage" id="marked" >
+    <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
         <asp:Repeater ID="repMarketResources" runat="server" >
           <HeaderTemplate>
@@ -68,6 +68,7 @@
           </FooterTemplate>
     </asp:Repeater>
             </div>
+        </div>
 
     <div class="jumbotron">
 
@@ -96,7 +97,6 @@
           </FooterTemplate>
     </asp:Repeater>
         </div>        
-    </div>
 </div>
   </div>
 </div>
