@@ -618,12 +618,12 @@ namespace _02148_Project
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    SqlDependency dependency = new SqlDependency(command);
-                    dependency.OnChange += new OnChangeEventHandler(playerMethode);
-                    command.ExecuteNonQuery();
-                }
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(playerMethode);
+                command.ExecuteNonQuery();
             }
+        }
         }
         /// <summary>
         /// Setup monitor/event lister for resource offer data
@@ -635,12 +635,12 @@ namespace _02148_Project
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    SqlDependency dependency = new SqlDependency(command);
-                    dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
-                    command.ExecuteNonQuery();
-                }
+            {
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
+                command.ExecuteNonQuery();
             }
+        }
         }
 
         /// <summary>
@@ -651,15 +651,15 @@ namespace _02148_Project
             string query = "SELECT Id FROM TradeOffers;";
             
             using (SqlConnection connection = new SqlConnection(connectionString))
-            {
+            { 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    SqlDependency dependency = new SqlDependency(command);
-                    dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
-                    command.ExecuteNonQuery();
-                }
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
+                command.ExecuteNonQuery();
             }
+        }
         }
 
         /// <summary>
