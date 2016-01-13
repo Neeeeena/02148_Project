@@ -13,8 +13,8 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
-        //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
+        private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
 
         /// <summary>
@@ -22,14 +22,17 @@ namespace _02148_Project
         /// </summary>
         internal static void OpenConnection()
         {
-            if (connection == null)
-            {
-                connection = new SqlConnection(connectionString);
-            }
-            if (connection.State != ConnectionState.Open)
-            {
-                connection.Open();
-            }
+            connection = new SqlConnection(connectionString);
+            connection.OpenAsync();
+            while (connection.State != ConnectionState.Open) { }
+            //if (connection == null)
+            //{
+            //    connection = new SqlConnection(connectionString);
+            //}
+            //if (connection.State != ConnectionState.Open)
+            //{
+            //    connection.Open();
+            //}
         }
 
         /// <summary>
@@ -51,12 +54,19 @@ namespace _02148_Project
         /// <param name="name">Name of the player</param>
         internal static void CreatePlayer(string name)
         {
-            OpenConnection();
-            string query = "INSERT INTO Players (Name) VALUES (@Name);";
-
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@Name", name);
-            command.ExecuteNonQuery();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "INSERT INTO Players (Name) VALUES (@Name);";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.Parameters.AddWithValue("@Name", name);
+            //command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -167,14 +177,26 @@ namespace _02148_Project
         /// Read all the resource from the market
         /// </summary>
         /// <returns>A SQL reader object with the result data</returns>
-        internal static SqlDataReader ReadAllResourcesOnMarket()
+        internal static List<ResourceOffer> ReadAllResourcesOnMarket()
         {
-            OpenConnection();
-            string query = "SELECT * "
-                + "FROM Market ";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM Market ";
+                SqlCommand command = new SqlCommand(query, connection);
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ResourceOffer> offer = new List<ResourceOffer>();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
+                        }
+                    }
+                    return offer;
+                }
+            }
         }
 
         /// <summary>
@@ -265,7 +287,14 @@ namespace _02148_Project
             string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
             SqlCommand command = new SqlCommand(query, connection);
             
-            return command.ExecuteReader();    
+            try
+            {
+                return command.ExecuteReader();            
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -421,14 +450,17 @@ namespace _02148_Project
 
         internal static void MonitorChat(DatabaseInterface.OnChange_Chat chatMethode)
         {
-            OpenConnection();
-            using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
-                + "FROM dbo.Chat",
-                connection))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(chatMethode);
-                command.ExecuteNonQuery();
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
+                    + "FROM dbo.Chat",
+                    con))
+                {
+                    SqlDependency dependency = new SqlDependency(command);
+                    dependency.OnChange += new OnChangeEventHandler(chatMethode);
+                    command.ExecuteNonQuery();
+                }
             }
         }
         #endregion

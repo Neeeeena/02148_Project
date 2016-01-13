@@ -14,7 +14,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">SQL Data reader object with the relevant data</param>
         /// <returns>The Resource offer from the reader object</returns>
-        private static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
+        internal static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
             if (reader.IsDBNull(6))
             {
@@ -33,7 +33,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">Reader with the data</param>
         /// <returns>The player in the reader object</returns>
-        private static Player GetPlayerFromReader(SqlDataReader reader)
+        internal static Player GetPlayerFromReader(SqlDataReader reader)
         {
             return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
                                 reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
@@ -45,7 +45,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">Reader with the data</param>
         /// <returns>A trade offer object</returns>
-        private static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
+        internal static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
         {
             return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
                 (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
@@ -247,19 +247,20 @@ namespace _02148_Project
         /// <returns>A list of resources offers</returns>
         public static List<ResourceOffer> ReadAllResourceOffers()
         {
-            List<ResourceOffer> offers = new List<ResourceOffer>();
-            SqlDataReader reader = DatabaseHandler.ReadAllResourcesOnMarket();
+            return DatabaseHandler.ReadAllResourcesOnMarket();
+            //List<ResourceOffer> offers = new List<ResourceOffer>();
+            //SqlDataReader reader = DatabaseHandler.ReadAllResourcesOnMarket();
 
-            if (reader.HasRows) // Check if the reader has any results. 
-            {
-                while (reader.Read())
-                {
-                    offers.Add(GetResourceOfferFromReader(reader));
-                }
-            }
-            reader.Dispose();
-            DatabaseHandler.CloseConnection();
-            return offers;
+            //if (reader.HasRows) // Check if the reader has any results. 
+            //{
+            //    while (reader.Read())
+            //    {
+            //        offers.Add(GetResourceOfferFromReader(reader));
+            //    }
+            //}
+            //reader.Dispose();
+            //DatabaseHandler.CloseConnection();
+            //return offers;
         }
 
         /// <summary>
@@ -335,7 +336,7 @@ namespace _02148_Project
             SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
             List<TradeOffer> offers = new List<TradeOffer>();
 
-            if (reader.HasRows)
+            if (reader != null && reader.HasRows)
             {
                 while (reader.Read())
                 {
