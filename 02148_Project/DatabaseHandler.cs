@@ -13,7 +13,7 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=Alex-pc\MSSQLSERVER;Initial Catalog=UseThis;User ID=02148;Password=02148";
+        private const string connectionString = @"Data Source=Alex-pc\MSSQLSERVER;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
         //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
