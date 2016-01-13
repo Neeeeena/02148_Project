@@ -138,11 +138,9 @@ namespace _02148_Project
         {
             OpenConnection();
             string query = "DELETE FROM Players WHERE Name = @Name;";
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@Name", name);
-                command.ExecuteNonQuery();
-            }
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@Name", name);
+            command.ExecuteNonQuery();
         }
         #endregion
 
@@ -265,10 +263,9 @@ namespace _02148_Project
         {
             OpenConnection();
             string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                return command.ExecuteReader();
-            }
+            SqlCommand command = new SqlCommand(query, connection);
+            
+            return command.ExecuteReader();    
         }
 
         /// <summary>
@@ -280,10 +277,8 @@ namespace _02148_Project
         {
             OpenConnection();
             string query = "SELECT * FROM TradeOffers WHERE SenderName = '" + sender + "';";
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                return command.ExecuteReader();
-            }
+            SqlCommand command = new SqlCommand(query, connection);
+            return command.ExecuteReader();
         }
 
         /// <summary>
