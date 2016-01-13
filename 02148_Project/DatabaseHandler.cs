@@ -23,15 +23,18 @@ namespace _02148_Project
         /// </summary>
         internal static void OpenConnection()
         {
-            if (connection == null)
-            {
                 connection = new SqlConnection(connectionString);
+            connection.OpenAsync();
+            while (connection.State != ConnectionState.Open) { }
+            //if (connection == null)
+            //{
+            //    connection = new SqlConnection(connectionString);
+            //}
+            //if (connection.State != ConnectionState.Open)
+            //{
+            //    connection.Open();
+            //}
             }
-            if (connection.State != ConnectionState.Open)
-            {
-                connection.Open();
-            }
-        }
 
         /// <summary>
         /// Close the connection to the database, and set the object to null
@@ -52,12 +55,19 @@ namespace _02148_Project
         /// <param name="name">Name of the player</param>
         internal static void CreatePlayer(string name)
         {
-            OpenConnection();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
             string query = "INSERT INTO Players (Name) VALUES (@Name);";
-
-            SqlCommand command = new SqlCommand(query, connection);
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
             command.Parameters.AddWithValue("@Name", name);
-            command.ExecuteNonQuery();
+        }
+            }
+            //OpenConnection();
+            //SqlCommand command = new SqlCommand(query, connection);
+            //command.Parameters.AddWithValue("@Name", name);
+            //command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -168,14 +178,26 @@ namespace _02148_Project
         /// Read all the resource from the market
         /// </summary>
         /// <returns>A SQL reader object with the result data</returns>
-        internal static SqlDataReader ReadAllResourcesOnMarket()
+        internal static List<ResourceOffer> ReadAllResourcesOnMarket()
         {
-            OpenConnection();
-            string query = "SELECT * "
-                + "FROM Market ";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+                connection.Open();
+                string query = "SELECT * FROM Market ";
             SqlCommand command = new SqlCommand(query, connection);
-
-            return command.ExecuteReader();
+                using (var reader = command.ExecuteReader())
+                {
+                    List<ResourceOffer> offer = new List<ResourceOffer>();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            offer.Add(DatabaseInterface.GetResourceOfferFromReader(reader));
+                        }
+                    }
+                    return offer;
+                }
+            }
         }
 
         /// <summary>
@@ -266,7 +288,14 @@ namespace _02148_Project
             string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
             SqlCommand command = new SqlCommand(query, connection);
             
+            try
+            {
             return command.ExecuteReader();    
+        }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -422,15 +451,18 @@ namespace _02148_Project
 
         internal static void MonitorChat(DatabaseInterface.OnChange_Chat chatMethode)
         {
-            OpenConnection();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
             using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
                 + "FROM dbo.Chat",
-                connection))
+                    con))
             {
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(chatMethode);
                 command.ExecuteNonQuery();
             }
+        }
         }
         #endregion
     }

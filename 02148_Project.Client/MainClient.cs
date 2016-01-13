@@ -8,6 +8,7 @@ using _02148_Project.Model;
 using _02148_Project.Model.Exceptions;
 using System.Timers;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace _02148_Project.Client
 {
@@ -149,8 +150,8 @@ namespace _02148_Project.Client
         //Kun for test!
         public static void ReadAPlayer()
         {
-            player = DatabaseInterface.ReadAllPlayers().Find(e => e.Name == "Nina");
-            DatabaseInterface.UpdatePlayerResource("Nina", ResourceType.Wool, 1);
+            player = DatabaseInterface.ReadPlayer("Oliver");
+            //DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wool, 1);
         }
 
 
@@ -342,8 +343,8 @@ namespace _02148_Project.Client
                     msg.RecieverName = p.Name;
                     DatabaseInterface.SendMessage(msg);
                 }
-                }
             }
+        }
             catch(Exception ex)
             {
                 return ex.Message;
@@ -399,7 +400,7 @@ namespace _02148_Project.Client
             DatabaseInterface.SetupDatabaseListeners(players, resources, trades, chat);
         }
 
-        
+
         //Constructions with their required resources to build
         static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
             Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
@@ -428,7 +429,12 @@ namespace _02148_Project.Client
                 Tuple.Create(40,ResourceType.Gold),
                 Tuple.Create(5,ResourceType.Clay),
                 Tuple.Create(5,ResourceType.Wood),
-                Tuple.Create(10,ResourceType.Food) })
+                Tuple.Create(10,ResourceType.Food) }),
+            Tuple.Create(Construction.Goldmine, new Tuple<int,ResourceType>[] {
+                Tuple.Create(10,ResourceType.Gold),
+                Tuple.Create(20,ResourceType.Iron),
+                Tuple.Create(10,ResourceType.Food),
+                Tuple.Create(5,ResourceType.Wood) })
         };
 
 
@@ -437,14 +443,45 @@ namespace _02148_Project.Client
             foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
                 if (cp.Item1 == type)
                     foreach (Tuple<int, ResourceType> priceres in cp.Item2)
-        {
+                    {
+                        //Muligvis tilføj noget handling her, hvis det ikke er muligt at tage alle resourcerne?
+                        //Eller bare formod at gui siger "NEJ!!!!!!"?
                         DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, - priceres.Item1);
-        }
+                    }
                     //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
                     //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
                     return;
 
             //THROW ERROR (construction does not exist)
+        }
+
+
+        private static int getIncome()
+        {
+            Random r = new Random();
+            return 10 + r.Next(5) +
+                   player.Cottage   * 1 +
+                   player.Forge     * 2 + (player.Forge / 3) * r.Next(3) +
+                   player.Mason     * r.Next(3) +
+                   player.Mill      * 1 +
+                   player.Farm      * 1 + (player.Farm / 2) * r.Next(2) +
+                   player.Townhall  * 4 +
+                   player.Goldmine  * (2 + r.Next(5));
+        }
+
+        private static void giveIncome(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            DatabaseInterface.UpdatePlayerResource(player.Name, ResourceType.Gold, getIncome());
+        }
+
+        //START IN NEW THREAD
+        public static void incomeHandler()
+        {
+            System.Timers.Timer incomeTimer = new System.Timers.Timer();
+            incomeTimer.Interval = 30000; // 30 seconds, possibly change?
+            incomeTimer.AutoReset = true;
+            incomeTimer.Elapsed += giveIncome;
+            incomeTimer.Start();
         }
     }
 
