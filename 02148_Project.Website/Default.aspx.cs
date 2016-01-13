@@ -33,9 +33,11 @@ namespace _02148_Project.Website
                 MainClient.ReadAPlayer();
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
-               // RenderMarket();
+                // RenderMarket();
                 //RenderLocalResources();
 
+                MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
+                    OnChange_TradeOffer, OnChange_Chat);
             }
             else
             {
