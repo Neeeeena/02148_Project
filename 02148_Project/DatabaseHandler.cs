@@ -400,7 +400,7 @@ namespace _02148_Project
             using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
                 + "ResourceType, Count, PriceType, Price FROM TradeOffers;",
                 connection))
-            {
+            { 
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
                 command.ExecuteNonQuery();
