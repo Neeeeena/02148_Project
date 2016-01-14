@@ -200,6 +200,7 @@
     <Content Include="Images\mursten.png" />
     <Content Include="Images\wood.gif" />
     <Content Include="MapView.aspx" />
+    <Content Include="MarketView.aspx" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -270,6 +271,13 @@
     </Compile>
     <Compile Include="MapView.aspx.designer.cs">
       <DependentUpon>MapView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MarketView.aspx.cs">
+      <DependentUpon>MarketView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MarketView.aspx.designer.cs">
+      <DependentUpon>MarketView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

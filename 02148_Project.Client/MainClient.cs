@@ -155,9 +155,9 @@ namespace _02148_Project.Client
             return "";
         }
         //Kun for test!
-        public static void ReadAPlayer()
+        public static void ReadAPlayer(string userName)
         {
-            player = DatabaseInterface.ReadPlayer("Oliver");
+            player = DatabaseInterface.ReadPlayer(userName);
             //DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wool, 1);
         }
 

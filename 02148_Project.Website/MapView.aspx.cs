@@ -49,11 +49,13 @@ namespace _02148_Project.Website
         protected void buyMill_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Mill);
+            RenderLocalResources();
         }
 
         protected void buyCottage_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Cottage);
+            RenderLocalResources();
         }
         protected bool hasResourcesFor(Construction type)
         {
