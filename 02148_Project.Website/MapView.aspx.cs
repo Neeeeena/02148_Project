@@ -49,5 +49,10 @@ namespace _02148_Project.Website
 
         }
 
+        protected bool hasResourcesFor(Construction type)
+        {
+            return MainClient.hasResourcesFor(type);
+        }
+
     }
 }

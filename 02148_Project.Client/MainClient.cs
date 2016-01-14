@@ -516,6 +516,41 @@ namespace _02148_Project.Client
             incomeTimer.Elapsed += giveIncome;
             incomeTimer.Start();
         }
+
+        public static bool hasResourcesFor(Construction type)
+        {
+            foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+                if(cp.Item1 == type)
+                    foreach (Tuple<int,ResourceType> ir in cp.Item2)
+                        switch (ir.Item2)
+                        {
+                            case ResourceType.Clay:
+                                if (player.Clay < ir.Item1) return false;
+                                break;
+                            case ResourceType.Food:
+                                if (player.Food < ir.Item1) return false;
+                                break;
+                            case ResourceType.Gold:
+                                if (player.Gold < ir.Item1) return false;
+                                break;
+                            case ResourceType.Iron:
+                                if (player.Iron < ir.Item1) return false;
+                                break;
+                            case ResourceType.Stone:
+                                if (player.Stone < ir.Item1) return false;
+                                break;
+                            case ResourceType.Straw:
+                                if (player.Straw < ir.Item1) return false;
+                                break;
+                            case ResourceType.Wood:
+                                if (player.Wood < ir.Item1) return false;
+                                break;
+                            default:   //Default er wool
+                                if (player.Wool < ir.Item1) return false;
+                                break;
+                        }
+            return true;            
+        }
     }
 
 
