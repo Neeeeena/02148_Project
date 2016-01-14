@@ -39,12 +39,19 @@ input[type="select"] {
 
 .floating {
     float:left;
+    width: 100px;
+    height: 250px;
     overflow:hidden;
 }
 .resource img {
     display:block;
     width:50px;
     height:50px;
+}
+
+.resource {
+    width:70px;
+    height:150px;
 }
 
 .drag {
@@ -149,4 +156,9 @@ input.hidden {
 
 #hideshow {
     display:none;
+}
+
+h3 {
+    font-size: small;
+    margin: 0;
 }

@@ -152,5 +152,10 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion
+
+        protected void submitBid_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

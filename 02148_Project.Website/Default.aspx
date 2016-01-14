@@ -63,8 +63,13 @@
           <ItemTemplate>
             <tr class="floating">
               <td>
-                  <div class="resource">
-                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />  
+                <div class="resource">
+		        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
+		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
+		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
+		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+		               <input type="text" runat="server" id="bidInput">
+		               <asp:Button runat="server" ID="submitBid" OnClick="submitBid_Click" text="Submit" > </asp:Button>
                  </div>
               </td>
             </tr>
