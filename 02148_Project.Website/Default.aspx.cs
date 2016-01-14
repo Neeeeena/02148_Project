@@ -97,9 +97,16 @@ namespace _02148_Project.Website
         protected void submitName_Click(object sender, EventArgs e)
         {
             var name = nameInput.Value;
-            MainClient.createPlayer(name);
-            RenderLocalResources();
-            RenderMarket();
+            if (MainClient.createPlayer(name) != null)
+            {
+                // Display message
+                
+            }
+            else
+            {
+                RenderLocalResources();
+                RenderMarket();
+            }
         }
 
         #region DatabaseListeners

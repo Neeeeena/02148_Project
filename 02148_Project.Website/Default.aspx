@@ -78,9 +78,9 @@
               <tbody>
           </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
+            <tr class="dockFloating">
               <td>
-                  <div class="resource" >
+                  <div class="dockResource" >
                        <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="<%#Eval("ImageSrc")%>"  />
                  </div>
               </td>
@@ -96,13 +96,6 @@
   </div>
 </div>
 
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        jQuery("#hideshow").live("click", function (event) {
-            jQuery("content").toggle("show");
-        });
-    });
-</script>
 
 <script type="text/javascript">
 

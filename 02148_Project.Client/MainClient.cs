@@ -38,7 +38,7 @@ namespace _02148_Project.Client
             player = new Player(name);
             try
             {
-            DatabaseInterface.PutPlayer(name);
+                DatabaseInterface.PutPlayer(name);
             }
             catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Clay, 1);
             ////////////////
-            return "";
+            return null;
         }
 
         public static string deletePlayer(string name)
@@ -157,7 +157,7 @@ namespace _02148_Project.Client
         //Kun for test!
         public static void ReadAPlayer()
         {
-            player = DatabaseInterface.ReadPlayer("Nina");
+            player = DatabaseInterface.ReadPlayer("Oliver");
             //DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wool, 1);
         }
 
@@ -424,32 +424,32 @@ namespace _02148_Project.Client
         //Constructions with their required resources to build
         static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
             Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
-                Tuple.Create(2,ResourceType.Wood),
-                Tuple.Create(2,ResourceType.Wool),
-                Tuple.Create(2,ResourceType.Straw) }),
+                Tuple.Create(1,ResourceType.Wood),
+                Tuple.Create(1,ResourceType.Wool),
+                Tuple.Create(1,ResourceType.Straw) }),
             Tuple.Create(Construction.Forge, new Tuple<int,ResourceType>[] {
-                Tuple.Create(4,ResourceType.Stone),
-                Tuple.Create(4,ResourceType.Food),
-                Tuple.Create(5,ResourceType.Iron) }),
+                Tuple.Create(3,ResourceType.Stone),
+                Tuple.Create(2,ResourceType.Food),
+                Tuple.Create(2,ResourceType.Iron) }),
             Tuple.Create(Construction.Mill, new Tuple<int,ResourceType>[] {
-                Tuple.Create(6,ResourceType.Wood),
-                Tuple.Create(4,ResourceType.Straw),
+                Tuple.Create(3,ResourceType.Wood),
+                Tuple.Create(2,ResourceType.Straw),
                 Tuple.Create(2,ResourceType.Food),
                 Tuple.Create(1,ResourceType.Wool)  }),
             Tuple.Create(Construction.Farm, new Tuple<int,ResourceType>[] {
-                Tuple.Create(6,ResourceType.Food),
-                Tuple.Create(4,ResourceType.Straw),
-                Tuple.Create(4,ResourceType.Clay),
+                Tuple.Create(3,ResourceType.Food),
+                Tuple.Create(2,ResourceType.Straw),
+                Tuple.Create(2,ResourceType.Clay),
                 Tuple.Create(1,ResourceType.Wood) }),
             Tuple.Create(Construction.Townhall, new Tuple<int,ResourceType>[] {
                 Tuple.Create(40,ResourceType.Gold),
                 Tuple.Create(5,ResourceType.Clay),
                 Tuple.Create(5,ResourceType.Wood),
-                Tuple.Create(10,ResourceType.Food) }),
+                Tuple.Create(5,ResourceType.Food) }),
             Tuple.Create(Construction.Goldmine, new Tuple<int,ResourceType>[] {
                 Tuple.Create(10,ResourceType.Gold),
-                Tuple.Create(20,ResourceType.Iron),
-                Tuple.Create(10,ResourceType.Food),
+                Tuple.Create(15,ResourceType.Iron),
+                Tuple.Create(10,ResourceType.Stone),
                 Tuple.Create(5,ResourceType.Wood) })
         };
 
@@ -462,10 +462,28 @@ namespace _02148_Project.Client
                     {
                         //Muligvis tilføj noget handling her, hvis det ikke er muligt at tage alle resourcerne?
                         //Eller bare formod at gui siger "NEJ!!!!!!"?
-                        DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, - priceres.Item1);
+                        try {
+                            DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, -priceres.Item1);
+                        }
+                        catch(Exception e) //INDSÆT RIGTIG ERROR
+                        {
+                            // If an error should happen while taking the resources, the
+                            // already paid resources are returned to the buyer
+                            //ERROR MSG???
+                            foreach (Tuple<int, ResourceType> priceresReturn in cp.Item2)
+                            {
+                                if (priceresReturn == priceres)
+                                {
+                                    return;
+                                }
+                                DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, priceres.Item1);
+                            }
+
+
+                        }
                     }
                     //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
-                    //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+                    DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
                     return;
 
             //THROW ERROR (construction does not exist)
@@ -497,6 +515,45 @@ namespace _02148_Project.Client
             incomeTimer.AutoReset = true;
             incomeTimer.Elapsed += giveIncome;
             incomeTimer.Start();
+        }
+
+        public static bool hasResourcesFor(Construction type)
+        {
+            foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+            {
+                if(cp.Item1 == type)
+                    foreach (Tuple<int,ResourceType> ir in cp.Item2)
+                        switch (ir.Item2)
+                        {
+                            case ResourceType.Clay:
+                                if (player.Clay < ir.Item1) return false;
+                                break;
+                            case ResourceType.Food:
+                                if (player.Food < ir.Item1) return false;
+                                break;
+                            case ResourceType.Gold:
+                                if (player.Gold < ir.Item1) return false;
+                                break;
+                            case ResourceType.Iron:
+                                if (player.Iron < ir.Item1) return false;
+                                break;
+                            case ResourceType.Stone:
+                                if (player.Stone < ir.Item1) return false;
+                                break;
+                            case ResourceType.Straw:
+                                if (player.Straw < ir.Item1) return false;
+                                break;
+                            case ResourceType.Wood:
+                                if (player.Wood < ir.Item1) return false;
+                                break;
+                            default:   //Default er wool
+                                if (player.Wool < ir.Item1) return false;
+                                break;
+                        }
+                return true;            
+            }
+            //building does not exist error??
+            return false;
         }
     }
 

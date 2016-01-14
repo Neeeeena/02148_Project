@@ -38,9 +38,6 @@
             </Scripts>
         </asp:ScriptManager>
 
-
-       <a class="navbar-brand" runat="server" href="~/">Village Rush</a>
-
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
