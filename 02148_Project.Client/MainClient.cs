@@ -464,6 +464,7 @@ namespace _02148_Project.Client
                         //Eller bare formod at gui siger "NEJ!!!!!!"?
                         try {
                             DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, -priceres.Item1);
+                            SubtractResource(priceres.Item2, priceres.Item1);
                         }
                         catch(Exception e) //INDSÆT RIGTIG ERROR
                         {
@@ -476,7 +477,8 @@ namespace _02148_Project.Client
                                 {
                                     return;
                                 }
-                                DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, priceres.Item1);
+                                DatabaseInterface.UpdatePlayerResource(player.Name, priceresReturn.Item2, priceresReturn.Item1);
+                                SubtractResource(priceresReturn.Item2, priceresReturn.Item1);
                             }
 
 
