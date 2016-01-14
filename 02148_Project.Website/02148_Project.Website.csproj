@@ -191,9 +191,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="ApplicationInsights.config" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Images\Cottage.png" />
     <Content Include="Images\firewood.png" />
+    <Content Include="Images\får.png" />
     <Content Include="Images\Horse.png" />
     <Content Include="Images\map.png" />
+    <Content Include="Images\Mill.png" />
+    <Content Include="Images\mursten.png" />
     <Content Include="Images\wood.gif" />
     <Content Include="MapView.aspx" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />

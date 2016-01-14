@@ -15,18 +15,6 @@
         <asp:Button runat="server" ID="submitName" OnClick="submitName_Click" Text="Submit"/>
     </div>
         <div class="span2">
-            <div "> 
-                <table class="table table-hover" style="width:100%">
-				    <tr>
-					    <td>
-					        <!-- <img src="untitled.png" width="30" height="25">
-						        <p ID=houseCount>0</p>-->
-						    <button type="button" class="btn btn-primary btn-block btn-lg" id="houseButton">
-							    BUY (2W, 2T)
-						    </button>
-					    </td>
-				    </tr>
-	  		    </table>
 
             <p>Sell resources here!</p>
             <div style="background-image:url(Images/sellbox.png); width:70px; height:70px"   id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -40,8 +28,6 @@
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
 
-
-            </div>
         </div>
         <div class="span8">
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
@@ -59,13 +45,15 @@
             <tr class="floating">
               <td>
                 <div class="resource">
-		        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
+		        <img class="resource_image" id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
 		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
 		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
 		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+                    <div id="txtfield<%#Eval("Id")%>">
 		               <input type="text" runat="server" id="bidInput">
 		               <asp:Button runat="server" ID="submitBid" OnClick="submitBid_Click" text="Submit" > </asp:Button>
-                 </div>
+                    </div>
+                    </div>
               </td>
             </tr>
           </ItemTemplate>
@@ -143,7 +131,20 @@
 
 
     }
+</script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".resource").each(function () {
+            var $id = "#txtfield" + $(this).find("img").attr("id");
+            $($id).hide();
+        });
+        $(".resource_image").click(function () {
+            var $id = "#txtfield" + $(this).attr("id");
+            $($id).toggle();
+        });
+    });
 </script>
 
 
