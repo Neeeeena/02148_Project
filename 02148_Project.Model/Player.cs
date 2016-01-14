@@ -70,12 +70,19 @@ namespace _02148_Project.Model
             this.Straw = straw;
             this.Food = food;
             this.Gold = gold;
-            this.Cottage = 0;
-            this.Forge = 0;
-            this.Mill = 0;
-            this.Farm = 0;
-            this.Townhall = 0;
-            this.Goldmine = 0;
         }
+
+        public Player(string name, int wood, int clay, int wool, int stone, int iron, int straw, int food, int gold, 
+            int cottage, int forge, int mill, int farm, int townhall, int goldmine)
+            : this(name, wood, clay, wool, stone, iron, straw, food, gold)
+        {
+            this.Cottage = cottage;
+            this.Forge = forge;
+            this.Mill = mill;
+            this.Farm = farm;
+            this.Townhall = townhall;
+            this.Goldmine = goldmine;
+        }
+
     }
 }
