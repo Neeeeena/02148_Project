@@ -44,9 +44,16 @@
           <ItemTemplate>
             <tr class="floating">
               <td>
-                  <div class="resource">
-                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />  
-                 </div>
+                <div class="resource">
+		        <img class="resource_image" id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
+		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
+		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
+		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+                    <div id="txtfield<%#Eval("Id")%>">
+		               <input type="text" runat="server" id="bidInput">
+		               <asp:Button runat="server" ID="submitBid" OnClick="submitBid_Click" text="Submit" > </asp:Button>
+                    </div>
+                    </div>
               </td>
             </tr>
           </ItemTemplate>
@@ -71,9 +78,9 @@
               <tbody>
           </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
+            <tr class="dockFloating">
               <td>
-                  <div class="resource" >
+                  <div class="dockResource" >
                        <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="<%#Eval("ImageSrc")%>"  />
                  </div>
               </td>
@@ -89,13 +96,6 @@
   </div>
 </div>
 
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        jQuery("#hideshow").live("click", function (event) {
-            jQuery("content").toggle("show");
-        });
-    });
-</script>
 
 <script type="text/javascript">
 
@@ -124,7 +124,20 @@
 
 
     }
+</script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".resource").each(function () {
+            var $id = "#txtfield" + $(this).find("img").attr("id");
+            $($id).hide();
+        });
+        $(".resource_image").click(function () {
+            var $id = "#txtfield" + $(this).attr("id");
+            $($id).toggle();
+        });
+    });
 </script>
 
 

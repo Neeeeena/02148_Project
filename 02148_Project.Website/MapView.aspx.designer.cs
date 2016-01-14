@@ -13,13 +13,22 @@ namespace _02148_Project.Website {
     public partial class MapView {
         
         /// <summary>
-        /// houseButton control.
+        /// buyCottage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button houseButton;
+        protected global::System.Web.UI.WebControls.Button buyCottage;
+        
+        /// <summary>
+        /// buyMill control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buyMill;
         
         /// <summary>
         /// repLocalResources control.
