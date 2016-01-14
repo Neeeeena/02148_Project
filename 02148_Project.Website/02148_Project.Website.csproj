@@ -192,8 +192,10 @@
     <Content Include="ApplicationInsights.config" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Images\firewood.png" />
+    <Content Include="Images\Horse.png" />
     <Content Include="Images\map.png" />
     <Content Include="Images\wood.gif" />
+    <Content Include="MapView.aspx" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -257,6 +259,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MapView.aspx.cs">
+      <DependentUpon>MapView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MapView.aspx.designer.cs">
+      <DependentUpon>MapView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

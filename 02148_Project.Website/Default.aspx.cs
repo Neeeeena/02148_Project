@@ -74,6 +74,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
 
+
         }
 
 
@@ -123,7 +124,6 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
-            //marketresources = MainClient.UpdateResourcesOnMarket();
             RenderMarket();
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
