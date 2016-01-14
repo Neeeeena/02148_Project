@@ -150,3 +150,12 @@ input.hidden {
 #hideshow {
     display:none;
 }
+
+.horseLink {
+    float:right;
+}
+
+.horseLink img {
+    height:65px;
+    width:100px;
+}
