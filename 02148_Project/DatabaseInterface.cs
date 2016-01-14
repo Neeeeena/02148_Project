@@ -93,7 +93,25 @@ namespace _02148_Project
             List<Player> players = new List<Player>();
             try
             {
-                return DatabaseHandler.ReadAllPlayers();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM Players";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    players.Add(GetPlayerFromReader(reader));
+                                }
+                            }
+                            return players;
+                        }
+                    }
+                }
 
                 //DatabaseHandler.OpenConnection();
                 //SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
@@ -112,10 +130,6 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            //    DatabaseHandler.CloseConnection();
-            //}
             return players;
         }
 
@@ -127,7 +141,31 @@ namespace _02148_Project
         /// <returns>A player object with all the relevant data</returns>
         public static Player ReadPlayer(string name)
         {
-            Player player = DatabaseHandler.ReadPlayerData(name);
+            Player player = null;
+            try
+            {
+                string query = "SELECT * FROM Players WHERE Name = @Name;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                player = GetPlayerFromReader(reader);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
             //SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
             //Player player = null;
             //if (reader.HasRows)
@@ -151,15 +189,23 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.UpdatePlayerResource(name, type, count);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Players "
+                        + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+                        + "WHERE Name = @Name;";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.Parameters.AddWithValue("@Count", count);
+                        command.ExecuteNonQuery();
+                    }
+                }
             } 
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -171,15 +217,34 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.UpdatePlayerData(player);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Players "
+                        + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+                        + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+                        + "Food = @Food, Gold = @Gold "
+                        + "WHERE Name = @Name;";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Wood", player.Wood);
+                        command.Parameters.AddWithValue("@Clay", player.Clay);
+                        command.Parameters.AddWithValue("@Wool", player.Wool);
+                        command.Parameters.AddWithValue("@Stone", player.Stone);
+                        command.Parameters.AddWithValue("@Iron", player.Iron);
+                        command.Parameters.AddWithValue("@Straw", player.Straw);
+                        command.Parameters.AddWithValue("@Food", player.Food);
+                        command.Parameters.AddWithValue("@Gold", player.Gold);
+                        command.Parameters.AddWithValue("@Name", player.Name);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -191,7 +256,16 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.CreatePlayer(name);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "INSERT INTO Players (Name) VALUES (@Name);";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             catch (SqlException ex)
             {
@@ -203,10 +277,6 @@ namespace _02148_Project
                 {
                     SqlExceptionHandling(ex); 
                 }
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -223,10 +293,6 @@ namespace _02148_Project
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -289,10 +355,6 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
         }
 
         /// <summary>
@@ -329,10 +391,6 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
             return id;
         }
         #endregion
@@ -363,10 +421,6 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            // DatabaseHandler.CloseConnection();
-            //}
             return offers;
         }
 
@@ -389,7 +443,6 @@ namespace _02148_Project
             //    }
             //}
             //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
             //return offers;
         }
 
@@ -417,10 +470,6 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            //    DatabaseHandler.CloseConnection();
-            //}
             return offer;
         }
         
@@ -438,10 +487,6 @@ namespace _02148_Project
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
             return id;
         }
@@ -461,10 +506,6 @@ namespace _02148_Project
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 

@@ -21,31 +21,31 @@ namespace _02148_Project
         /// <summary>
         /// Create a new SqlConnection with the given connection string and open it
         /// </summary>
-        internal static void OpenConnection()
-        {
-            connection = new SqlConnection(connectionString);
-            connection.OpenAsync();
-            while (connection.State != ConnectionState.Open) { }
-            //if (connection == null)
-            //{
-            //    connection = new SqlConnection(connectionString);
-            //}
-            //if (connection.State != ConnectionState.Open)
-            //{
-            //    connection.Open();
-            //}
-        }
+        //internal static void OpenConnection()
+        //{
+        //    connection = new SqlConnection(connectionString);
+        //    connection.OpenAsync();
+        //    while (connection.State != ConnectionState.Open) { }
+        //    //if (connection == null)
+        //    //{
+        //    //    connection = new SqlConnection(connectionString);
+        //    //}
+        //    //if (connection.State != ConnectionState.Open)
+        //    //{
+        //    //    connection.Open();
+        //    //}
+        //}
 
         /// <summary>
         /// Close the connection to the database, and set the object to null
         /// </summary>
-        internal static void CloseConnection()
-        {
-            if (connection != null)
-            { 
-                connection.Close();
-            }
-        }
+        //internal static void CloseConnection()
+        //{
+        //    if (connection != null)
+        //    { 
+        //        connection.Close();
+        //    }
+        //}
 
         #region Player
         /// <summary>
@@ -53,90 +53,90 @@ namespace _02148_Project
         /// Throws a SQL exception, if the name allready exsits in the table
         /// </summary>
         /// <param name="name">Name of the player</param>
-        internal static void CreatePlayer(string name)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = "INSERT INTO Players (Name) VALUES (@Name);";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", name);
-                    command.ExecuteNonQuery();
-                }
-            }
-            //OpenConnection();
-            //SqlCommand command = new SqlCommand(query, connection);
-            //command.Parameters.AddWithValue("@Name", name);
-            //command.ExecuteNonQuery();
-        }
+        //internal static void CreatePlayer(string name)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "INSERT INTO Players (Name) VALUES (@Name);";
+        //        using (SqlCommand command = new SqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@Name", name);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //    //OpenConnection();
+        //    //SqlCommand command = new SqlCommand(query, connection);
+        //    //command.Parameters.AddWithValue("@Name", name);
+        //    //command.ExecuteNonQuery();
+        //}
 
         /// <summary>
         /// Get all the players from the database
         /// </summary>
         /// <returns>Rows from the database with player data</returns>
-        internal static List<Player> ReadAllPlayers()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = "SELECT * FROM Players";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    List<Player> players = new List<Player>();
+        //internal static List<Player> ReadAllPlayers()
+        //{
+        //    //using (SqlConnection connection = new SqlConnection(connectionString))
+        //    //{
+        //    //    connection.Open();
+        //    //    string query = "SELECT * FROM Players";
+        //    //    using (SqlCommand command = new SqlCommand(query, connection))
+        //    //    {
+        //    //        List<Player> players = new List<Player>();
 
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                players.Add(DatabaseInterface.GetPlayerFromReader(reader));
-        }
-                        }
-                        return players;
-                    }
-                }
-            }
-            //OpenConnection();
-            //SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
-            //return command.ExecuteReader();
-        }
+        //    //        using (SqlDataReader reader = command.ExecuteReader())
+        //    //        {
+        //    //            if (reader.HasRows)
+        //    //            {
+        //    //                while (reader.Read())
+        //    //                {
+        //    //                    players.Add(DatabaseInterface.GetPlayerFromReader(reader));
+        //    //                }
+        //    //            }
+        //    //            return players;
+        //    //        }
+        //    //    }
+        //    //}
+        //    //OpenConnection();
+        //    //SqlCommand command = new SqlCommand("SELECT * FROM Players", connection);
+        //    //return command.ExecuteReader();
+        //}
 
         /// <summary>
         /// Update the player data in the database
         /// </summary>
         /// <param name="player">Player to update</param>
-        internal static void UpdatePlayerData(Player player)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-            string query = "UPDATE Players "
-                + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
-                + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
-                + "Food = @Food, Gold = @Gold "
-                + "WHERE Name = @Name;";
+        //internal static void UpdatePlayerData(Player player)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //    string query = "UPDATE Players "
+        //        + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+        //        + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+        //        + "Food = @Food, Gold = @Gold "
+        //        + "WHERE Name = @Name;";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-            command.Parameters.AddWithValue("@Wood", player.Wood);
-            command.Parameters.AddWithValue("@Clay", player.Clay);
-            command.Parameters.AddWithValue("@Wool", player.Wool);
-            command.Parameters.AddWithValue("@Stone", player.Stone);
-            command.Parameters.AddWithValue("@Iron", player.Iron);
-            command.Parameters.AddWithValue("@Straw", player.Straw);
-            command.Parameters.AddWithValue("@Food", player.Food);
-            command.Parameters.AddWithValue("@Gold", player.Gold);
-            command.Parameters.AddWithValue("@Name", player.Name);
+        //        using (SqlCommand command = new SqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@Wood", player.Wood);
+        //            command.Parameters.AddWithValue("@Clay", player.Clay);
+        //            command.Parameters.AddWithValue("@Wool", player.Wool);
+        //            command.Parameters.AddWithValue("@Stone", player.Stone);
+        //            command.Parameters.AddWithValue("@Iron", player.Iron);
+        //            command.Parameters.AddWithValue("@Straw", player.Straw);
+        //            command.Parameters.AddWithValue("@Food", player.Food);
+        //            command.Parameters.AddWithValue("@Gold", player.Gold);
+        //            command.Parameters.AddWithValue("@Name", player.Name);
 
-                    command.ExecuteNonQuery();
-        }
-            }
-            //OpenConnection();
-            //SqlCommand command = new SqlCommand(query, connection);
-            //command.ExecuteNonQueryAsync();
-        }
+        //            command.ExecuteNonQuery();
+        //        }       
+        //    }
+        //    //OpenConnection();
+        //    //SqlCommand command = new SqlCommand(query, connection);
+        //    //command.ExecuteNonQueryAsync();
+        //}
 
         /// <summary>
         /// Update a specific resource for a player
@@ -144,29 +144,29 @@ namespace _02148_Project
         /// <param name="name">Name of the player to update</param>
         /// <param name="type">Type of the resource to update</param>
         /// <param name="count">Amount of resources to add</param>
-        internal static void UpdatePlayerResource(string name, ResourceType type, int count)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-            string query = "UPDATE Players " 
-                    + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
-                + "WHERE Name = @Name;";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-            command.Parameters.AddWithValue("@Name", name);
-                    command.Parameters.AddWithValue("@Count", count);
-            command.ExecuteNonQuery();
-        }
-            }
-            //    OpenConnection();
-            //string query = "UPDATE Players " 
-            //    + "SET " + type.ToString() + " = " + type.ToString() + " + " + count + " "
-            //    + "WHERE Name = @Name;";
-            //SqlCommand command = new SqlCommand(query, connection);
-            //command.Parameters.AddWithValue("@Name", name);
-            //command.ExecuteNonQuery();
-        }
+        //internal static void UpdatePlayerResource(string name, ResourceType type, int count)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        string query = "UPDATE Players " 
+        //            + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+        //            + "WHERE Name = @Name;";
+        //        using (SqlCommand command = new SqlCommand(query, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@Name", name);
+        //            command.Parameters.AddWithValue("@Count", count);
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //    //    OpenConnection();
+        //    //string query = "UPDATE Players " 
+        //    //    + "SET " + type.ToString() + " = " + type.ToString() + " + " + count + " "
+        //    //    + "WHERE Name = @Name;";
+        //    //SqlCommand command = new SqlCommand(query, connection);
+        //    //command.Parameters.AddWithValue("@Name", name);
+        //    //command.ExecuteNonQuery();
+        //}
 
         /// <summary>
         /// Reads all the data about a player in the database and returns the 
@@ -174,34 +174,34 @@ namespace _02148_Project
         /// </summary>
         /// <param name="name">Name of the player</param>
         /// <returns>The data reader object with the returned data</returns>
-        internal static Player ReadPlayerData(string name)
-        {
-            string query = "SELECT * FROM Players WHERE Name = @Name;";
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-            command.Parameters.AddWithValue("@Name", name);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            reader.Read();
-                            return DatabaseInterface.GetPlayerFromReader(reader);
-        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                }
-            }
-            //OpenConnection();
-            //SqlCommand command = new SqlCommand(query, connection);
+        //internal static Player ReadPlayerData(string name)
+        //{
+        //    string query = "SELECT * FROM Players WHERE Name = @Name;";
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        using (SqlCommand command = new SqlCommand(query, connection))
+        //        {
+        //    command.Parameters.AddWithValue("@Name", name);
+        //            using (SqlDataReader reader = command.ExecuteReader())
+        //            {
+        //                if (reader.HasRows)
+        //                {
+        //                    reader.Read();
+        //                    return DatabaseInterface.GetPlayerFromReader(reader);
+        //                }
+        //                else
+        //                {
+        //                    return null;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    //OpenConnection();
+        //    //SqlCommand command = new SqlCommand(query, connection);
 
-            //return command.ExecuteReader();
-        }
+        //    //return command.ExecuteReader();
+        //}
 
         /// <summary>
         /// Delete a player with a given name 
@@ -622,8 +622,8 @@ namespace _02148_Project
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(playerMethode);
                 command.ExecuteNonQuery();
+                }
             }
-        }
         }
         /// <summary>
         /// Setup monitor/event lister for resource offer data
@@ -635,12 +635,12 @@ namespace _02148_Project
             {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
-                command.ExecuteNonQuery();
+                {
+                    SqlDependency dependency = new SqlDependency(command);
+                    dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
+                    command.ExecuteNonQuery();
+                }
             }
-        }
         }
 
         /// <summary>
@@ -648,18 +648,18 @@ namespace _02148_Project
         /// </summary>
         internal static void MonitorTradeOffers(DatabaseInterface.OnChange_TradeOffers tradeOfferMethode)
         {
-            string query = "SELECT Id FROM TradeOffers;";
-            
+            string query = "SELECT Id FROM dbo.TradeOffers;";
+
             using (SqlConnection connection = new SqlConnection(connectionString))
-            { 
+            {
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                SqlDependency dependency = new SqlDependency(command);
-                dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
-                command.ExecuteNonQuery();
+                    SqlDependency dependency = new SqlDependency(command);
+                    dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
+                    command.ExecuteNonQuery();
+                }
             }
-        }
         }
 
         /// <summary>

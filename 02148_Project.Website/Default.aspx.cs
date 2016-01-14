@@ -58,14 +58,9 @@ namespace _02148_Project.Website
 
         protected void RenderMarket()
         {
-            //for (int i = 7; i <= 9; i++)
-            //{
-            //    marketresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
-            //}
             marketresources = MainClient.UpdateResourcesOnMarket();
             repMarketResources.DataSource = marketresources;
             repMarketResources.DataBind();
-
         }
 
         protected void RenderLocalResources()
@@ -96,9 +91,6 @@ namespace _02148_Project.Website
             MainClient.PlaceResourceOfferOnMarket(newOffer);
             RenderLocalResources();
             RenderMarket();
-
-
-
         }
 
         protected void submitName_Click(object sender, EventArgs e)
@@ -131,8 +123,8 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
+            //marketresources = MainClient.UpdateResourcesOnMarket();
             RenderMarket();
-            marketresources = MainClient.UpdateResourcesOnMarket();
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
@@ -143,10 +135,9 @@ namespace _02148_Project.Website
             // Update all trade offer fields
             if (MainClient.player != null)
             {
-                //allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
-                //allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
+                allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
+                allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
             }
-            //Console.WriteLine("Trade event");
             DatabaseInterface.MonitorTradeOffer(OnChange_TradeOffer);
         }
 
