@@ -125,7 +125,6 @@ namespace _02148_Project.Website
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
             RenderMarket();
-            marketresources = MainClient.UpdateResourcesOnMarket();
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
