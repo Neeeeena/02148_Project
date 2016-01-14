@@ -19,8 +19,13 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+<<<<<<< HEAD
         protected global::System.Web.UI.HtmlControls.HtmlInputText username;
         
+=======
+        protected global::System.Web.UI.HtmlControls.HtmlInputText nameInput;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText bidInput;
+>>>>>>> a0b0b4c38c622ea7364de01e17b39feb009e8fcc
         /// <summary>
         /// submitusername control.
         /// </summary>

@@ -37,7 +37,7 @@ namespace Server.Test
 
         [TestMethod]
         [TestCategory("Player")]
-        public void GetPlayersObjectsTest()
+        public void ReadPlayersObjectsTest()
         {
             List<Player> players = DatabaseInterface.ReadAllPlayers();
             
@@ -266,6 +266,8 @@ namespace Server.Test
             DatabaseInterface.DependencyTermination();
         }
 
+        #region OnChange_Examples
+
         public static List<Player> players = new List<Player>();
 
         /// <summary>
@@ -309,6 +311,28 @@ namespace Server.Test
             //// Call methode to update the latest message 
             ////message = GetMessage();
             //DatabaseHandler.MonitorChat();
+        }
+        #endregion
+    
+        [TestMethod]
+        [TestCategory("Construction")]
+        public void ReadConstruction_PlayerTest()
+        {
+            Player player = DatabaseInterface.ReadPlayer("Oliver");
+            Assert.IsNotNull(player);
+
+            Console.WriteLine("{0}\t{1}\t{2}\t{3}", player.Name, player.Goldmine, player.Cottage, player.Forge);
+        }
+
+        [TestMethod]
+        [TestCategory("Construction")]
+        public void UpdateConstruction_PlayerTest()
+        {
+            Player before = DatabaseInterface.ReadPlayer("Oliver");
+            DatabaseInterface.UpdatePlayerConstructions("Oliver", Construction.Goldmine, 1);
+            Player after = DatabaseInterface.ReadPlayer("Oliver");
+
+            Assert.AreEqual(before.Goldmine + 1, after.Goldmine);
         }
     }
 }

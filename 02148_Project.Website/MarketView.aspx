@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MarketView.aspx.cs" Inherits="_02148_Project.Website.MarketView" %>
+﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MarketView.aspx.cs" Inherits="_02148_Project.Website.MarketView" EnableEventValidation="false" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -23,7 +23,7 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert price">
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
@@ -44,9 +44,16 @@
           <ItemTemplate>
             <tr class="floating">
               <td>
-                  <div class="resource">
-                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />  
-                 </div>
+                <div class="resource">
+		        <img class="resource_image" id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
+		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
+		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
+		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+                    <div id="txtfield<%#Eval("Id")%>">
+		               <input id="bidInput" type="text" runat="server" />
+                       <asp:Button id="submitBid" runat="server" OnCommand="submitBid_Click" CommandArgument='<%#Eval("Id")%>' Text="Test"></asp:Button>
+		            </div>
+                </div>
               </td>
             </tr>
           </ItemTemplate>
@@ -58,7 +65,7 @@
             </div>
         </div>
 
-    <div >
+    <div class="jumbotron">
 
         <asp:Repeater ID="repLocalResources" runat="server" >
           <HeaderTemplate>
@@ -71,9 +78,9 @@
               <tbody>
           </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
+            <tr class="dockFloating">
               <td>
-                  <div class="resource" >
+                  <div class="dockResource" >
                        <img id="<%#Eval("Id")%>" ondragstart="drag(event)" draggable="true" src="<%#Eval("ImageSrc")%>"  />
                  </div>
               </td>
@@ -117,9 +124,23 @@
 
 
     }
+</script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".resource").each(function () {
+            var $id = "#txtfield" + $(this).find("img").attr("id");
+            $($id).hide();
+        });
+        $(".resource_image").click(function () {
+            var $id = "#txtfield" + $(this).attr("id");
+            $($id).toggle();
+        });
+    });
 </script>
 
 
 </asp:Content>
+
 

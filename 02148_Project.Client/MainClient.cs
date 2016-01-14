@@ -464,6 +464,7 @@ namespace _02148_Project.Client
                         //Eller bare formod at gui siger "NEJ!!!!!!"?
                         try {
                             DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, -priceres.Item1);
+                            SubtractResource(priceres.Item2, priceres.Item1);
                         }
                         catch(Exception e) //INDSÆT RIGTIG ERROR
                         {
@@ -476,7 +477,8 @@ namespace _02148_Project.Client
                                 {
                                     return;
                                 }
-                                DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, priceres.Item1);
+                                DatabaseInterface.UpdatePlayerResource(player.Name, priceresReturn.Item2, priceresReturn.Item1);
+                                SubtractResource(priceresReturn.Item2, priceresReturn.Item1);
                             }
 
 
@@ -520,6 +522,7 @@ namespace _02148_Project.Client
         public static bool hasResourcesFor(Construction type)
         {
             foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+            {
                 if(cp.Item1 == type)
                     foreach (Tuple<int,ResourceType> ir in cp.Item2)
                         switch (ir.Item2)
@@ -549,7 +552,10 @@ namespace _02148_Project.Client
                                 if (player.Wool < ir.Item1) return false;
                                 break;
                         }
-            return true;            
+                return true;            
+            }
+            //building does not exist error??
+            return false;
         }
     }
 
