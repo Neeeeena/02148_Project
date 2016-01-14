@@ -85,7 +85,14 @@ namespace _02148_Project.Client
         // Kan ikke returne string
         public static List<ResourceOffer> UpdateResourcesOnMarket()
         {
-            return DatabaseInterface.ReadAllResourceOffers();
+            try {
+                return DatabaseInterface.ReadAllResourceOffers();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message + " UpdateAllResourcesOnMarked() made this exception");
+            }
+            return new List<ResourceOffer>();
         }
 
         //Missing tests
@@ -201,8 +208,14 @@ namespace _02148_Project.Client
         // Kan ikke returne string
         public static void ReadOtherPlayers()
         {
-            allOtherPlayers = DatabaseInterface.ReadAllPlayers();
-            removeYourself();
+            try {
+                allOtherPlayers = DatabaseInterface.ReadAllPlayers();
+                removeYourself();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message + " This was from ReadOtherPlayer");
+            }
         }
 
         // Used by ReadOtherPlayersGold
@@ -241,19 +254,19 @@ namespace _02148_Project.Client
         
             //put det op
             try {
-            int id = DatabaseInterface.PutTradeOffer(offer);
-            SubtractResource(offer.Type, offer.Count);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
+                int id = DatabaseInterface.PutTradeOffer(offer);
+                SubtractResource(offer.Type, offer.Count);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
 
-            Timer timer = new Timer(10000);
-            timer.Elapsed += TakeBackTradeOffer;
-            timer.AutoReset = false;
+                Timer timer = new Timer(10000);
+                timer.Elapsed += TakeBackTradeOffer;
+                timer.AutoReset = false;
 
-            Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
+                Tuple<Timer, int> meh = new Tuple<Timer, int>(timer, id);
 
-            timersWithId.Add(meh);
+                timersWithId.Add(meh);
 
-            timer.Start();
+                timer.Start();
             }
             catch(Exception ex)
             {
@@ -280,13 +293,13 @@ namespace _02148_Project.Client
         public static string AcceptTradeOffer(int id)
         {
             try {
-            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            SubtractResource(offer.PriceType, offer.Price);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
-            SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
-        }
+                TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+                SubtractResource(offer.PriceType, offer.Price);
+                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+                SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
+            }
             catch(Exception ex)
             {
                 return ex.Message;
@@ -314,7 +327,14 @@ namespace _02148_Project.Client
         //Kan ikke returne string
         public static Message GetNewMessage()
         {
-            return DatabaseInterface.GetMessage(player.Name);
+            try {
+                return DatabaseInterface.GetMessage(player.Name);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message + " GetMessage() made this exception");
+            }
+            return null;
       
         }
 
