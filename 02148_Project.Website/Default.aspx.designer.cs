@@ -20,7 +20,7 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText nameInput;
-        
+        protected global::System.Web.UI.HtmlControls.HtmlInputText bidInput;
         /// <summary>
         /// submitName control.
         /// </summary>

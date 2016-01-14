@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="_02148_Project.Website._Default" %>
+﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="_02148_Project.Website._Default" EnableEventValidation="false" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -50,10 +50,10 @@
 		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
 		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
                     <div id="txtfield<%#Eval("Id")%>">
-		               <input type="text" runat="server" id="bidInput">
-		               <asp:Button runat="server" ID="submitBid" OnClick="submitBid_Click" text="Submit" > </asp:Button>
-                    </div>
-                    </div>
+		               <input id="bidInput" type="text" runat="server" />
+                       <asp:Button id="submitBid" runat="server" OnCommand="submitBid_Click" CommandArgument='<%#Eval("Id")%>' Text="Test"></asp:Button>
+		            </div>
+                </div>
               </td>
             </tr>
           </ItemTemplate>
