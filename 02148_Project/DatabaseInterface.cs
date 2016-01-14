@@ -8,8 +8,9 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
+        private const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
-        internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
+        //private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
 
         #region ConvertMethods
         /// <summary>
@@ -93,29 +94,30 @@ namespace _02148_Project
             List<Player> players = new List<Player>();
             try
             {
-                return DatabaseHandler.ReadAllPlayers();
-
-                //DatabaseHandler.OpenConnection();
-                //SqlDataReader reader = DatabaseHandler.ReadAllPlayers();
-
-                // Get all the players from the results
-                //if (reader.HasRows)
-                //{
-                //    while (reader.Read())
-                //    {
-                //        players.Add(GetPlayerFromReader(reader));
-                //    }
-                //}
-                //reader.Dispose();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM Players";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    players.Add(GetPlayerFromReader(reader));
+                                }
+                            }
+                            return players;
+                        }
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            //    DatabaseHandler.CloseConnection();
-            //}
             return players;
         }
 
@@ -127,16 +129,31 @@ namespace _02148_Project
         /// <returns>A player object with all the relevant data</returns>
         public static Player ReadPlayer(string name)
         {
-            Player player = DatabaseHandler.ReadPlayerData(name);
-            //SqlDataReader reader = DatabaseHandler.ReadPlayerData(name);
-            //Player player = null;
-            //if (reader.HasRows)
-            //{
-            //    reader.Read();
-            //    player = GetPlayerFromReader(reader);
-            //}
-            //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
+            Player player = null;
+            try
+            {
+                string query = "SELECT * FROM Players WHERE Name = @Name;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                player = GetPlayerFromReader(reader);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
             if (player == null) throw new PlayerException("Player not found", name);
             return player;
         }
@@ -151,15 +168,23 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.UpdatePlayerResource(name, type, count);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Players "
+                        + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+                        + "WHERE Name = @Name;";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.Parameters.AddWithValue("@Count", count);
+                        command.ExecuteNonQuery();
+                    }
+                }
             } 
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -171,15 +196,34 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.UpdatePlayerData(player);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Players "
+                        + "SET Wood = @Wood, Clay = @Clay, Wool = @Wool, "
+                        + "Stone = @Stone, Iron = @Iron, Straw = @Straw, "
+                        + "Food = @Food, Gold = @Gold "
+                        + "WHERE Name = @Name;";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Wood", player.Wood);
+                        command.Parameters.AddWithValue("@Clay", player.Clay);
+                        command.Parameters.AddWithValue("@Wool", player.Wool);
+                        command.Parameters.AddWithValue("@Stone", player.Stone);
+                        command.Parameters.AddWithValue("@Iron", player.Iron);
+                        command.Parameters.AddWithValue("@Straw", player.Straw);
+                        command.Parameters.AddWithValue("@Food", player.Food);
+                        command.Parameters.AddWithValue("@Gold", player.Gold);
+                        command.Parameters.AddWithValue("@Name", player.Name);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -191,7 +235,16 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.CreatePlayer(name);
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "INSERT INTO Players (Name) VALUES (@Name);";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             catch (SqlException ex)
             {
@@ -204,10 +257,6 @@ namespace _02148_Project
                     SqlExceptionHandling(ex); 
                 }
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
         }
 
         /// <summary>
@@ -218,15 +267,20 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.DeletePlayer(name);
+                string query = "DELETE FROM Players WHERE Name = @Name;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.ExecuteNonQuery();
+                    }
+                }
             } 
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -240,7 +294,27 @@ namespace _02148_Project
         /// <returns>The offer from the database</returns>
         public static ResourceOffer ReadResourceOffer(int id)
         {
-            return DatabaseHandler.ReadResourceOnMarket(id);
+            string query = "SELECT * FROM Market WHERE Id = @Id;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return GetResourceOfferFromReader(reader);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
             //SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
             //ResourceOffer offer = null;
             //if (reader.HasRows)
@@ -259,20 +333,26 @@ namespace _02148_Project
         /// <returns>A list of resources offers</returns>
         public static List<ResourceOffer> ReadAllResourceOffers()
         {
-            return DatabaseHandler.ReadAllResourcesOnMarket();
-            //List<ResourceOffer> offers = new List<ResourceOffer>();
-            //SqlDataReader reader = DatabaseHandler.ReadAllResourcesOnMarket();
-
-            //if (reader.HasRows) // Check if the reader has any results. 
-            //{
-            //    while (reader.Read())
-            //    {
-            //        offers.Add(GetResourceOfferFromReader(reader));
-            //    }
-            //}
-            //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
-            //return offers;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM Market ";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<ResourceOffer> offer = new List<ResourceOffer>();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                offer.Add(GetResourceOfferFromReader(reader));
+                            }
+                        }
+                        return offer;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -283,15 +363,33 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.UpdateResourceOffer(offer);
+                string query = "UPDATE Market "
+                    + "SET SellerName = @SellerName, ResourceType = @Type, "
+                    + "Count = @Count, Price = @Price, HighestBidder = @Bidder, Bid = @Bid "
+                    + "WHERE Market.Id = " + offer.Id + " AND Market.Bid < @Bid;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@SellerName", offer.SellerName);
+                        command.Parameters.AddWithValue("@Type", offer.Type);
+                        command.Parameters.AddWithValue("@Count", offer.Count);
+                        command.Parameters.AddWithValue("@Price", offer.Price);
+                        command.Parameters.AddWithValue("@Bidder", offer.HighestBidder ?? Convert.DBNull);
+                        command.Parameters.AddWithValue("@Bid", offer.HighestBid);
+
+                        // If no rows where updated 
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            throw new ResourceOfferException("Unable to bid on ressource. Either it is gone or your bid was to low", offer);
+                        }
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -302,16 +400,30 @@ namespace _02148_Project
         /// <returns>The resource offer from the database</returns>
         public static ResourceOffer GetResourceOffer(int id)
         {
-            ResourceOffer offer = DatabaseHandler.GetResourceOnMarket(id);
-            //SqlDataReader reader = DatabaseHandler.GetResourceOnMarket(id);
-            //if (reader.HasRows)
-            //{
-            //    reader.Read();
-            //    offer = GetResourceOfferFromReader(reader);
-            //}
-            //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
-            return offer;
+            string query = "DELETE FROM Market OUTPUT DELETED.* WHERE Id = " + id;
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                return GetResourceOfferFromReader(reader);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            return null;
         }
 
         /// <summary>
@@ -320,20 +432,32 @@ namespace _02148_Project
         /// <param name="offer">Offer to place on the market</param>
         public static int PutResourceOfferOnMarket(ResourceOffer offer)
         {
-            int id = 0;
             try
             {
-                id = DatabaseHandler.PlaceResources(offer);
+                string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
+                    + "OUTPUT INSERTED.Id "
+                    + "VALUES (@Name, @Resource, @Count, @Price);";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", offer.SellerName);
+                        command.Parameters.AddWithValue("@Resource", offer.Type);
+                        command.Parameters.AddWithValue("@Count", offer.Count);
+                        command.Parameters.AddWithValue("@Price", offer.Price);
+
+                        return (int)command.ExecuteScalar();
+                    }
+                }
+
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
-            return id;
+            return 0;
         }
         #endregion
 
@@ -348,25 +472,30 @@ namespace _02148_Project
             List<TradeOffer> offers = new List<TradeOffer>();
             try
             {
-                offers = DatabaseHandler.ReadAllTradeOffers(reciever);
-                //SqlDataReader reader = DatabaseHandler.ReadAllTradeOffers(reciever);
-                //if (reader != null && reader.HasRows)
-                //{
-                //    while (reader.Read())
-                //    {
-                //        offers.Add(GetTradeOfferFromReader(reader));
-                //    }
-                //}
-                //reader.Dispose();
+                string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    offers.Add(GetTradeOfferFromReader(reader));
+                                }
+                            }
+                            return offers;
+                        }
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            // DatabaseHandler.CloseConnection();
-            //}
             return offers;
         }
 
@@ -377,20 +506,26 @@ namespace _02148_Project
         /// <returns>A list of trade offers, which the user has send</returns>
         public static List<TradeOffer> ReadAllSendTradeOffers(string sender)
         {
-            return DatabaseHandler.ReadAllSendTradeOffers(sender);
-            //SqlDataReader reader = DatabaseHandler.ReadAllSendTradeOffers(sender);
-            //List<TradeOffer> offers = new List<TradeOffer>();
-
-            //if (reader.HasRows)
-            //{
-            //    while (reader.Read())
-            //    {
-            //        offers.Add(GetTradeOfferFromReader(reader));
-            //    }
-            //}
-            //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
-            //return offers;
+            string query = "SELECT * FROM TradeOffers WHERE SellerName = '" + sender + "';";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        List<TradeOffer> offers = new List<TradeOffer>();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                offers.Add(GetTradeOfferFromReader(reader));
+                            }
+                        }
+                        return offers;
+                    }
+                }
+            }
         }
 
 
@@ -404,23 +539,27 @@ namespace _02148_Project
             TradeOffer offer = null;
             try
             {
-                return DatabaseHandler.GetTradeOffer(id);
-                //SqlDataReader reader = DatabaseHandler.GetTradeOffer(id);
-                //if (reader.HasRows)
-                //{
-                //    reader.Read();
-                //    offer = GetTradeOfferFromReader(reader);
-                //}
-                //reader.Dispose();
+                string query = "DELETE FROM TradeOffers OUTPUT DELETED.* WHERE Id = " + id;
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                offer = GetTradeOfferFromReader(reader);
+                            }
+                        }
+                    }
+                }
             }
             catch(SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            //finally
-            //{
-            //    DatabaseHandler.CloseConnection();
-            //}
             return offer;
         }
         
@@ -430,20 +569,32 @@ namespace _02148_Project
         /// <param name="offer"></param>
         public static int PutTradeOffer(TradeOffer offer)
         {
-            int id = 0;
             try
             {
-                id = DatabaseHandler.PlaceTradeOffer(offer);
+                string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, PriceType, Price) "
+                    + "OUTPUT INSERTED.Id "
+                    + "VALUES (@Seller, @Reciever, @Type, @Count, @PriceType, @Price);";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Seller", offer.SellerName);
+                        command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
+                        command.Parameters.AddWithValue("@Type", offer.Type);
+                        command.Parameters.AddWithValue("@Count", offer.Count);
+                        command.Parameters.AddWithValue("@PriceType", offer.PriceType);
+                        command.Parameters.AddWithValue("@Price", offer.Price);
+
+                        return (int)command.ExecuteScalar();
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
             }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
-            }
-            return id;
+            return 0;
         }
         #endregion
 
@@ -456,15 +607,23 @@ namespace _02148_Project
         {
             try
             {
-                DatabaseHandler.SendMessage(msg);
+                string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
+                    + "VALUES (@Message, @Sender, @Reciever);";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Message", msg.Context);
+                        command.Parameters.AddWithValue("@Sender", msg.SenderName);
+                        command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+                        command.ExecuteNonQuery();
+                    }
+                }
             }
             catch (SqlException ex)
             {
                 SqlExceptionHandling(ex);
-            }
-            finally
-            {
-                DatabaseHandler.CloseConnection();
             }
         }
 
@@ -475,17 +634,33 @@ namespace _02148_Project
         /// <returns>The latest message to the reciever</returns>
         public static Message GetMessage(string reciever)
         {
-            return DatabaseHandler.GetMessage(reciever);
-            //SqlDataReader reader = DatabaseHandler.GetMessage(reciever);
-            //Message msg = null;
-            //if (reader.HasRows)
-            //{
-            //    reader.Read();
-            //    msg = new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
-            //    reader.Dispose();
-            //    DatabaseHandler.CloseConnection();
-            //}
-            //return msg;
+            try
+            {
+                string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
+                    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
+                    + "DELETE FROM toprow "
+                    + "OUTPUT DELETED.*;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                reader.Read();
+                                return new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
+            return null;
         }
         #endregion
 
@@ -495,14 +670,20 @@ namespace _02148_Project
         public delegate void OnChange_TradeOffers(object sender, SqlNotificationEventArgs e);
         public delegate void OnChange_Chat(object sender, SqlNotificationEventArgs e);
 
+        /// <summary>
+        /// Start the sql dependency class, so event listeners can be setup
+        /// </summary>
         public static void DependencyInitialization()
         {
-            DatabaseHandler.DependencyInitialization();
+            SqlDependency.Start(connectionString);
         }
 
+        /// <summary>
+        /// Stop all event listeners to the SQL database
+        /// </summary>
         public static void DependencyTermination()
         {
-            DatabaseHandler.DependencyTermination();
+            SqlDependency.Stop(connectionString);
         }
 
         /// <summary>
@@ -511,30 +692,116 @@ namespace _02148_Project
         public static void SetupDatabaseListeners(OnChange_Player player, OnChange_ResourceOffers resourceOffer, 
             OnChange_TradeOffers tradeOffer, OnChange_Chat chat)
         {
-            DatabaseHandler.DependencyInitialization();
-            DatabaseHandler.SetupDatabaseListeners(player, resourceOffer, tradeOffer, chat);
+            DependencyInitialization();
+            MonitorPlayers(player);
+            MonitorResourceOffers(resourceOffer);
+            MonitorTradeOffer(tradeOffer);
+            MonitorChat(chat);
         }
 
-        public static void MonitorPlayers(OnChange_Player player)
+        /// <summary>
+        /// Setup listener for the player table
+        /// </summary>
+        /// <param name="player">The event handler methode which should be run when the event fires</param>
+        public static void MonitorPlayers(OnChange_Player playerMethode)
         {
-            DatabaseHandler.MonitorPlayers(player);
+            try
+            {
+                string query = "SELECT Name, Wood, Clay, Wool, " +
+                    "Stone, Iron, Straw, Food, Gold FROM dbo.Players";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDependency dependency = new SqlDependency(command);
+                        dependency.OnChange += new OnChangeEventHandler(playerMethode);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (SqlException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            { }
         }
 
-        public static void MonitorResourceOffers(OnChange_ResourceOffers resourceOffer)
+        /// <summary>
+        /// Setup listener for the resource offer table
+        /// </summary>
+        /// <param name="resourceOfferMethode"></param>
+        public static void MonitorResourceOffers(OnChange_ResourceOffers resourceOfferMethode)
         {
-            DatabaseHandler.MonitorResourceOffers(resourceOffer);
+            try
+            {
+                string query = "SELECT Id, HighestBidder, Bid FROM dbo.Market";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDependency dependency = new SqlDependency(command);
+                        dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (SqlException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            { }
         }
 
-        public static void MonitorTradeOffer(OnChange_TradeOffers tradeOffer)
+        /// <summary>
+        /// Setup listener for the trade offer 
+        /// </summary>
+        /// <param name="tradeOfferMethode">Event methode to be run when event fires</param>
+        public static void MonitorTradeOffer(OnChange_TradeOffers tradeOfferMethode)
         {
-            DatabaseHandler.MonitorTradeOffers(tradeOffer);
+            try
+            {
+                string query = "SELECT Id FROM dbo.TradeOffers;";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDependency dependency = new SqlDependency(command);
+                        dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (SqlException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            { }
         }
 
-        public static void MonitorChat(OnChange_Chat chat)
+        /// <summary>
+        /// Setup listener for the chat table
+        /// </summary>
+        /// <param name="chatMethode"></param>
+        public static void MonitorChat(OnChange_Chat chatMethode)
         {
-            DatabaseHandler.MonitorChat(chat);
+            try
+            {
+                string query = "SELECT Id FROM dbo.Chat";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        SqlDependency dependency = new SqlDependency(command);
+                        dependency.OnChange += new OnChangeEventHandler(chatMethode);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (SqlException ex) { }
+#pragma warning restore CS0168 // Variable is declared but never used
         }
-
         #endregion
     }
 }
