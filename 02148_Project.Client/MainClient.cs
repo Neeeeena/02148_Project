@@ -38,7 +38,7 @@ namespace _02148_Project.Client
             player = new Player(name);
             try
             {
-            DatabaseInterface.PutPlayer(name);
+                DatabaseInterface.PutPlayer(name);
             }
             catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Clay, 1);
             ////////////////
-            return "";
+            return null;
         }
 
         public static string deletePlayer(string name)
@@ -462,10 +462,28 @@ namespace _02148_Project.Client
                     {
                         //Muligvis tilføj noget handling her, hvis det ikke er muligt at tage alle resourcerne?
                         //Eller bare formod at gui siger "NEJ!!!!!!"?
-                        DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, - priceres.Item1);
+                        try {
+                            DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, -priceres.Item1);
+                        }
+                        catch(Exception e) //INDSÆT RIGTIG ERROR
+                        {
+                            // If an error should happen while taking the resources, the
+                            // already paid resources are returned to the buyer
+                            //ERROR MSG???
+                            foreach (Tuple<int, ResourceType> priceresReturn in cp.Item2)
+                            {
+                                if (priceresReturn == priceres)
+                                {
+                                    return;
+                                }
+                                DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, priceres.Item1);
+                            }
+
+
+                        }
                     }
                     //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
-                    //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+                    DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
                     return;
 
             //THROW ERROR (construction does not exist)

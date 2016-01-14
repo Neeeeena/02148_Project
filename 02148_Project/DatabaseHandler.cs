@@ -169,6 +169,30 @@ namespace _02148_Project
         }
 
         /// <summary>
+        /// Update specific construction for a player
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        internal static void UpdatePlayerConstructions(string name, Construction type, int count)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "UPDATE Construction "
+                    + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+                    + "WHERE Name = @Name;";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", name);
+                    command.Parameters.AddWithValue("@Count", count);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Reads all the data about a player in the database and returns the 
         /// SQL data reader object with the data
         /// </summary>
