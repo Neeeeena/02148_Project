@@ -520,6 +520,7 @@ namespace _02148_Project.Client
         public static bool hasResourcesFor(Construction type)
         {
             foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+            {
                 if(cp.Item1 == type)
                     foreach (Tuple<int,ResourceType> ir in cp.Item2)
                         switch (ir.Item2)
@@ -549,7 +550,10 @@ namespace _02148_Project.Client
                                 if (player.Wool < ir.Item1) return false;
                                 break;
                         }
-            return true;            
+                return true;            
+            }
+            //building does not exist error??
+            return false;
         }
     }
 
