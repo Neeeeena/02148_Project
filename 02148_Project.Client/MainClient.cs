@@ -483,7 +483,7 @@ namespace _02148_Project.Client
                         }
                     }
                     //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
-                    //DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+                    DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
                     return;
 
             //THROW ERROR (construction does not exist)
