@@ -70,6 +70,9 @@ input[type="select"] {
     margin-left: 21%;
     margin-right: 21%;
 }
+.span10{
+    float:left;
+}
 
 .span3 {
     width: 20%;
@@ -143,7 +146,7 @@ input.hidden {
     height:400px;
     width:500px;
     position:absolute;
-    top:250px;
+    top:150px;
     left:50px;
 }
 
@@ -158,4 +161,9 @@ input.hidden {
 .horseLink img {
     height:65px;
     width:100px;
+}
+
+.buildings {
+    height:50px;
+    width:50px;
 }
