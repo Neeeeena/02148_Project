@@ -65,16 +65,9 @@ namespace _02148_Project.Website
 
         protected void RenderLocalResources()
         {
-            //Add 5 resources
-            //for (int i = 0; i <= 5; i++)
-            //{
-            //    localresources.Add(new ResourceOffer(i, "Nina", ResourceType.Wood, 1, 0));
-            //}
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
-
-
         }
 
 
@@ -159,5 +152,10 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion
+
+        protected void submitBid_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
