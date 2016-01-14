@@ -3,13 +3,14 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
-<div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="content">
+<div style="background-image:url(Images/map.png); background-repeat:no-repeat; height: 500px;width: 600px" class="content">
 
 
 </div>
 
 
 <input type="button" id="hideshow" value="hide/show"/>
+
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">

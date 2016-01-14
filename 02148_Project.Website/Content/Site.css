@@ -146,3 +146,7 @@ input.hidden {
     top:250px;
     left:50px;
 }
+
+#hideshow {
+    display:none;
+}
