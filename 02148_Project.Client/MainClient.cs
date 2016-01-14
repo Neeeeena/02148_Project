@@ -38,7 +38,7 @@ namespace _02148_Project.Client
             player = new Player(name);
             try
             {
-            DatabaseInterface.PutPlayer(name);
+                DatabaseInterface.PutPlayer(name);
             }
             catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace _02148_Project.Client
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Wood, 2);
             DatabaseInterface.UpdatePlayerResource(name, ResourceType.Clay, 1);
             ////////////////
-            return "";
+            return null;
         }
 
         public static string deletePlayer(string name)
