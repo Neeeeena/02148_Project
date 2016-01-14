@@ -5,7 +5,7 @@
     [Count]         INT          NOT NULL,
     [Price]         INT          NOT NULL,
     [HighestBidder] VARCHAR (32) NULL,
-    [Bid]           INT          NULL,
+    [Bid]           INT          NOT NULL DEFAULT 0,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Market_Players] FOREIGN KEY ([SellerName]) REFERENCES [dbo].[Players] ([Name]),
     CONSTRAINT [FK_Market_Players2] FOREIGN KEY ([HighestBidder]) REFERENCES [dbo].[Players] ([Name]),

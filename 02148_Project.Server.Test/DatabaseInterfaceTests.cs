@@ -142,12 +142,10 @@ namespace Server.Test
         [TestCategory("ResourceOffer")]
         public void GetResourceOfferFromMarketTest()
         {
-            ResourceOffer offer = DatabaseInterface.GetResourceOffer(5);
+            ResourceOffer offer = DatabaseInterface.GetResourceOffer(1);
 
-            if (offer != null)
-            {
-                PrintOffer(offer);
-            }
+            Assert.IsNotNull(offer);
+            PrintOffer(offer);
             Console.WriteLine("End of test");
         }
         
@@ -164,11 +162,11 @@ namespace Server.Test
         [TestCategory("ResourceOffer")]
         public void UpdateResourceOfferTest()
         {
-            int id = 2; // Used to select the resource in the database to test on
+            int id = 3; // Used to select the resource in the database to test on
             // Get the current offer on the market
             ResourceOffer beforeOffer = DatabaseInterface.ReadResourceOffer(id);
             Random random = new Random();
-            int count = 50;
+            int count = 100;
 
             // Create the new offer to update
             ResourceOffer offer = new ResourceOffer(id, "Oliver", ResourceType.Iron, 
