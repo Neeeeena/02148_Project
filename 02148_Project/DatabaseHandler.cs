@@ -13,7 +13,7 @@ namespace _02148_Project
 {
     internal static class DatabaseHandler
     {
-        private const string connectionString = @"Data Source=Alex-pc;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
+        private const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2";
         //internal const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
         internal static SqlConnection connection;
@@ -612,31 +612,35 @@ namespace _02148_Project
         /// </summary>
         internal static void MonitorPlayers(DatabaseInterface.OnChange_Player playerMethode)
         {
-            OpenConnection();
-            using (SqlCommand command = new SqlCommand("SELECT Name, Wood, Clay, Wool, " +
-                "Stone, Iron, Straw, Food, Gold FROM dbo.Players",
-                connection))
+            string query = "SELECT Name, Wood, Clay, Wool, " +
+                    "Stone, Iron, Straw, Food, Gold FROM dbo.Players";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(playerMethode);
                 command.ExecuteNonQuery();
             }
         }
+        }
         /// <summary>
         /// Setup monitor/event lister for resource offer data
         /// </summary>
         internal static void MonitorResourceOffers(DatabaseInterface.OnChange_ResourceOffers resourceOfferMethode)
         {
-            OpenConnection();
-            using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, ResourceType, "
-                + "Count, Price, HighestBidder, Bid "
-                + "FROM dbo.Market",
-                connection))
+            string query = "SELECT Id, HighestBidder, Bid FROM dbo.Market";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
             {
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
                 command.ExecuteNonQuery();
             }
+        }
         }
 
         /// <summary>
@@ -644,25 +648,31 @@ namespace _02148_Project
         /// </summary>
         internal static void MonitorTradeOffers(DatabaseInterface.OnChange_TradeOffers tradeOfferMethode)
         {
-            OpenConnection();
-            using (SqlCommand command = new SqlCommand("SELECT Id, SellerName, RecieverName, "
-                + "ResourceType, Count, PriceType, Price FROM TradeOffers;",
-                connection))
+            string query = "SELECT Id FROM TradeOffers;";
+            
+            using (SqlConnection connection = new SqlConnection(connectionString))
             { 
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
                 SqlDependency dependency = new SqlDependency(command);
                 dependency.OnChange += new OnChangeEventHandler(tradeOfferMethode);
                 command.ExecuteNonQuery();
             }
         }
+        }
 
+        /// <summary>
+        /// Setup monitor for the chat table
+        /// </summary>
+        /// <param name="chatMethode"></param>
         internal static void MonitorChat(DatabaseInterface.OnChange_Chat chatMethode)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            string query = "SELECT Id FROM dbo.Chat";
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                con.Open();
-                using (SqlCommand command = new SqlCommand("SELECT Id, Message, SenderName, RecieverName "
-                    + "FROM dbo.Chat",
-                    con))
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     SqlDependency dependency = new SqlDependency(command);
                     dependency.OnChange += new OnChangeEventHandler(chatMethode);
