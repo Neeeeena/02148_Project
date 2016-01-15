@@ -115,7 +115,7 @@
       <div class="modal-body">
           <p>Bid:</p>
           <input type="text" id="bidPrice" runat="server"/>
-        <input runat="server" class="hidden" name="hidId" id="hidId" value=""/>
+        <input runat="server" class="hidden" name="hidId" id="hidId" value="er"/>
       </div>
       <div class="modal-footer">
         <asp:Button runat="server" class="btn btn-success" id="submitBid" OnClick="submitBid_Click" Text="Bid"></asp:Button>
