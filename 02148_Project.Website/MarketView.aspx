@@ -10,9 +10,7 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        <p>This is where you buy houses, a blacksmith etc.</p>
-        <input runat="server" type="text" id="nameInput" value="Write a mofo username!" />
-        <asp:Button runat="server" ID="submitName" OnClick="submitName_Click" Text="Submit"/>
+        
     </div>
         <div class="span2">
 
@@ -23,7 +21,9 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert a price" 
+                    onblur="if (this.value == '') {this.value = 'Insert a price';}"
+                    onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
