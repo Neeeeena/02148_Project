@@ -14,7 +14,6 @@ namespace _02148_Project.Client
 {
     public class MainClient
     {
-
         //public List<ResourceOffer> allResourcesOnMarket;
         //public List<TradeOffer> allYourRecievedTradeOffers;
         //public static List<TradeOffer> allYourSentTradeOffers;
@@ -101,7 +100,7 @@ namespace _02148_Project.Client
             ResourceOffer prevOffer = DatabaseInterface.ReadResourceOffer(offer.Id);
             try
             {
-            DatabaseInterface.UpdateResourceOffer(offer);
+                DatabaseInterface.UpdateResourceOffer(offer);
             }
             catch (ConnectionException e) {
 
@@ -146,8 +145,8 @@ namespace _02148_Project.Client
         {
             try
             {
-            player = DatabaseInterface.ReadPlayer(player.Name);
-        }
+                player = DatabaseInterface.ReadPlayer(player.Name);
+            }
             catch(Exception ex)
             {
                 return ex.Message;
@@ -243,6 +242,7 @@ namespace _02148_Project.Client
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message + " ReadAllTradeOffersForYou() threw this");
                 return new List<TradeOffer>();
             }
         }
@@ -310,11 +310,11 @@ namespace _02148_Project.Client
         public static string DeclineTradeOffer(int id)
         {
             try
-        {
-            TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-            DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
-            SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
-        }
+            {
+                TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
+                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
+                SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
+            }
             catch (Exception ex)
             {
                 return ex.Message;

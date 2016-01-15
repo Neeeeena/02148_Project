@@ -50,6 +50,10 @@ namespace _02148_Project.Website
             }
         }
 
+        protected void timer_Ticked(object sender, EventArgs e)
+        {
+        }
+
         protected void RenderMarket()
         {
             marketresources = MainClient.UpdateResourcesOnMarket();
@@ -118,6 +122,8 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
+            RenderLocalResources();
+            RenderMarket();
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
