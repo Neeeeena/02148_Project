@@ -31,31 +31,40 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button buyMill;
         
         /// <summary>
-        /// Button1 control.
+        /// buyForge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button buyForge;
         
         /// <summary>
-        /// Button2 control.
+        /// buyFarm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.Button buyFarm;
         
         /// <summary>
-        /// Button3 control.
+        /// buyTownHall control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button3;
+        protected global::System.Web.UI.WebControls.Button buyTownHall;
+        
+        /// <summary>
+        /// buyGoldmine control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buyGoldmine;
         
         /// <summary>
         /// repLocalResources control.

@@ -9,6 +9,7 @@ using _02148_Project.Model;
 using _02148_Project.Client;
 using _02148_Project;
 using System.Data.SqlClient;
+using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project.Website
 {
@@ -152,17 +153,27 @@ namespace _02148_Project.Website
         }
         #endregion
 
-        protected void submitBid_Click(object sender, CommandEventArgs e)
+
+        protected void submitBid_Click(object sender, EventArgs e)
         {
-            //string ID = e.CommandArgument.ToString();
-            //ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
-            //int bidValue = Int32.Parse(bidInput.Value);
-            //if (bidValue > ro.HighestBid)
-            //{
-            //    ro.HighestBid = bidValue;
-            //    ro.HighestBidder = MainClient.player.Name;
-            //    MainClient.BidOnResource(ro);
-            //}
+            try {
+                string ID = hidId.Value;
+                string price = bidPrice.Value;
+                ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
+                int bidValue = Int32.Parse(price);
+                if (bidValue > ro.HighestBid)
+                {
+                    ro.HighestBid = bidValue;
+                    ro.HighestBidder = MainClient.player.Name;
+                    MainClient.BidOnResource(ro);
+                }
+                bidwarning.Visible = false;
+                bidPrice.Value = "";
+            }catch(ResourceOfferException ex)
+            {
+                bidwarning.InnerText = ex.Message;
+                bidwarning.Visible = true;
+            }
         }
     }
 }
