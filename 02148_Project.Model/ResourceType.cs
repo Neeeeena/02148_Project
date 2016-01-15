@@ -30,6 +30,12 @@ namespace _02148_Project.Model
                     return "Images/Food.png";
                 case ResourceType.Wool:
                     return "Images/får.png";
+                case ResourceType.Straw:
+                    return "Images/Straw.png";
+                case ResourceType.Stone:
+                    return "Images/stone.png";
+                case ResourceType.Iron:
+                    return "Images/anvil.png";
                 default:
                     return "Images/firewood.png";
             }

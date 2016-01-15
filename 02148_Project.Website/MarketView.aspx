@@ -21,7 +21,7 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Insert a price" 
+                <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
@@ -52,7 +52,7 @@
 		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
 		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
 		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
-                <button id="but" class="open-myModal" data-id="<%#Eval("Id")%>" data-toggle="modal" data-target="#myModal" >Bid</button>
+                <button id="but" class="open-myModal btn btn-default btn-sm" onclick="saveId(this)" data-id="<%#Eval("Id")%>" data-toggle="modal" data-target="#myModal" >Bid</button>
 
                 </div>
               </td>
@@ -126,14 +126,16 @@
   </div>
 </div>
 
+
 <script type="text/javascript">
-    $(".open-myModal").click(function () {
-        var resId = $(this).data('id');
+    function saveId(ele) {
+        var resId = ele.getAttribute('data-id');
+        alert("Jeg blev kaldt! "+resId);
+        
         document.getElementById("MainContent_hidId").setAttribute("value", resId);
         $("#myModal").modal("show");
-    });
+    }
 </script>
-
 
 <script type="text/javascript">
 
