@@ -1,6 +1,7 @@
 ﻿using _02148_Project.Model;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
 using _02148_Project.Model.Exceptions;
 using System;
 
@@ -8,7 +9,7 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
-        private const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
+        public const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
         //private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
 
@@ -18,7 +19,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">SQL Data reader object with the relevant data</param>
         /// <returns>The Resource offer from the reader object</returns>
-        internal static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
+        public static ResourceOffer GetResourceOfferFromReader(SqlDataReader reader)
         {
             if (reader.IsDBNull(5))
             {
@@ -37,7 +38,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">Reader with the data</param>
         /// <returns>The player in the reader object</returns>
-        internal static Player GetPlayerFromReader(SqlDataReader reader)
+        public static Player GetPlayerFromReader(SqlDataReader reader)
         {
             return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
                                 reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
@@ -51,7 +52,7 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reader">Reader with the data</param>
         /// <returns>A trade offer object</returns>
-        internal static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
+        public static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
         {
             return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
                 (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
@@ -337,16 +338,6 @@ namespace _02148_Project
                     }
                 }
             }
-            //SqlDataReader reader = DatabaseHandler.ReadResourceOnMarket(id);
-            //ResourceOffer offer = null;
-            //if (reader.HasRows)
-            //{
-            //    reader.Read();
-            //    offer = GetResourceOfferFromReader(reader);
-            //}
-            //reader.Dispose();
-            //DatabaseHandler.CloseConnection();
-            //return offer;
         }
 
         /// <summary>
@@ -456,9 +447,9 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price) "
+                string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price, HighestBidder, Bid) "
                     + "OUTPUT INSERTED.Id "
-                    + "VALUES (@Name, @Resource, @Count, @Price);";
+                    + "VALUES (@Name, @Resource, @Count, @Price, @HighestBidder, @Bid);";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -469,6 +460,8 @@ namespace _02148_Project
                         command.Parameters.AddWithValue("@Resource", offer.Type);
                         command.Parameters.AddWithValue("@Count", offer.Count);
                         command.Parameters.AddWithValue("@Price", offer.Price);
+                        command.Parameters.AddWithValue("@HighestBidder", "Server");
+                        command.Parameters.AddWithValue("@Bid", offer.Price);
 
                         return (int)command.ExecuteScalar();
                     }
@@ -780,6 +773,7 @@ namespace _02148_Project
             { }
         }
 
+        private static SqlConnection monitorConnection;
         /// <summary>
         /// Setup listener for the resource offer table
         /// </summary>
@@ -789,21 +783,21 @@ namespace _02148_Project
             try
             {
                 string query = "SELECT Id, HighestBidder, Bid FROM dbo.Market";
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        SqlDependency dependency = new SqlDependency(command);
-                        dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
-                        command.ExecuteNonQuery();
-                    }
-                }
+                monitorConnection = new SqlConnection(connectionString);
+                monitorConnection.Open();
+                SqlCommand command = new SqlCommand(query, monitorConnection);
+                command.Notification = null;
+
+                SqlDependency dependency = new SqlDependency(command);
+                dependency.OnChange += new OnChangeEventHandler(resourceOfferMethode);
+                command.ExecuteNonQuery();
             }
 #pragma warning disable CS0168 // Variable is declared but never used
             catch (SqlException ex)
 #pragma warning restore CS0168 // Variable is declared but never used
-            { }
+            {
+                throw ex;
+            }
         }
 
         /// <summary>

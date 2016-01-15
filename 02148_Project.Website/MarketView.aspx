@@ -10,9 +10,7 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        <p>This is where you buy houses, a blacksmith etc.</p>
-        <input runat="server" type="text" id="nameInput" value="Write a mofo username!" />
-        <asp:Button runat="server" ID="submitName" OnClick="submitName_Click" Text="Submit"/>
+        
     </div>
         <div class="span2">
 
@@ -23,7 +21,9 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert a price" 
+                    onblur="if (this.value == '') {this.value = 'Insert a price';}"
+                    onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
@@ -32,6 +32,9 @@
         <div class="span8">
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
+            <asp:UpdatePanel ID="up" runat="server">        
+    <ContentTemplate>
+        <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repMarketResources" runat="server" >
           <HeaderTemplate>
             <table>
@@ -60,6 +63,8 @@
             </table>
           </FooterTemplate>
     </asp:Repeater>
+    </ContentTemplate>
+</asp:UpdatePanel>
             </div>
         </div>
 <div class="alert alert-warning" id="bidwarning" visible="false" runat="server">
@@ -132,6 +137,9 @@
 
 <script type="text/javascript">
 
+    function refresh(){
+        location.reload(true);
+    }
 
     function allowDrop(ev) {
         ev.preventDefault();

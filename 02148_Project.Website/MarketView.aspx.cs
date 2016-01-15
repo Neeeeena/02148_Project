@@ -9,6 +9,7 @@ using _02148_Project.Model;
 using _02148_Project.Client;
 using _02148_Project;
 using System.Data.SqlClient;
+using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project.Website
@@ -25,11 +26,8 @@ namespace _02148_Project.Website
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
             if (!Page.IsPostBack)
             {
-
                 //MainClient.deletePlayer("Martin");
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
@@ -49,11 +47,12 @@ namespace _02148_Project.Website
                     repMarketResources.DataBind();
                     repLocalResources.DataSource = localresources;
                     repLocalResources.DataBind();
-
                 }
-
             }
+        }
 
+        protected void timer_Ticked(object sender, EventArgs e)
+        {
         }
 
         protected void RenderMarket()
@@ -78,10 +77,11 @@ namespace _02148_Project.Website
 
         protected void buttonConfirmSell_Click(Object sender, EventArgs e)
         {
-
             var sid = hiddenValue.Value;
             var soldElement = localresources.Find(se => se.Id == sid);
-            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, Int32.Parse(inputPrice.Value));
+            var sellValue = Int32.Parse(inputPrice.Value);
+            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, sellValue);
+            newOffer.HighestBid = Int32.Parse(inputPrice.Value);
             MainClient.PlaceResourceOfferOnMarket(newOffer);
             RenderLocalResources();
             RenderMarket();
@@ -89,20 +89,21 @@ namespace _02148_Project.Website
 
         protected void submitName_Click(object sender, EventArgs e)
         {
-            var name = nameInput.Value;
-            if (MainClient.createPlayer(name) != null)
-            {
-                // Display message
+            //var name = nameInput.Value;
+            //if (MainClient.createPlayer(name) != null)
+            //{
+            //    Display message
 
-            }
-            else
-            {
-                RenderLocalResources();
-                RenderMarket();
-            }
+            //}
+            //else
+            //{
+            //    RenderLocalResources();
+            //    RenderMarket();
+            //}
         }
 
         #region DatabaseListeners
+
         /// <summary>
         /// On change methode for when the players table changes
         /// </summary>
@@ -124,6 +125,7 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
+            RenderLocalResources();
             RenderMarket();
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
@@ -170,7 +172,7 @@ namespace _02148_Project.Website
                 bidwarning.Visible = false;
                 bidPrice.Value = "";
             }catch(ResourceOfferException ex)
-            {
+        {
                 bidwarning.InnerText = ex.Message;
                 bidwarning.Visible = true;
             }
