@@ -68,6 +68,11 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
 
+        protected void RenderChat()
+        {
+
+        }
+
 
         protected void buttonCancelSell_Click(Object sender, EventArgs e)
         {

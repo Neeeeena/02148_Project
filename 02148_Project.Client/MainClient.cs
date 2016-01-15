@@ -95,28 +95,27 @@ namespace _02148_Project.Client
         }
 
         //Missing tests
-        public static void BidOnResource(ResourceOffer offer)
+        public static string BidOnResource(ResourceOffer offer)
         {
             ResourceOffer prevOffer = DatabaseInterface.ReadResourceOffer(offer.Id);
             try
             {
                 DatabaseInterface.UpdateResourceOffer(offer);
+                //Transfering the money back to the previous highest bidder, if one exists
+                if (prevOffer.HighestBidder != null)
+                    DatabaseInterface.UpdatePlayerResource(prevOffer.HighestBidder, ResourceType.Gold, prevOffer.HighestBid);
+
+                //Taking money from the new highest bidder
+                DatabaseInterface.UpdatePlayerResource(offer.HighestBidder, ResourceType.Gold, -offer.HighestBid);
             }
-            catch (ConnectionException e) {
+            catch (Exception ex) {
 
                 //parse error msg to user
-                return;
+                return ex.Message;
             }
+            return "";
 
-            MainServer.bidAccepted(offer.Id);
-
-            //Transfering the money back to the previous highest bidder, if one exists
-            if (prevOffer.HighestBidder != null)
-                DatabaseInterface.UpdatePlayerResource(prevOffer.HighestBidder, ResourceType.Gold, prevOffer.HighestBid);
-
-            //Taking money from the new highest bidder
-            DatabaseInterface.UpdatePlayerResource(offer.HighestBidder, ResourceType.Gold, -offer.HighestBid);
-
+            //MainServer.bidAccepted(offer.Id);
 
             //When the auction is ended, the user has already spent the money, and only the wares have to be transfered
 
