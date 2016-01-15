@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace _02148_Project.Model
 {
-
     public enum Construction
     {
         Cottage,

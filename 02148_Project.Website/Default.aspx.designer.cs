@@ -13,84 +13,57 @@ namespace _02148_Project.Website {
     public partial class _Default {
         
         /// <summary>
-        /// nameInput control.
+        /// username control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText nameInput;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText username;
         
         /// <summary>
-        /// submitName control.
+        /// submitusername control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitName;
+        protected global::System.Web.UI.WebControls.Button submitusername;
         
         /// <summary>
-        /// hiddenValue control.
+        /// userwarning control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText hiddenValue;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl userwarning;
         
         /// <summary>
-        /// sellInput control.
+        /// existingusername control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl sellInput;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText existingusername;
         
         /// <summary>
-        /// inputPrice control.
+        /// Button1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText inputPrice;
+        protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
-        /// buttonCancelSell control.
+        /// existinguserwarning control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buttonCancelSell;
-        
-        /// <summary>
-        /// buttonConfirmSell control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buttonConfirmSell;
-        
-        /// <summary>
-        /// repMarketResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repMarketResources;
-        
-        /// <summary>
-        /// repLocalResources control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater repLocalResources;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl existinguserwarning;
     }
 }

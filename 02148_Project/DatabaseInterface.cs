@@ -41,7 +41,9 @@ namespace _02148_Project
         {
             return new Player(reader.GetString(0), reader.GetInt32(1), reader.GetInt32(2),
                                 reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5),
-                                reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8));
+                                reader.GetInt32(6), reader.GetInt32(7), reader.GetInt32(8), 
+                                reader.GetInt32(10), reader.GetInt32(11), reader.GetInt32(12),
+                                reader.GetInt32(13), reader.GetInt32(14), reader.GetInt32(15));
         }
 
         /// <summary>
@@ -97,7 +99,8 @@ namespace _02148_Project
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "SELECT * FROM Players";
+                    string query = "SELECT * FROM Players " +
+                        "LEFT JOIN Construction ON Players.Name = Construction.Name";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -132,7 +135,9 @@ namespace _02148_Project
             Player player = null;
             try
             {
-                string query = "SELECT * FROM Players WHERE Name = @Name;";
+                string query = "SELECT * FROM Players " +
+                    "LEFT JOIN Construction ON Players.Name = Construction.Name " +
+                    "WHERE Players.Name = @Name;";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -243,6 +248,23 @@ namespace _02148_Project
                     {
                         command.Parameters.AddWithValue("@Name", name);
                         command.ExecuteNonQuery();
+                    }
+                    // Make sure the player is also created in the construction table
+                    try
+                    {
+                        query = "INSERT INTO Construction (Name) VALUES (@Name);";
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@Name", name);
+                            command.ExecuteNonQuery();
+                        }
+                    } 
+                    catch (SqlException ex)
+                    {
+                        if (ex.Number != 2627)
+                        {
+                            throw ex;
+                        }
                     }
                 }
             }
@@ -661,6 +683,38 @@ namespace _02148_Project
                 SqlExceptionHandling(ex);
             }
             return null;
+        }
+        #endregion
+
+        #region Construction
+        /// <summary>
+        /// Update a specific construction for the player
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        public static void UpdatePlayerConstructions(string name, Construction type, int count)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE Construction "
+                        + "SET " + type.ToString() + " = " + type.ToString() + " + @Count "
+                        + "WHERE Name = @Name;";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Name", name);
+                        command.Parameters.AddWithValue("@Count", count);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                SqlExceptionHandling(ex);
+            }
         }
         #endregion
 
