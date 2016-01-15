@@ -127,9 +127,9 @@ namespace _02148_Project.Client
         {
             try
             {
-            DatabaseInterface.PutResourceOfferOnMarket(offer);
-            DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
-        }
+                DatabaseInterface.PutResourceOfferOnMarket(offer);
+                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
+            }
             catch(Exception ex)
             {
                 return ex.Message;
