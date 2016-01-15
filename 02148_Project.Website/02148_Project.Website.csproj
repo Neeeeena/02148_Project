@@ -192,6 +192,7 @@
     <Content Include="ApplicationInsights.config" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Images\Cottage.png" />
+    <Content Include="Images\Farm.png" />
     <Content Include="Images\firewood.png" />
     <Content Include="Images\forge.png" />
     <Content Include="Images\får.png" />
@@ -200,7 +201,7 @@
     <Content Include="Images\map.png" />
     <Content Include="Images\Mill.png" />
     <Content Include="Images\mursten.png" />
-    <Content Include="Images\Town Hall.png" />
+    <Content Include="Images\TownHall.png" />
     <Content Include="Images\wood.gif" />
     <Content Include="MapView.aspx" />
     <Content Include="MarketView.aspx" />

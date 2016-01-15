@@ -13,24 +13,6 @@ namespace _02148_Project.Website {
     public partial class MarketView {
         
         /// <summary>
-        /// nameInput control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText nameInput;
-        
-        /// <summary>
-        /// submitName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button submitName;
-        
-        /// <summary>
         /// hiddenValue control.
         /// </summary>
         /// <remarks>
@@ -103,6 +85,15 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Repeater repMarketResources;
         
         /// <summary>
+        /// bidwarning control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl bidwarning;
+        
+        /// <summary>
         /// repLocalResources control.
         /// </summary>
         /// <remarks>
@@ -110,5 +101,32 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repLocalResources;
+        
+        /// <summary>
+        /// bidPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText bidPrice;
+        
+        /// <summary>
+        /// hidId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText hidId;
+        
+        /// <summary>
+        /// submitBid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button submitBid;
     }
 }

@@ -10,9 +10,7 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        <p>This is where you buy houses, a blacksmith etc.</p>
-        <input runat="server" type="text" id="nameInput" value="Write a mofo username!" />
-        <asp:Button runat="server" ID="submitName" OnClick="submitName_Click" Text="Submit"/>
+        
     </div>
         <div class="span2">
 
@@ -23,7 +21,9 @@
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
                 How much do you want to sell it for? <br />
-                <INPUT runat="server" id="inputPrice" type="text" value="Insert price">
+                <INPUT runat="server" id="inputPrice" type="text" value="Insert a price" 
+                    onblur="if (this.value == '') {this.value = 'Insert a price';}"
+                    onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
                 <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
@@ -52,11 +52,8 @@
 		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
 		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
 		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
-                    <div id="txtfield<%#Eval("Id")%>">
-		               <input id="bidInput" type="text" runat="server" />
-                        <!--Tilføj javascript funktion der gemmer id i hidden input field-->
-                       <asp:Button id="submitBid" runat="server" OnCommand="submitBid_Click" CommandArgument='<%#Eval("Id")%>' Text="Test"></asp:Button>
-		            </div>
+                <button id="but" class="open-myModal" data-id="<%#Eval("Id")%>" data-toggle="modal" data-target="#myModal" >Bid</button>
+
                 </div>
               </td>
             </tr>
@@ -70,8 +67,11 @@
 </asp:UpdatePanel>
             </div>
         </div>
+<div class="alert alert-warning" id="bidwarning" visible="false" runat="server">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+</div>
 
-    <div class="jumbotron">
+    <div>
 
         <asp:Repeater ID="repLocalResources" runat="server" >
           <HeaderTemplate>
@@ -101,6 +101,38 @@
 </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Bid on resource</h4>
+      </div>
+      <div class="modal-body">
+          <p>Bid:</p>
+          <input type="text" id="bidPrice" runat="server"/>
+        <input runat="server" class="hidden" name="hidId" id="hidId" value=""/>
+      </div>
+      <div class="modal-footer">
+        <asp:Button runat="server" class="btn btn-success" id="submitBid" OnClick="submitBid_Click" Text="Bid"></asp:Button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+    $(".open-myModal").click(function () {
+        var resId = $(this).data('id');
+        document.getElementById("MainContent_hidId").setAttribute("value", resId);
+        $("#myModal").modal("show");
+    });
+</script>
 
 
 <script type="text/javascript">
@@ -135,19 +167,13 @@
     }
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".resource").each(function () {
-            var $id = "#txtfield" + $(this).find("img").attr("id");
-            $($id).hide();
-        });
-        $(".resource_image").click(function () {
-            var $id = "#txtfield" + $(this).attr("id");
-            $($id).toggle();
-        });
-    });
-</script>
+
+
+
+
+
+
+
 
 
 </asp:Content>

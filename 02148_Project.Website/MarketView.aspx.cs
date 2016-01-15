@@ -10,6 +10,7 @@ using _02148_Project.Client;
 using _02148_Project;
 using System.Data.SqlClient;
 using System.Web.Caching;
+using _02148_Project.Model.Exceptions;
 
 namespace _02148_Project.Website
 {
@@ -83,7 +84,9 @@ namespace _02148_Project.Website
         {
             var sid = hiddenValue.Value;
             var soldElement = localresources.Find(se => se.Id == sid);
-            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, Int32.Parse(inputPrice.Value));
+            var sellValue = Int32.Parse(inputPrice.Value);
+            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, sellValue);
+            newOffer.HighestBid = Int32.Parse(inputPrice.Value);
             MainClient.PlaceResourceOfferOnMarket(newOffer);
             RenderLocalResources();
             RenderMarket();
@@ -91,17 +94,17 @@ namespace _02148_Project.Website
 
         protected void submitName_Click(object sender, EventArgs e)
         {
-            var name = nameInput.Value;
-            if (MainClient.createPlayer(name) != null)
-            {
-                // Display message
+            //var name = nameInput.Value;
+            //if (MainClient.createPlayer(name) != null)
+            //{
+            //    Display message
 
-            }
-            else
-            {
-                RenderLocalResources();
-                RenderMarket();
-            }
+            //}
+            //else
+            //{
+            //    RenderLocalResources();
+            //    RenderMarket();
+            //}
         }
 
         #region DatabaseListeners
@@ -157,17 +160,27 @@ namespace _02148_Project.Website
         }
         #endregion
 
-        protected void submitBid_Click(object sender, CommandEventArgs e)
+
+        protected void submitBid_Click(object sender, EventArgs e)
         {
-            //string ID = e.CommandArgument.ToString();
-            //ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
-            //int bidValue = Int32.Parse(bidInput.Value);
-            //if (bidValue > ro.HighestBid)
-            //{
-            //    ro.HighestBid = bidValue;
-            //    ro.HighestBidder = MainClient.player.Name;
-            //    MainClient.BidOnResource(ro);
-            //}
+            try {
+                string ID = hidId.Value;
+                string price = bidPrice.Value;
+                ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
+                int bidValue = Int32.Parse(price);
+                if (bidValue > ro.HighestBid)
+                {
+                    ro.HighestBid = bidValue;
+                    ro.HighestBidder = MainClient.player.Name;
+                    MainClient.BidOnResource(ro);
+                }
+                bidwarning.Visible = false;
+                bidPrice.Value = "";
+            }catch(ResourceOfferException ex)
+        {
+                bidwarning.InnerText = ex.Message;
+                bidwarning.Visible = true;
+            }
         }
     }
 }

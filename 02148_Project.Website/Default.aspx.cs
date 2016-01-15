@@ -24,41 +24,55 @@ namespace _02148_Project.Website
 
         protected void submitusername_Click(object sender, EventArgs e)
         {
-            string ret = MainClient.createPlayer(username.Value);
-            if (ret == null)
+            if (String.IsNullOrEmpty(username.Value))
             {
-                Response.Redirect("~/MarketView");
+                userwarning.Visible = true;
+                userwarning.InnerText = "A player name must be typed in";
             }
             else
             {
-                userwarning.Visible = true;
-                userwarning.InnerText = ret;
+                string ret = MainClient.createPlayer(username.Value);
+                if (ret == null)
+                {
+                    Response.Redirect("~/MarketView");
+                }
+                else
+                {
+                    userwarning.Visible = true;
+                    userwarning.InnerText = ret;
+
+                }
 
             }
+            
 
         }
         //Muligvis ud
         protected void submitexistingusername_Click(object sender, EventArgs e)
         {
-            try
-
+            if (String.IsNullOrEmpty(existingusername.Value))
             {
-
-                MainClient.ReadAPlayer(existingusername.Value);
-
-                Response.Redirect("~/MarketView");
+                existinguserwarning.Visible = true;
+                existinguserwarning.InnerText = "A player name must be typed in";
             }
-            catch (Exception ex)
+            else
             {
-                if (ex is PlayerException)
+                try
                 {
-                    existinguserwarning.Visible = true;
-                    existinguserwarning.InnerText = "Player name doesnt exist";
+                    MainClient.ReadAPlayer(existingusername.Value);
+
+                    Response.Redirect("~/MarketView");
                 }
+                catch (Exception ex)
+                {
+                    if (ex is PlayerException)
+                    {
+                        existinguserwarning.Visible = true;
+                        existinguserwarning.InnerText = "Player name doesnt exist";
+                    }
 
+                }
             }
-
-
         }
 
     }

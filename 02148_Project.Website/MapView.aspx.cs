@@ -62,5 +62,29 @@ namespace _02148_Project.Website
             return MainClient.hasResourcesFor(type);
         }
 
+        protected void buyForge_Click(object sender, EventArgs e)
+        {
+            MainClient.constructConstruction(Construction.Forge);
+            RenderLocalResources();
+        }
+
+        protected void buyTownHall_Click(object sender, EventArgs e)
+        {
+            MainClient.constructConstruction(Construction.Townhall);
+            RenderLocalResources();
+        }
+
+        protected void buyGoldmine_Click(object sender, EventArgs e)
+        {
+            MainClient.constructConstruction(Construction.Goldmine);
+            RenderLocalResources();
+        }
+
+        protected void buyFarm_Click(object sender, EventArgs e)
+        {
+            MainClient.constructConstruction(Construction.Farm);
+            RenderLocalResources();
+
+        }
     }
 }
