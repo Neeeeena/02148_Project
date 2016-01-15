@@ -9,6 +9,7 @@ using _02148_Project.Model;
 using _02148_Project.Client;
 using _02148_Project;
 using System.Data.SqlClient;
+using System.Web.Caching;
 
 namespace _02148_Project.Website
 {
@@ -24,11 +25,8 @@ namespace _02148_Project.Website
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
             if (!Page.IsPostBack)
             {
-
                 //MainClient.deletePlayer("Martin");
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
@@ -48,11 +46,8 @@ namespace _02148_Project.Website
                     repMarketResources.DataBind();
                     repLocalResources.DataSource = localresources;
                     repLocalResources.DataBind();
-
                 }
-
             }
-
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
@@ -81,7 +76,6 @@ namespace _02148_Project.Website
 
         protected void buttonConfirmSell_Click(Object sender, EventArgs e)
         {
-
             var sid = hiddenValue.Value;
             var soldElement = localresources.Find(se => se.Id == sid);
             var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, Int32.Parse(inputPrice.Value));
@@ -106,6 +100,7 @@ namespace _02148_Project.Website
         }
 
         #region DatabaseListeners
+
         /// <summary>
         /// On change methode for when the players table changes
         /// </summary>
@@ -127,8 +122,8 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_ResourceOffer;
             // Find a way to update with the latest resource offers
+            RenderLocalResources();
             RenderMarket();
-            Page.ClientScript.RegisterStartupScript(GetType(), "MyKey", "refresh();", true);
 
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
