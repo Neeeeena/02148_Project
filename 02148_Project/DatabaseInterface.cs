@@ -447,9 +447,9 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price, Bid) "
+                string query = "INSERT INTO Market (SellerName, ResourceType, Count, Price, HighestBidder, Bid) "
                     + "OUTPUT INSERTED.Id "
-                    + "VALUES (@Name, @Resource, @Count, @Price, @Bid);";
+                    + "VALUES (@Name, @Resource, @Count, @Price, @HighestBidder, @Bid);";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -460,6 +460,7 @@ namespace _02148_Project
                         command.Parameters.AddWithValue("@Resource", offer.Type);
                         command.Parameters.AddWithValue("@Count", offer.Count);
                         command.Parameters.AddWithValue("@Price", offer.Price);
+                        command.Parameters.AddWithValue("@HighestBidder", "Server");
                         command.Parameters.AddWithValue("@Bid", offer.Price);
 
                         return (int)command.ExecuteScalar();
