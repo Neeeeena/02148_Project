@@ -10,52 +10,79 @@
 namespace _02148_Project.Website {
     
     
-    public partial class MapView {
+    public partial class MarketView {
         
         /// <summary>
-        /// buyCottage control.
+        /// nameInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buyCottage;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText nameInput;
         
         /// <summary>
-        /// buyMill control.
+        /// submitName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buyMill;
+        protected global::System.Web.UI.WebControls.Button submitName;
         
         /// <summary>
-        /// Button1 control.
+        /// hiddenValue control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText hiddenValue;
         
         /// <summary>
-        /// Button2 control.
+        /// sellInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl sellInput;
         
         /// <summary>
-        /// Button3 control.
+        /// inputPrice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button3;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText inputPrice;
+        
+        /// <summary>
+        /// buttonCancelSell control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonCancelSell;
+        
+        /// <summary>
+        /// buttonConfirmSell control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonConfirmSell;
+        
+        /// <summary>
+        /// repMarketResources control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repMarketResources;
         
         /// <summary>
         /// repLocalResources control.

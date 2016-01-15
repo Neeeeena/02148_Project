@@ -21,6 +21,28 @@
 						    <asp:Button runat="server" OnClick="buyMill_Click" text="Buy" class="btn btn-default" id="buyMill"></asp:Button>
 					    </td>
 				    </tr>
+                    <tr>
+					    <td id="forgeRow">
+					        <img class="buildings" src="Images/Mill.png" />
+                            <p>Mill: 2 food, 3 wood, 2 straw, 1 wool</p>
+						    <asp:Button runat="server" OnClick="buyMill_Click" text="Buy" class="btn btn-default" id="Button1"></asp:Button>
+					    </td>
+				    </tr>
+                    <tr>
+					    <td id="townhallRow">
+					        <img class="buildings" src="Images/Mill.png" />
+                            <p>Mill: 2 food, 3 wood, 2 straw, 1 wool</p>
+						    <asp:Button runat="server" OnClick="buyMill_Click" text="Buy" class="btn btn-default" id="Button2"></asp:Button>
+					    </td>
+				    </tr>
+                    <tr>
+					    <td id="goldmineRow">
+					        <img class="buildings" src="Images/Mill.png" />
+                            <p>Mill: 2 food, 3 wood, 2 straw, 1 wool</p>
+						    <asp:Button runat="server" OnClick="buyMill_Click" text="Buy" class="btn btn-default" id="Button3"></asp:Button>
+					    </td>
+				    </tr>
+                    
 	  		    </table>
         </div>
 
