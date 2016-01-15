@@ -51,6 +51,7 @@
 		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
                     <div id="txtfield<%#Eval("Id")%>">
 		               <input id="bidInput" type="text" runat="server" />
+                        <!--Tilføj javascript funktion der gemmer id i hidden input field-->
                        <asp:Button id="submitBid" runat="server" OnCommand="submitBid_Click" CommandArgument='<%#Eval("Id")%>' Text="Test"></asp:Button>
 		            </div>
                 </div>

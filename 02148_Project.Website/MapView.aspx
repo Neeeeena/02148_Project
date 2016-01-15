@@ -39,9 +39,9 @@
               <tbody>
           </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
+            <tr class="dockFloating">
               <td>
-                  <div class="resource" >
+                  <div class="dockResource" >
                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />
                  </div>
               </td>

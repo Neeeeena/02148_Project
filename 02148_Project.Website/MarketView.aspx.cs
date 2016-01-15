@@ -154,15 +154,15 @@ namespace _02148_Project.Website
 
         protected void submitBid_Click(object sender, CommandEventArgs e)
         {
-            string ID = e.CommandArgument.ToString();
-            ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
-            int bidValue = Int32.Parse(bidInput.Value);
-            if (bidValue > ro.HighestBid)
-            {
-                ro.HighestBid = bidValue;
-                ro.HighestBidder = MainClient.player.Name;
-                MainClient.BidOnResource(ro);
-            }
+            //string ID = e.CommandArgument.ToString();
+            //ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
+            //int bidValue = Int32.Parse(bidInput.Value);
+            //if (bidValue > ro.HighestBid)
+            //{
+            //    ro.HighestBid = bidValue;
+            //    ro.HighestBidder = MainClient.player.Name;
+            //    MainClient.BidOnResource(ro);
+            //}
         }
     }
 }
