@@ -78,25 +78,27 @@ namespace _02148_Project.Website
         {
             var sid = hiddenValue.Value;
             var soldElement = localresources.Find(se => se.Id == sid);
-            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, Int32.Parse(inputPrice.Value));
+            var sellValue = Int32.Parse(inputPrice.Value);
+            var newOffer = new ResourceOffer(MainClient.player.Name, soldElement.Type, 1, sellValue);
+            newOffer.HighestBid = Int32.Parse(inputPrice.Value);
             MainClient.PlaceResourceOfferOnMarket(newOffer);
-            RenderLocalResources();
+            RenderLocalResources(); 
             RenderMarket();
         }
 
         protected void submitName_Click(object sender, EventArgs e)
         {
-            var name = nameInput.Value;
-            if (MainClient.createPlayer(name) != null)
-            {
-                // Display message
+            //var name = nameInput.Value;
+            //if (MainClient.createPlayer(name) != null)
+            //{
+            //    Display message
 
-            }
-            else
-            {
-                RenderLocalResources();
-                RenderMarket();
-            }
+            //}
+            //else
+            //{
+            //    RenderLocalResources();
+            //    RenderMarket();
+            //}
         }
 
         #region DatabaseListeners
