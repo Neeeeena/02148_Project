@@ -98,8 +98,13 @@ namespace _02148_Project.Client
         public static string BidOnResource(ResourceOffer offer)
         {
             ResourceOffer prevOffer = DatabaseInterface.ReadResourceOffer(offer.Id);
+            if (player.Gold < offer.HighestBid) return ("I must apologize my good sir, but you do not seem to have enough medieval currency");
             try
             {
+                //Hvad sker der nu, hvis UpdateRessourceOffer virker, men den af en eller anden grund ikke kan opdatere dit guld?
+                //Så kaster den en exception, men updateResource bliver vel stadig kaldt?
+
+
                 DatabaseInterface.UpdateResourceOffer(offer);
                 //Transfering the money back to the previous highest bidder, if one exists
                 if (prevOffer.HighestBidder != null)

@@ -4,7 +4,7 @@
 
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
-<a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
+
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -13,9 +13,11 @@
         
     </div>
         <div class="span2">
-
+            <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
+            <hr />
+            <hr />
             <p>Sell resources here!</p>
-            <div style="background-image:url(Images/sellbox.png); width:70px; height:70px"   id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
             </div>
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
@@ -24,9 +26,59 @@
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
-                <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
-                <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
+
+
+	<div class="container" style="width:300px">
+	  <h2>CHAT</h2>
+	  <ul class="nav nav-tabs" >
+		<li id="activeChat" style="width:25%"><a data-toggle="tab" href="#all"><p>All</p></a></li>
+		<li id="chatTab2" style="width:25%"><a data-toggle="tab" href="#p1" ><p>Mathias Kirkeskov</p></a></li>
+		<li id="chatTab3" style="width:25%"><a data-toggle="tab" href="#p2"><p>Player1</p></a></li>
+		<li id="chatTab4" style="width:25%"><a data-toggle="tab" href="#p3"><p>Alexander</p></a></li>
+	  </ul>
+
+	  <div class="tab-content">
+		<div id="all" class="tab-pane fade in active">
+			<div class="chatbox" id="allChat">
+			  <p><b>Market: </b>Everyone can see everything here :)</p>
+			</div>
+		
+			
+			<div class="input-group">
+			  <input type="text" class="form-control" placeholder="Type your message here :)" id="allMsg" runat="server">
+			  <span class="input-group-btn">
+				<button class="btn btn-default" type="button" id="allBtn" runat="server" onclick="send_message_btn_click">Send</button>
+			  </span>
+			</div>
+		</div>
+		
+		<div id="p1" class="tab-pane fade">
+			<div class="chatbox" id="p1Chat">
+			  <p><b>This is a private chat</b></p>
+			</div>
+		
+			
+			<div class="input-group">
+			  <input type="text" class="form-control" placeholder="Type your message here :)" id="p1Msg">
+			  <span class="input-group-btn">
+				<button class="btn btn-default" type="button" id="p1Btn">Send</button>
+			  </span>
+			</div>
+		</div>
+		
+		<div id="p2" class="tab-pane fade">
+		  <h3>Menu 2</h3>
+		  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+		</div>
+		<div id="p3" class="tab-pane fade">
+		  <h3>Menu 3</h3>
+		  <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+		</div>
+	  </div>
+	</div>
 
         </div>
         <div class="span8">
@@ -70,6 +122,8 @@
 <div class="alert alert-warning" id="bidwarning" visible="false" runat="server">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 </div>
+
+
 
     <div>
 
@@ -115,7 +169,7 @@
       <div class="modal-body">
           <p>Bid:</p>
           <input type="text" id="bidPrice" runat="server"/>
-        <input runat="server" class="hidden" name="hidId" id="hidId" value=""/>
+        <input runat="server" class="hidden" name="hidId" id="hidId" value="er"/>
       </div>
       <div class="modal-footer">
         <asp:Button runat="server" class="btn btn-success" id="submitBid" OnClick="submitBid_Click" Text="Bid"></asp:Button>
@@ -130,8 +184,7 @@
 <script type="text/javascript">
     function saveId(ele) {
         var resId = ele.getAttribute('data-id');
-        alert("Jeg blev kaldt! "+resId);
-        
+
         document.getElementById("MainContent_hidId").setAttribute("value", resId);
         $("#myModal").modal("show");
     }
@@ -149,7 +202,6 @@
 
     function drag(ev) {
         ev.dataTransfer.setData("text/id", ev.target.id);
-
     }
 
     function drop(ev) {
@@ -159,17 +211,143 @@
         var id = ev.dataTransfer.getData("text/id");
         var img = document.getElementById(id);
         ev.target.appendChild(img);
-        console.log("ID " + id);
+
         var hid = document.getElementById("MainContent_hiddenValue");
         hid.setAttribute("value", id);
-        console.log("HID " + hid.value);
-
-
 
     }
 </script>
 
 
+<script>
+
+var p1name = "Bob";
+var p2name = "p2";
+var p3name = "p3";
+var p4name = "p4";
+
+
+
+var allchat = "";
+var name = "Mathias";
+
+$(document).ready(function(){
+    $('#allMsg').keypress(function(e){
+      if(e.keyCode==13)
+      $('#allBtn').click();
+    });
+	
+	$('#p1Msg').keypress(function(e){
+      if(e.keyCode==13)
+      $('#p1Btn').click();
+    });
+	
+	$('#p2Msg').keypress(function(e){
+      if(e.keyCode==13)
+      $('#p2Btn').click();
+    });
+	
+	$('#p3Msg').keypress(function(e){
+      if(e.keyCode==13)
+      $('#p3Btn').click();
+    });
+	
+	$('#allBtn').click(function(e) {
+		prepareMsg(name,"all",$(allMsg).val(),'#allChat','#allMsg',false);
+	});
+	
+	$('#p1Btn').click(function(e) {
+		prepareMsg(name,p1name,$(p1Msg).val(),'#p1Chat','#p1Msg',true);
+	});
+	
+	
+});
+
+/*$(document).ready(function(){
+    $('#allBtn').click(function(e){
+	if($(allMsg).val() != "") {
+	  $("#allChat").append("<p><b>"+name+": </b>"+$(allMsg).val()+"</p>");
+	  $('#allChat').scrollTop($('#allChat')[0].scrollHeight);
+	  
+	  sendMsg(name,"all",$(allMsg).val(),false);
+	  
+	  $('#allMsg').val("");
+	 // recieveMsg("Bob","Hello Mathias. How are you? Can I buy five stone?",true);
+	  
+	  
+	}
+	
+	
+	
+      
+    });
+	
+	
+	
+});
+*/
+
+
+function prepareMsg(sender,recieverName,content,recieverChat,msgTag,personal) {
+	if(content != "") {
+		$(recieverChat).append("<p><b>"+sender+": </b>"+content+"</p>");
+		$(recieverChat).scrollTop($(recieverChat)[0].scrollHeight);
+		
+		sendMsg(sender,recieverName,content,true);
+		
+		$(msgTag).val("");
+	}
+}
+
+
+function sendMsg(sender, reciever, content, personal) {
+}
+
+
+function recieveMsg(sender, reciever, content, personal) {
+	if(!personal) {
+		$('#allChat').append("<p><b>"+sender+": </b>"+content+"</p>")
+	}else{
+		var pl;
+		switch (sender) {
+			case p1name:
+				pl = '#p1hat';
+				break;
+			case p2name:
+				pl = '#p2';
+				pk = p2msg;
+				break;
+			case p3name:
+				pl = '#p3';
+				pk = p3msg;
+				break;
+			case p4name:
+				pl = '#p4';
+				pk = p4msg;
+				break;
+			default:
+				alert("Something happened :(");
+		}
+		$(pl).append("<p><b>"+sender+": </b>"+content+"</p>")
+	}
+}
+
+
+function changeIDOnChat()
+{
+    $('#activeChat').removeAttr('id');
+
+}
+
+
+</script>
+
+<script>
+    $('#chatTab2').click(function () {
+        $().att('id','')
+        $(this).attr('id','activeChat');
+    });
+</script>
 
 
 
