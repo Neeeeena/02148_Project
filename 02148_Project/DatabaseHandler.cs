@@ -551,7 +551,7 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Message", msg.Context);
+                    command.Parameters.AddWithValue("@Message", msg.Content);
                     command.Parameters.AddWithValue("@Sender", msg.SenderName);
                     command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
                     command.ExecuteNonQuery();
