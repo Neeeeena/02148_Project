@@ -12,8 +12,6 @@
       <!--Sidebar content-->
         <div id="tradeOffers">
 
-
-
         </div>
     </div>
         <div class="span2">
