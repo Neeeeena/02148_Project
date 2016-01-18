@@ -378,7 +378,6 @@ namespace _02148_Project.Client
             try
             {
                 DatabaseInterface.SendMessage(message);
-
             }
             catch(Exception ex)
             {

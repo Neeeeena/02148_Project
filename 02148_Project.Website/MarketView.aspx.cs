@@ -173,6 +173,7 @@ namespace _02148_Project.Website
                 }
                 else
                 {
+                    if (mes.RecieverName != null)
                     if(mes.RecieverName.Equals(Player1.Name) || mes.SenderName.Equals(Player1.Name))
                     {
                         Label l = new Label();

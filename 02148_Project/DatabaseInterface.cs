@@ -678,8 +678,17 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
-                    + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+                string query;
+                if (msg.RecieverName != null)
+                {
+                    query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                        + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+                }
+                else
+                {
+                    query = "INSERT INTO Chat (Message, SenderName, ToAll) "
+                        + "VALUES (@Message, @Sender, @ToAll);";
+                }
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -687,7 +696,10 @@ namespace _02148_Project
                     {
                         command.Parameters.AddWithValue("@Message", msg.Content);
                         command.Parameters.AddWithValue("@Sender", msg.SenderName);
-                        command.Parameters.AddWithValue("@Reciever", msg.RecieverName ?? Convert.DBNull);
+                        if (msg.RecieverName != null)
+                        {
+                            command.Parameters.AddWithValue("@Reciever", msg.RecieverName ?? Convert.DBNull);
+                        }
                         command.Parameters.AddWithValue("@ToAll", msg.ToAll);
                         command.ExecuteNonQuery();
                     }
