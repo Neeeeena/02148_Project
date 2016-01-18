@@ -11,6 +11,7 @@ using _02148_Project;
 using System.Data.SqlClient;
 using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
+using System.Web.UI.HtmlControls;
 
 namespace _02148_Project.Website
 {
@@ -33,6 +34,7 @@ namespace _02148_Project.Website
                 marketresources = new List<ResourceOffer>();
                 RenderMarket();
                 RenderLocalResources();
+                RenderTradeOffers();
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
@@ -49,6 +51,54 @@ namespace _02148_Project.Website
                     repLocalResources.DataBind();
                 }
             }
+
+
+
+        }
+
+        protected void RenderTradeOffers()
+        {
+            List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
+            foreach(var t in tradeOffersO)
+            {
+                System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
+                tradeOffers.Controls.Add(div);
+            }
+        }
+
+        protected HtmlGenericControl createDiv(TradeOffer to)
+        {
+            System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+            System.Web.UI.WebControls.Label sellerName = new System.Web.UI.WebControls.Label();
+            sellerName.Text = to.SellerName;
+            System.Web.UI.WebControls.Label receiverName = new System.Web.UI.WebControls.Label();
+            receiverName.Text = to.RecieverName;
+            tradeOffer.Controls.Add(sellerName);
+            tradeOffer.Controls.Add(receiverName);
+
+            Dictionary<ResourceType, int> resources = to.resources;
+            Dictionary<ResourceType, int> price = to.price;
+
+            foreach (KeyValuePair<ResourceType, int> r in resources)
+            {
+                ResourceType res = r.Key;
+                int numb = r.Value;
+                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+                tradeOffer.Controls.Add(image);
+                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+                numberOfRes.Text = numb.ToString() ;
+                tradeOffer.Controls.Add(numberOfRes);
+            }
+
+            return tradeOffer;
+            
+            //tradeOffer.Attributes.Add("class", "tradeOffer");
+            //tradeOffer.Style.Add(HtmlTextWriterStyle.BackgroundColor, "gray");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Color, "Red");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Height, "100px");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
+            //createDiv.InnerHtml = " I'm a div, from code behind ";
+            //tradeOffers.Controls.Add(tradeOffer);
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
