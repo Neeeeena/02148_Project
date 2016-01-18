@@ -360,7 +360,8 @@ namespace _02148_Project.Client
         //Kan ikke returne string
         public static List<Message> GetNewMessage()
         {
-            try {
+            try
+            {
                 return DatabaseInterface.ReadMessages(player.Name);
             }
             catch(Exception ex)
@@ -372,30 +373,20 @@ namespace _02148_Project.Client
         }
 
         // Exception skal kastes
-        public static string SendNewMessage(Message msg)
+        public static string SendNewMessage(Message message)
         {
-            try {
-                DatabaseInterface.SendMessage(msg);
-            }
-            catch(Exception ex)
+            try
             {
-                return ex.Message;
-            }
-            return "";
-        }
-
-        public static string SendNewMessageToAll(Message msg)
-        {
-            try {
-                msg.ToAll = true;
-                List<Player> players = new List<Player>();
-                players = DatabaseInterface.ReadAllPlayers();
-                foreach (Player p in players)
+                if (message.ToAll == false)
                 {
-                    if (p.Name != player.Name)
+                    DatabaseInterface.SendMessage(message);
+                }
+                else
+                {
+                    foreach (Player player in allOtherPlayers)
                     {
-                        msg.RecieverName = p.Name;
-                        DatabaseInterface.SendMessage(msg);
+                        message.RecieverName = player.Name;
+                        DatabaseInterface.SendMessage(message);
                     }
                 }
             }
@@ -405,7 +396,6 @@ namespace _02148_Project.Client
             }
             return "";
         }
-
 
         private static void SubtractResource(ResourceType type, int count)
         {
