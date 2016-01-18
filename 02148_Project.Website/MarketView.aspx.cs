@@ -162,25 +162,23 @@ namespace _02148_Project.Website
 
 
         protected void submitBid_Click(object sender, EventArgs e)
-        {
-            try {
-                string ID = hidId.Value;
-                string price = bidPrice.Value;
-                ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
-                int bidValue = Int32.Parse(price);
-                if (bidValue > ro.HighestBid)
-                {
-                    ro.HighestBid = bidValue;
-                    ro.HighestBidder = MainClient.player.Name;
-                    MainClient.BidOnResource(ro);
-                }
-                bidwarning.Visible = false;
-                bidPrice.Value = "";
-            }catch(ResourceOfferException ex)
-        {
-                bidwarning.InnerText = ex.Message;
-                bidwarning.Visible = true;
+        {         
+            string ID = hidId.Value;
+            string price = bidPrice.Value;
+            int bidValue = Int32.Parse(price);
+
+            ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));           
+            ro.HighestBid = bidValue;
+            ro.HighestBidder = MainClient.player.Name;
+
+            string returnedMessage = MainClient.BidOnResource(ro);
+             
+            if(returnedMessage != "")
+            {
+                //Message box error
             }
+            bidwarning.Visible = false;
+            bidPrice.Value = "";            
         }
     }
 }
