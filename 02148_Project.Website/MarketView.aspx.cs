@@ -90,22 +90,9 @@ namespace _02148_Project.Website
             MainClient.PlaceResourceOfferOnMarket(newOffer);
             RenderLocalResources();
             RenderMarket();
+            inputPrice.Value = "";
         }
 
-        protected void submitName_Click(object sender, EventArgs e)
-        {
-            //var name = nameInput.Value;
-            //if (MainClient.createPlayer(name) != null)
-            //{
-            //    Display message
-
-            //}
-            //else
-            //{
-            //    RenderLocalResources();
-            //    RenderMarket();
-            //}
-        }
 
         #region DatabaseListeners
 

@@ -4,7 +4,7 @@
 
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
-<a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
+
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -13,9 +13,11 @@
         
     </div>
         <div class="span2">
-
+            <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
+            <hr />
+            <hr />
             <p>Sell resources here!</p>
-            <div style="background-image:url(Images/sellbox.png); width:70px; height:70px"   id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
             </div>
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
@@ -24,8 +26,8 @@
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
-                <asp:Button id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
-                <asp:Button id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
 
         </div>
@@ -130,8 +132,7 @@
 <script type="text/javascript">
     function saveId(ele) {
         var resId = ele.getAttribute('data-id');
-        alert("Jeg blev kaldt! "+resId);
-        
+
         document.getElementById("MainContent_hidId").setAttribute("value", resId);
         $("#myModal").modal("show");
     }
@@ -149,7 +150,6 @@
 
     function drag(ev) {
         ev.dataTransfer.setData("text/id", ev.target.id);
-
     }
 
     function drop(ev) {
@@ -159,12 +159,9 @@
         var id = ev.dataTransfer.getData("text/id");
         var img = document.getElementById(id);
         ev.target.appendChild(img);
-        console.log("ID " + id);
+
         var hid = document.getElementById("MainContent_hiddenValue");
         hid.setAttribute("value", id);
-        console.log("HID " + hid.value);
-
-
 
     }
 </script>

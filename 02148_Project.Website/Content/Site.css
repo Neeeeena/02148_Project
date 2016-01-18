@@ -98,6 +98,8 @@ input[type="select"] {
     width: 20%;
     float: right;
     border-radius:6px;
+
+    left:10px;
 }
 
 
@@ -141,7 +143,12 @@ input[type="select"] {
 }
 
 #sellBox {
-    text-align: center; 
+    text-align: center;
+    border-color:black;
+    border:1px solid;
+    width:60px;
+    height:60px;
+
 }
 #sellBox img {
     display:block;
@@ -192,4 +199,11 @@ input.hidden {
 h3 {
     font-size: small;
     margin: 0;
+}
+
+#invisibleLines {
+    border:0 none;
+    color:white;
+    visibility:hidden;
+    clear:both;
 }
