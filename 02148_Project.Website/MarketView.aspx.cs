@@ -21,6 +21,7 @@ namespace _02148_Project.Website
         public List<ResourceOffer> marketresources;
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
+        public List<Message> collectedMessages = new List<Message>();
         public Message message;
 
         public int movedId;
@@ -71,7 +72,10 @@ namespace _02148_Project.Website
 
         protected void RenderChat()
         {
-
+            collectedMessages.Add(MainClient.GetNewMessage());
+            //Set en reader op
+            //repChatMessages.DataSource = collectedMessages;
+            //repChatMessages.DataBind();
         }
 
 
