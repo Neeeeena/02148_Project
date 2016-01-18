@@ -22,9 +22,9 @@ namespace _02148_Project.Client
             return DatabaseInterface.ReadAllTradeOffers(reciever);
         }
 
-        public static Message GetNewMessage(string reciever)
+        public static List<Message> GetNewMessage(string reciever)
         {
-            return DatabaseInterface.GetMessage(reciever);        
+            return DatabaseInterface.ReadMessages(reciever);        
         }
 
         public static void PlaceNewResourceOffer()
