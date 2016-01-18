@@ -54,9 +54,11 @@
 	  		    </table>
         </div>
 
+
+
       <div class="span10">
         <div style="background-image:url(Images/map.png); background-repeat:no-repeat; height: 600px;width: 880px" class="markedImage" id="marked" >
-   
+  
         </div>
         <asp:Repeater ID="repLocalResources" runat="server" >
           <HeaderTemplate>

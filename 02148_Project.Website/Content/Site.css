@@ -98,6 +98,8 @@ input[type="select"] {
     width: 20%;
     float: right;
     border-radius:6px;
+
+    left:10px;
 }
 
 
@@ -141,7 +143,12 @@ input[type="select"] {
 }
 
 #sellBox {
-    text-align: center; 
+    text-align: center;
+    border-color:black;
+    border:1px solid;
+    width:60px;
+    height:60px;
+
 }
 #sellBox img {
     display:block;
@@ -170,12 +177,6 @@ input.hidden {
 
 .horseLink {
     float:right;
-    -moz-transform: scaleY(-1);
-    -o-transform: scaleY(-1);
-    -webkit-transform: scaleY(-1);
-    transform: scaleY(-1);
-    filter: FlipV;
-    -ms-filter: "FlipV";
 }
 
 .horseLink img {
@@ -192,4 +193,41 @@ input.hidden {
 h3 {
     font-size: small;
     margin: 0;
+}
+
+#invisibleLines {
+    border:0 none;
+    color:white;
+    visibility:hidden;
+    clear:both;
+}
+
+div.scroll {
+    background-color: #FFFFFF;
+    width: 100px;
+    height: 100px;
+    overflow-y: scroll;
+}
+
+.nav-tabs > li{
+  width:25%;
+}
+
+.nav-tabs > li > a > p{
+  word-wrap:break-word;
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-top:-10px;
+  margin-bottom:-10px;
+  height:45px;
+  font-size:80%
+}
+
+.chatbox{
+	overflow-y:scroll;
+	height:300px;
+	font-size:90%;
+	padding:8px;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
 }

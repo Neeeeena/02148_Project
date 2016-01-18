@@ -795,9 +795,7 @@ namespace _02148_Project
 #pragma warning disable CS0168 // Variable is declared but never used
             catch (SqlException ex)
 #pragma warning restore CS0168 // Variable is declared but never used
-            {
-                throw ex;
-            }
+            { }
         }
 
         /// <summary>
