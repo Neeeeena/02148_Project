@@ -259,8 +259,10 @@ namespace _02148_Project.Client
             //put det op
             try {
                 int id = DatabaseInterface.PutTradeOffer(offer);
-                SubtractResource(offer.Type, offer.Count);
-                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -offer.Count);
+
+                //SubtractResource(offer.Type, offer.Count); - skal måske slet ikke bruges
+
+                SubtractPlayerResources(offer, player.Name);
 
                 Timer timer = new Timer(10000);
                 timer.Elapsed += TakeBackTradeOffer;
@@ -289,7 +291,7 @@ namespace _02148_Project.Client
             //Try get
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             //If gotten
-            if (offer != null) DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+            if (offer != null) AddPlayerResources(offer, player.Name);
 
             timersWithId.RemoveAt(0);
         }
@@ -298,10 +300,13 @@ namespace _02148_Project.Client
         {
             try {
                 TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-                SubtractResource(offer.PriceType, offer.Price);
-                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
-                DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
-                DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+                //SubtractResource(offer.PriceType, offer.Price); - skal måske ikke bruges
+                //DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
+                AddPlayerResources(offer, offer.SellerName);
+                //DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
+                SubtractPlayerResources(offer, player.Name);
+                //DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
+                AddPlayerResources(offer, player.Name);
                 SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
             }
             catch(Exception ex)
@@ -316,7 +321,8 @@ namespace _02148_Project.Client
             try
             {
                 TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
-                DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
+                //DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
+                AddPlayerResources(offer, offer.SellerName);
                 SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
             }
             catch (Exception ex)
@@ -326,13 +332,36 @@ namespace _02148_Project.Client
             return "";
         }
 
+        public static void AddPlayerResources(TradeOffer offer, string name)
+        {
+            foreach(var pair in offer.resources)
+            {
+                if(pair.Value != 0)
+                {
+                    DatabaseInterface.UpdatePlayerResource(name, pair.Key, pair.Value);
+                }
+            }
+        }
+
+        public static void SubtractPlayerResources(TradeOffer offer, string name)
+        {
+            foreach (var pair in offer.resources)
+            {
+                if (pair.Value != 0)
+                {
+                    DatabaseInterface.UpdatePlayerResource(name, pair.Key, -pair.Value);
+                }
+            }
+        }
+
+
 
         // Message stuff:
         //Kan ikke returne string
-        public static Message GetNewMessage()
+        public static List<Message> GetNewMessage()
         {
             try {
-                return DatabaseInterface.GetMessage(player.Name);
+                return DatabaseInterface.ReadMessages(player.Name);
             }
             catch(Exception ex)
             {

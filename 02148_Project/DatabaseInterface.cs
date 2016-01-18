@@ -54,8 +54,27 @@ namespace _02148_Project
         /// <returns>A trade offer object</returns>
         public static TradeOffer GetTradeOfferFromReader(SqlDataReader reader)
         {
-            return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2),
-                (ResourceType)reader.GetInt32(3), reader.GetInt32(4), (ResourceType) reader.GetInt32(5), reader.GetInt32(6));
+            Dictionary<ResourceType, int> resource = new Dictionary<ResourceType, int>();
+            resource.Add(ResourceType.Wood, reader.GetInt32(3));
+            resource.Add(ResourceType.Clay, reader.GetInt32(4));
+            resource.Add(ResourceType.Wool, reader.GetInt32(5));
+            resource.Add(ResourceType.Stone, reader.GetInt32(6));
+            resource.Add(ResourceType.Iron, reader.GetInt32(7));
+            resource.Add(ResourceType.Straw, reader.GetInt32(8));
+            resource.Add(ResourceType.Food, reader.GetInt32(9));
+            resource.Add(ResourceType.Gold, reader.GetInt32(10));
+
+            Dictionary<ResourceType, int> price = new Dictionary<ResourceType, int>();
+            price.Add(ResourceType.Wood, reader.GetInt32(11));
+            price.Add(ResourceType.Clay, reader.GetInt32(12));
+            price.Add(ResourceType.Wool, reader.GetInt32(13));
+            price.Add(ResourceType.Stone, reader.GetInt32(14));
+            price.Add(ResourceType.Iron, reader.GetInt32(15));
+            price.Add(ResourceType.Straw, reader.GetInt32(16));
+            price.Add(ResourceType.Food, reader.GetInt32(17));
+            price.Add(ResourceType.Gold, reader.GetInt32(18));
+
+            return new TradeOffer(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), resource, price);
         }
         #endregion
 
@@ -586,20 +605,57 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO TradeOffers (SellerName, RecieverName, ResourceType, Count, PriceType, Price) "
-                    + "OUTPUT INSERTED.Id "
-                    + "VALUES (@Seller, @Reciever, @Type, @Count, @PriceType, @Price);";
+                string query = "INSERT INTO TradeOffers (SellerName, RecieverName, " +
+                    "WoodSender, ClaySender, WoolSender, StoneSender, IronSender, StrawSender, FoodSender, GoldSender, " +
+                    "WoodReceiver, ClayReceiver, WoolReceiver, StoneReceiver, IronReceiver, StrawReceiver, FoodReceiver, GoldReceiver) " +
+                    "OUTPUT INSERTED.Id " +
+                    "VALUES (@Seller, @Receiver, " + 
+                    "@WoodS, @ClayS, @WoolS, @StoneS, @IronS, @StrawS, @FoodS, @GoldS, " + 
+                    "@WoodR, @ClayR, @WoolR, @StoneR, @IronR, @StrawR, @FoodR, @GoldR);";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Seller", offer.SellerName);
-                        command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
-                        command.Parameters.AddWithValue("@Type", offer.Type);
-                        command.Parameters.AddWithValue("@Count", offer.Count);
-                        command.Parameters.AddWithValue("@PriceType", offer.PriceType);
-                        command.Parameters.AddWithValue("@Price", offer.Price);
+                        command.Parameters.AddWithValue("@Receiver", offer.RecieverName);
+
+                        int value = 0;
+                        offer.Resources.TryGetValue(ResourceType.Wood, out value);
+                        command.Parameters.AddWithValue("@WoodS", value);
+                        offer.Resources.TryGetValue(ResourceType.Clay, out value);
+                        command.Parameters.AddWithValue("@ClayS", value);
+                        offer.Resources.TryGetValue(ResourceType.Wool, out value);
+                        command.Parameters.AddWithValue("@WoolS", value);
+                        offer.Resources.TryGetValue(ResourceType.Stone, out value);
+                        command.Parameters.AddWithValue("@StoneS", value);
+                        offer.Resources.TryGetValue(ResourceType.Iron, out value);
+                        command.Parameters.AddWithValue("@IronS", value);
+                        offer.Resources.TryGetValue(ResourceType.Iron, out value);
+                        command.Parameters.AddWithValue("@IronS", value);
+                        offer.Resources.TryGetValue(ResourceType.Straw, out value);
+                        command.Parameters.AddWithValue("@StrawS", value);
+                        offer.Resources.TryGetValue(ResourceType.Food, out value);
+                        command.Parameters.AddWithValue("@FoodS", value);
+                        offer.Resources.TryGetValue(ResourceType.Gold, out value);
+                        command.Parameters.AddWithValue("@GoldS", value);
+
+                        offer.Price.TryGetValue(ResourceType.Wood, out value);
+                        command.Parameters.AddWithValue("@WoodR", value);
+                        offer.Price.TryGetValue(ResourceType.Clay, out value);
+                        command.Parameters.AddWithValue("@ClayR", value);
+                        offer.Price.TryGetValue(ResourceType.Wool, out value);
+                        command.Parameters.AddWithValue("@WoolR", value);
+                        offer.Price.TryGetValue(ResourceType.Stone, out value);
+                        command.Parameters.AddWithValue("@StoneR", value);
+                        offer.Price.TryGetValue(ResourceType.Iron, out value);
+                        command.Parameters.AddWithValue("@IronR", value);
+                        offer.Price.TryGetValue(ResourceType.Straw, out value);
+                        command.Parameters.AddWithValue("@StrawR", value);
+                        offer.Price.TryGetValue(ResourceType.Food, out value);
+                        command.Parameters.AddWithValue("@FoodR", value);
+                        offer.Price.TryGetValue(ResourceType.Gold, out value);
+                        command.Parameters.AddWithValue("@GoldR", value);
 
                         return (int)command.ExecuteScalar();
                     }
@@ -622,16 +678,17 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
-                    + "VALUES (@Message, @Sender, @Reciever);";
+                string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                    + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Message", msg.Context);
+                        command.Parameters.AddWithValue("@Message", msg.Content);
                         command.Parameters.AddWithValue("@Sender", msg.SenderName);
                         command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+                        command.Parameters.AddWithValue("@ToAll", msg.ToAll);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -645,16 +702,20 @@ namespace _02148_Project
         /// <summary>
         /// Get/reciev a message from the server to the specifed reciever
         /// </summary>
-        /// <param name="reciever">Name of the reciever</param>
+        /// <param name="name">Name of the reciever</param>
         /// <returns>The latest message to the reciever</returns>
-        public static Message GetMessage(string reciever)
+        public static List<Message> ReadMessages(string name)
         {
+            List<Message> messages = new List<Message>();
             try
             {
-                string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
-                    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
-                    + "DELETE FROM toprow "
-                    + "OUTPUT DELETED.*;";
+                //string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
+                //    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
+                //    + "DELETE FROM toprow "
+                //    + "OUTPUT DELETED.*;";
+                string query = "SELECT TOP 100 * FROM Chat " +
+                    "WHERE RecieverName = '" + name + "' OR SenderName = '" + name + "' " +
+                    "ORDER BY Id DESC" ;
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -664,9 +725,12 @@ namespace _02148_Project
                         {
                             if (reader.HasRows)
                             {
-                                reader.Read();
-                                return new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                                while (reader.Read())
+                                {
+                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4)));
+                                }
                             }
+                            return messages;
                         }
                     }
                 }
@@ -675,7 +739,7 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            return null;
+            return messages;
         }
         #endregion
 
