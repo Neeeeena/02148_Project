@@ -23,34 +23,47 @@ namespace _02148_Project.Website
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
         public List<Message> messages;
+        public Player Player1;
+        public Player Player2;
+        public Player Player3;
 
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
+
+
             if (!Page.IsPostBack)
             {
-                //MainClient.deletePlayer("Martin");
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
-                RenderMarket();
-                RenderLocalResources();
-                RenderTradeOffers();
+                messages = new List<Message>();
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
-            else
-            {
-                if (MainClient.player != null)
-                {
-                    RenderMarket();
-                    RenderLocalResources();
-                    repMarketResources.DataSource = marketresources;
-                    repMarketResources.DataBind();
-                    repLocalResources.DataSource = localresources;
-                    repLocalResources.DataBind();
-                }
-            }
+            //Load data into allOtherPlayers list
+            MainClient.ReadOtherPlayers();
+
+            Player1 = MainClient.allOtherPlayers[0];
+            player1Tab.InnerText = Player1.Name;
+
+            Player2 = MainClient.allOtherPlayers[1];
+            player2Tab.InnerText = Player2.Name;
+
+            Player3 = MainClient.allOtherPlayers[2];
+            player3Tab.InnerText = Player3.Name;
+
+            RenderMarket();
+            RenderLocalResources();
+            repMarketResources.DataSource = marketresources;
+            repMarketResources.DataBind();
+            repLocalResources.DataSource = localresources;
+            repLocalResources.DataBind();
+            RenderChat();
+
+            
+            
+            
 
 
 
@@ -141,8 +154,58 @@ namespace _02148_Project.Website
 
         protected void RenderChat()
         {
+            messages = MainClient.GetNewMessage();
+            foreach(var mes in messages)
+            {
+                if (mes.ToAll)
+                {
+                    Label l = new Label();
+                    l.Text = mes.SenderName + ": " + mes.Content;
+                    if (mes.SenderName.Equals(MainClient.player.Name))
+                    {
+                        l.Attributes.Add("Class", "myMessage");
+                    }
+                    allChat.Controls.Add(l);
+                    allChat.Controls.Add(new Literal {Text = "<hr/>" });
+                }
+                else
+                {
+                    if(mes.RecieverName.Equals(Player1.Name) || mes.SenderName.Equals(Player1.Name))
+                    {
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p1Chat.Controls.Add(l);
+                        p1Chat.Controls.Add(new Literal { Text = "<hr/>" });
+                    }
+                    else if(mes.RecieverName.Equals(Player2.Name) || mes.SenderName.Equals(Player2.Name)){
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p2Chat.Controls.Add(l);
+                        p2Chat.Controls.Add(new Literal { Text = "<hr/>" });
+                    }
+                    else
+                    {
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p3Chat.Controls.Add(l);
+                        p3Chat.Controls.Add(new Literal {  Text = "<hr/>" });
+                    }
+                }
+            }
 
-        }
+           }
 
 
         protected void buttonCancelSell_Click(Object sender, EventArgs e)
@@ -161,12 +224,6 @@ namespace _02148_Project.Website
             RenderLocalResources();
             RenderMarket();
             inputPrice.Value = "";
-        }
-
-        protected void send_message_btn_click(Object sender, EventArgs e)
-        {
-            var msg = allMsg.Value;
-            //var msgTuple =  new Message(message, )
         }
 
         #region DatabaseListeners
@@ -242,5 +299,37 @@ namespace _02148_Project.Website
                 bidwarning.Visible = false;
                 bidPrice.Value = "";
         }
+
+        protected void btnSendToAll_Click(object sender, EventArgs e)
+        {
+            var message = allMsg.Value;
+            var messageObject = new Message(message,MainClient.player.Name,"",true);
+            MainClient.SendNewMessage(messageObject);
+            RenderChat();
+        }
+
+        protected void btnSendToPlayer1_Click(object sender, EventArgs e)
+        {
+            var message = p1Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player1.Name);
+            MainClient.SendNewMessage(messageObject);
+            RenderChat();
+        }
+
+        protected void btnSendToPlayer2_Click(object sender, EventArgs e)
+        {
+            var message = p2Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player2.Name);
+            MainClient.SendNewMessage(messageObject);
+            RenderChat();
+        }
+        protected void btnSendToPlayer3_Click(object sender, EventArgs e)
+        {
+            var message = p3Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player3.Name);
+            MainClient.SendNewMessage(messageObject);
+            RenderChat();
+        }
+
     }
 }

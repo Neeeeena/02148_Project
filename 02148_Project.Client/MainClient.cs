@@ -18,7 +18,7 @@ namespace _02148_Project.Client
         //public List<TradeOffer> allYourRecievedTradeOffers;
         //public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
-        public static List<Player> allOtherPlayers;
+        public static List<Player> allOtherPlayers = new List<Player>();
         
         public static Player player;
 

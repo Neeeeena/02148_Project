@@ -241,3 +241,11 @@ div.scroll {
     border: 1px solid black;
 
 }
+
+.myMessage{
+    float:right;
+}
+
+.otherMessage {
+    float:left;
+}

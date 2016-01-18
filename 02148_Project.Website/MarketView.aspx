@@ -36,15 +36,15 @@
 	<div class="container" style="width:300px">
 	  <h2>CHAT</h2>
 	  <ul class="nav nav-tabs" >
-		<li id="activeChat" style="width:25%"><a data-toggle="tab" href="#all"><p>All</p></a></li>
-		<li id="chatTab2" style="width:25%"><a data-toggle="tab" href="#p1" ><p>Mathias Kirkeskov</p></a></li>
-		<li id="chatTab3" style="width:25%"><a data-toggle="tab" href="#p2"><p>Player1</p></a></li>
-		<li id="chatTab4" style="width:25%"><a data-toggle="tab" href="#p3"><p>Alexander</p></a></li>
+		<li id="activeChat" style="width:25%"><a data-toggle="tab" href="#all"><p>Everyone</p></a></li>
+		<li id="chatTab2" style="width:25%"><a data-toggle="tab" href="#p1" ><p id="player1Tab" runat="server"></p></a></li>
+		<li id="chatTab3" style="width:25%"><a data-toggle="tab" href="#p2"><p id="player2Tab" runat="server"></p></a></li>
+		<li id="chatTab4" style="width:25%"><a data-toggle="tab" href="#p3"><p id="player3Tab" runat="server"></p></a></li>
 	  </ul>
 
 	  <div class="tab-content">
 		<div id="all" class="tab-pane fade in active">
-			<div class="chatbox" id="allChat">
+			<div class="chatbox" id="allChat" runat="server">
 			  <p><b>Market: </b>Everyone can see everything here :)</p>
 			</div>
 		
@@ -52,44 +52,61 @@
 			<div class="input-group">
 			  <input type="text" class="form-control" placeholder="Type your message here :)" id="allMsg" runat="server">
 			  <span class="input-group-btn">
-				<button class="btn btn-default" type="button" id="allBtn" runat="server" onclick="send_message_btn_click">Send</button>
+                  <asp:Button runat="server" class="btn btn-default" id="btnSendToAll" OnClick="btnSendToAll_Click" Text="Send"/>
 			  </span>
 			</div>
 		</div>
 		
 		<div id="p1" class="tab-pane fade">
-			<div class="chatbox" id="p1Chat">
-			  <p><b>This is a private chat</b></p>
+			<div class="chatbox" runat="server" id="p1Chat">
 			</div>
 		
 			
 			<div class="input-group">
-			  <input type="text" class="form-control" placeholder="Type your message here :)" id="p1Msg">
+			  <input type="text" class="form-control" runat="server" placeholder="Type your message here :)" id="p1Msg">
 			  <span class="input-group-btn">
-				<button class="btn btn-default" type="button" id="p1Btn">Send</button>
+				<asp:Button runat="server" class="btn btn-default" id="btnSendToPlayer1" OnClick="btnSendToPlayer1_Click" Text="Send"/>
+			  </span>
+			</div>
+		</div>
+          <div id="p2" class="tab-pane fade">
+			<div class="chatbox" runat="server" id="p2Chat">
+			</div>
+		
+			
+			<div class="input-group">
+			  <input type="text" class="form-control" runat="server" placeholder="Type your message here :)" id="p2Msg">
+			  <span class="input-group-btn">
+				<asp:Button runat="server" class="btn btn-default" id="btnSendToPlayer2" OnClick="btnSendToPlayer2_Click" Text="Send"/>
+			  </span>
+			</div>
+		</div>
+          <div id="p3" class="tab-pane fade">
+			<div class="chatbox" runat="server" id="p3Chat">
+			</div>
+		
+			
+			<div class="input-group">
+			  <input type="text" class="form-control" runat="server" placeholder="Type your message here :)" id="p3Msg">
+			  <span class="input-group-btn">
+				<asp:Button runat="server" class="btn btn-default" id="btnSendToPlayer3" OnClick="btnSendToPlayer3_Click" Text="Send"/>
 			  </span>
 			</div>
 		</div>
 		
-		<div id="p2" class="tab-pane fade">
-		  <h3>Menu 2</h3>
-		  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-		</div>
-		<div id="p3" class="tab-pane fade">
-		  <h3>Menu 3</h3>
-		  <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-		</div>
 	  </div>
 	</div>
 
         </div>
         <div class="span8">
+       
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
             <asp:UpdatePanel ID="up" runat="server">        
     <ContentTemplate>
         <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repMarketResources" runat="server" >
+         
           <HeaderTemplate>
             <table>
               <thead>
