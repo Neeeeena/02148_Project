@@ -210,7 +210,7 @@ namespace Server.Test
         [TestCategory("Trade Offer")]
         public void ReadTradeOffersInDatabaseTest()
         {
-            List<TradeOffer> offers = DatabaseInterface.ReadAllTradeOffers("Alex");
+            List<TradeOffer> offers = DatabaseInterface.ReadAllTradeOffers("carl");
             Console.WriteLine("Id\tSeller\tReciever\tType\tCount\tPrice");
             foreach (TradeOffer offer in offers)
             {

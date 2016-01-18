@@ -499,14 +499,14 @@ namespace _02148_Project
         /// <summary>
         /// Get a list of all the tradeoffers in the database to a given user
         /// </summary>
-        /// <param name="reciever">Name of the reciever to the tradeoffer</param>
+        /// <param name="receiver">Name of the reciever to the tradeoffer</param>
         /// <returns>A list of tradeoffers</returns>
-        public static List<TradeOffer> ReadAllTradeOffers(string reciever)
+        public static List<TradeOffer> ReadAllTradeOffers(string receiver)
         {
             List<TradeOffer> offers = new List<TradeOffer>();
             try
             {
-                string query = "SELECT * FROM TradeOffers WHERE RecieverName = '" + reciever + "';";
+                string query = "SELECT * FROM TradeOffers WHERE ReceiverName = '" + receiver + "';";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
