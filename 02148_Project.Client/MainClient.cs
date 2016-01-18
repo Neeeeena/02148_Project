@@ -346,8 +346,8 @@ namespace _02148_Project.Client
         public static string SendNewMessage(Message msg)
         {
             try {
-            DatabaseInterface.SendMessage(msg);
-        }
+                DatabaseInterface.SendMessage(msg);
+            }
             catch(Exception ex)
             {
                 return ex.Message;
@@ -358,17 +358,18 @@ namespace _02148_Project.Client
         public static string SendNewMessageToAll(Message msg)
         {
             try {
-            List<Player> players = new List<Player>();
-            players = DatabaseInterface.ReadAllPlayers();
-            foreach (Player p in players)
-            {
-                if (p.Name != player.Name)
+                msg.ToAll = true;
+                List<Player> players = new List<Player>();
+                players = DatabaseInterface.ReadAllPlayers();
+                foreach (Player p in players)
                 {
-                    msg.RecieverName = p.Name;
-                    DatabaseInterface.SendMessage(msg);
+                    if (p.Name != player.Name)
+                    {
+                        msg.RecieverName = p.Name;
+                        DatabaseInterface.SendMessage(msg);
+                    }
                 }
             }
-        }
             catch(Exception ex)
             {
                 return ex.Message;
