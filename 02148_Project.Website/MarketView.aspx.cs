@@ -90,27 +90,13 @@ namespace _02148_Project.Website
             MainClient.PlaceResourceOfferOnMarket(newOffer);
             RenderLocalResources();
             RenderMarket();
+            inputPrice.Value = "";
         }
 
         protected void send_message_btn_click(Object sender, EventArgs e)
         {
             var msg = allMsg.Value;
             //var msgTuple =  new Message(message, )
-        }
-
-        protected void submitName_Click(object sender, EventArgs e)
-        {
-            //var name = nameInput.Value;
-            //if (MainClient.createPlayer(name) != null)
-            //{
-            //    Display message
-
-            //}
-            //else
-            //{
-            //    RenderLocalResources();
-            //    RenderMarket();
-            //}
         }
 
         #region DatabaseListeners
@@ -169,24 +155,22 @@ namespace _02148_Project.Website
 
         protected void submitBid_Click(object sender, EventArgs e)
         {
-            try {
                 string ID = hidId.Value;
                 string price = bidPrice.Value;
+            int bidValue = Int32.Parse(price);
+
                 ResourceOffer ro = marketresources.Find(x => x.Id == Int32.Parse(ID));
-                int bidValue = Int32.Parse(price);
-                if (bidValue > ro.HighestBid)
-                {
                     ro.HighestBid = bidValue;
                     ro.HighestBidder = MainClient.player.Name;
-                    MainClient.BidOnResource(ro);
+
+            string returnedMessage = MainClient.BidOnResource(ro);
+             
+            if(returnedMessage != "")
+            {
+                //Message box error
                 }
                 bidwarning.Visible = false;
                 bidPrice.Value = "";
-            }catch(ResourceOfferException ex)
-        {
-                bidwarning.InnerText = ex.Message;
-                bidwarning.Visible = true;
-            }
         }
     }
 }
