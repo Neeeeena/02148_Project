@@ -112,6 +112,15 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button btnSendToAll;
         
         /// <summary>
+        /// p1Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl p1Chat;
+        
+        /// <summary>
         /// p1Msg control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button btnSendToPlayer1;
         
         /// <summary>
+        /// p2Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl p2Chat;
+        
+        /// <summary>
         /// p2Msg control.
         /// </summary>
         /// <remarks>
@@ -146,6 +164,15 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSendToPlayer2;
+        
+        /// <summary>
+        /// p3Chat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl p3Chat;
         
         /// <summary>
         /// p3Msg control.

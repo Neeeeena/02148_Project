@@ -36,18 +36,12 @@ namespace _02148_Project.Website
             {
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
+                messages = new List<Message>();
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
-                    RenderMarket();
-                    RenderLocalResources();
-                    repMarketResources.DataSource = marketresources;
-                    repMarketResources.DataBind();
-                    repLocalResources.DataSource = localresources;
-                    repLocalResources.DataBind();
 
-            //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
 
             Player1 = MainClient.allOtherPlayers[0];
@@ -58,6 +52,17 @@ namespace _02148_Project.Website
 
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
+
+            RenderMarket();
+            RenderLocalResources();
+            repMarketResources.DataSource = marketresources;
+            repMarketResources.DataBind();
+            repLocalResources.DataSource = localresources;
+            repLocalResources.DataBind();
+            RenderChat();
+
+            //Load data into allOtherPlayers list
+            
             
 
 
@@ -129,18 +134,58 @@ namespace _02148_Project.Website
 
         protected void RenderChat()
         {
-            List<Message> m = new List<Message>() { new Message("Hej Mathias", "Nina", "Mathias"), new Message("Hej Nina", "Mathias", "Nina") };
-            foreach(var mes in m){
-                Label l = new Label();
-                l.Text = mes.SenderName + ": "+ mes.Content;
-                if (mes.SenderName.Equals(MainClient.player.Name))
+            messages = MainClient.GetNewMessage();
+            foreach(var mes in messages)
+            {
+                if (mes.ToAll)
                 {
-                    l.Attributes.Add("Class", "myMessage");
+                    Label l = new Label();
+                    l.Text = mes.SenderName + ": " + mes.Content;
+                    if (mes.SenderName.Equals(MainClient.player.Name))
+                    {
+                        l.Attributes.Add("Class", "myMessage");
+                    }
+                    allChat.Controls.Add(l);
+                    allChat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
                 }
-                allChat.Controls.Add(l);
-                allChat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                else
+                {
+                    if(mes.RecieverName.Equals(Player1.Name) || mes.SenderName.Equals(Player1.Name))
+                    {
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p1Chat.Controls.Add(l);
+                        p1Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                    }
+                    else if(mes.RecieverName.Equals(Player2.Name) || mes.SenderName.Equals(Player2.Name)){
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p2Chat.Controls.Add(l);
+                        p2Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                    }
+                    else
+                    {
+                        Label l = new Label();
+                        l.Text = mes.SenderName + ": " + mes.Content;
+                        if (mes.SenderName.Equals(MainClient.player.Name))
+                        {
+                            l.Attributes.Add("Class", "myMessage");
+                        }
+                        p3Chat.Controls.Add(l);
+                        p3Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                    }
+                }
             }
-        }
+
+           }
 
 
         protected void buttonCancelSell_Click(Object sender, EventArgs e)
@@ -159,12 +204,6 @@ namespace _02148_Project.Website
             RenderLocalResources();
             RenderMarket();
             inputPrice.Value = "";
-        }
-
-        protected void send_message_btn_click(Object sender, EventArgs e)
-        {
-            var msg = allMsg.Value;
-            //var msgTuple =  new Message(message, )
         }
 
         #region DatabaseListeners
@@ -246,6 +285,7 @@ namespace _02148_Project.Website
             var message = allMsg.Value;
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
+            RenderChat();
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)
@@ -253,6 +293,7 @@ namespace _02148_Project.Website
             var message = p1Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player1.Name);
             MainClient.SendNewMessage(messageObject);
+            RenderChat();
         }
 
         protected void btnSendToPlayer2_Click(object sender, EventArgs e)
@@ -260,12 +301,14 @@ namespace _02148_Project.Website
             var message = p2Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player2.Name);
             MainClient.SendNewMessage(messageObject);
+            RenderChat();
         }
         protected void btnSendToPlayer3_Click(object sender, EventArgs e)
         {
             var message = p3Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player3.Name);
             MainClient.SendNewMessage(messageObject);
+            RenderChat();
         }
 
     }

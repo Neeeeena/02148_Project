@@ -58,7 +58,7 @@
 		</div>
 		
 		<div id="p1" class="tab-pane fade">
-			<div class="chatbox" id="p1Chat">
+			<div class="chatbox" runat="server" id="p1Chat">
 			</div>
 		
 			
@@ -70,7 +70,7 @@
 			</div>
 		</div>
           <div id="p2" class="tab-pane fade">
-			<div class="chatbox" id="p2Chat">
+			<div class="chatbox" runat="server" id="p2Chat">
 			</div>
 		
 			
@@ -82,7 +82,7 @@
 			</div>
 		</div>
           <div id="p3" class="tab-pane fade">
-			<div class="chatbox" id="p3Chat">
+			<div class="chatbox" runat="server" id="p3Chat">
 			</div>
 		
 			
