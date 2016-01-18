@@ -41,7 +41,7 @@ namespace _02148_Project.Website
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
-
+            //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
 
             Player1 = MainClient.allOtherPlayers[0];
@@ -61,7 +61,7 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
 
-            //Load data into allOtherPlayers list
+            
             
             
 
@@ -146,7 +146,7 @@ namespace _02148_Project.Website
                         l.Attributes.Add("Class", "myMessage");
                     }
                     allChat.Controls.Add(l);
-                    allChat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                    allChat.Controls.Add(new Literal {Text = "<hr/>" });
                 }
                 else
                 {
@@ -159,7 +159,7 @@ namespace _02148_Project.Website
                             l.Attributes.Add("Class", "myMessage");
                         }
                         p1Chat.Controls.Add(l);
-                        p1Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                        p1Chat.Controls.Add(new Literal { Text = "<hr/>" });
                     }
                     else if(mes.RecieverName.Equals(Player2.Name) || mes.SenderName.Equals(Player2.Name)){
                         Label l = new Label();
@@ -169,7 +169,7 @@ namespace _02148_Project.Website
                             l.Attributes.Add("Class", "myMessage");
                         }
                         p2Chat.Controls.Add(l);
-                        p2Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                        p2Chat.Controls.Add(new Literal { Text = "<hr/>" });
                     }
                     else
                     {
@@ -180,7 +180,7 @@ namespace _02148_Project.Website
                             l.Attributes.Add("Class", "myMessage");
                         }
                         p3Chat.Controls.Add(l);
-                        p3Chat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+                        p3Chat.Controls.Add(new Literal {  Text = "<hr/>" });
                     }
                 }
             }
