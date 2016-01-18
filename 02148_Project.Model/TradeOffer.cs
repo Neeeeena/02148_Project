@@ -14,9 +14,9 @@ namespace _02148_Project.Model
 
         public string RecieverName { get; set; }
 
-        public Dictionary<ResourceType,int> resources { get; set; }
+        public Dictionary<ResourceType,int> Resources { get; set; }
 
-        public Dictionary<ResourceType, int> price { get; set; }
+        public Dictionary<ResourceType, int> Price { get; set; }
 
         /// <summary>
         /// Create a trade offer object with all the data
@@ -28,25 +28,18 @@ namespace _02148_Project.Model
         /// <param name="count">Number of resources to sell</param>
         /// <param name="price">Price of the resources</param>
         public TradeOffer(int id, string sellerName, string recieverName, 
-            ResourceType type, int count, ResourceType priceType, int price)
+            Dictionary<ResourceType, int> resources, Dictionary<ResourceType, int> price)
+            : this(sellerName, recieverName, resources, price)
         {
             Id = id;
-            SellerName = sellerName;
-            RecieverName = recieverName;
-            Type = type;
-            Count = count;
-            PriceType = priceType;
-            Price = price;
         }
 
-        public TradeOffer(string sellerName, string recieverName, ResourceType type, 
-            int count, ResourceType priceType, int price)
+        public TradeOffer(string sellerName, string recieverName,
+            Dictionary<ResourceType, int> resources, Dictionary<ResourceType, int> price)
         {
             this.SellerName = sellerName;
             this.RecieverName = recieverName;
-            this.Type = type;
-            this.Count = count;
-            this.PriceType = priceType;
+            this.Resources = resources;
             this.Price = price;
         }
     }
