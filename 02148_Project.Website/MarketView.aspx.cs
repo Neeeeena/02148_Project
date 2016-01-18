@@ -11,6 +11,7 @@ using _02148_Project;
 using System.Data.SqlClient;
 using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
+using System.Web.UI.HtmlControls;
 
 namespace _02148_Project.Website
 {
@@ -21,7 +22,7 @@ namespace _02148_Project.Website
         public List<ResourceOffer> marketresources;
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
-        public Message message;
+        public List<Message> messages;
         public Player Player1;
         public Player Player2;
         public Player Player3;
@@ -39,12 +40,12 @@ namespace _02148_Project.Website
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
-            RenderMarket();
-            RenderLocalResources();
-            repMarketResources.DataSource = marketresources;
-            repMarketResources.DataBind();
-            repLocalResources.DataSource = localresources;
-            repLocalResources.DataBind();
+                    RenderMarket();
+                    RenderLocalResources();
+                    repMarketResources.DataSource = marketresources;
+                    repMarketResources.DataBind();
+                    repLocalResources.DataSource = localresources;
+                    repLocalResources.DataBind();
 
             //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
@@ -57,6 +58,55 @@ namespace _02148_Project.Website
 
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
+            
+
+
+
+        }
+
+        protected void RenderTradeOffers()
+        {
+            List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
+            foreach(var t in tradeOffersO)
+            {
+                System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
+                //tradeOffers.Controls.Add(div);
+            }
+        }
+
+        protected HtmlGenericControl createDiv(TradeOffer to)
+        {
+            System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+            System.Web.UI.WebControls.Label sellerName = new System.Web.UI.WebControls.Label();
+            sellerName.Text = to.SellerName;
+            System.Web.UI.WebControls.Label receiverName = new System.Web.UI.WebControls.Label();
+            receiverName.Text = to.RecieverName;
+            tradeOffer.Controls.Add(sellerName);
+            tradeOffer.Controls.Add(receiverName);
+
+            Dictionary<ResourceType, int> resources = to.SellerResources;
+            Dictionary<ResourceType, int> price = to.ReceiverResources;
+
+            foreach (KeyValuePair<ResourceType, int> r in resources)
+            {
+                ResourceType res = r.Key;
+                int numb = r.Value;
+                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+                tradeOffer.Controls.Add(image);
+                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+                numberOfRes.Text = numb.ToString() ;
+                tradeOffer.Controls.Add(numberOfRes);
+            }
+
+            return tradeOffer;
+            
+            //tradeOffer.Attributes.Add("class", "tradeOffer");
+            //tradeOffer.Style.Add(HtmlTextWriterStyle.BackgroundColor, "gray");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Color, "Red");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Height, "100px");
+            //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
+            //createDiv.InnerHtml = " I'm a div, from code behind ";
+            //tradeOffers.Controls.Add(tradeOffer);
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
@@ -82,7 +132,7 @@ namespace _02148_Project.Website
             List<Message> m = new List<Message>() { new Message("Hej Mathias", "Nina", "Mathias"), new Message("Hej Nina", "Mathias", "Nina") };
             foreach(var mes in m){
                 Label l = new Label();
-                l.Text = mes.SenderName + ": "+ mes.Context;
+                l.Text = mes.SenderName + ": "+ mes.Content;
                 if (mes.SenderName.Equals(MainClient.player.Name))
                 {
                     l.Attributes.Add("Class", "myMessage");
@@ -164,7 +214,7 @@ namespace _02148_Project.Website
             // Get the latest message and save it locally
             if (MainClient.player != null)
             {
-                message = DatabaseInterface.GetMessage(MainClient.player.Name);
+                messages = DatabaseInterface.ReadMessages(MainClient.player.Name);
             }
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
@@ -194,8 +244,8 @@ namespace _02148_Project.Website
         protected void btnSendToAll_Click(object sender, EventArgs e)
         {
             var message = allMsg.Value;
-            var messageObject = new Message(message,MainClient.player.Name,"");
-            MainClient.SendNewMessageToAll(messageObject);
+            var messageObject = new Message(message,MainClient.player.Name,"",true);
+            MainClient.SendNewMessage(messageObject);
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)

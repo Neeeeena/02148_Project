@@ -523,10 +523,10 @@ namespace _02148_Project
                 {
                     command.Parameters.AddWithValue("@Seller", offer.SellerName);
                     command.Parameters.AddWithValue("@Reciever", offer.RecieverName);
-                    command.Parameters.AddWithValue("@Type", offer.Type);
-                    command.Parameters.AddWithValue("@Count", offer.Count);
-                    command.Parameters.AddWithValue("@PriceType", offer.PriceType);
-                    command.Parameters.AddWithValue("@Price", offer.Price);
+                    //command.Parameters.AddWithValue("@Type", offer.Type);
+                    //command.Parameters.AddWithValue("@Count", offer.Count);
+                    //command.Parameters.AddWithValue("@PriceType", offer.PriceType);
+                    //command.Parameters.AddWithValue("@Price", offer.Price);
 
                     return (int)command.ExecuteScalar();
                 }
@@ -551,7 +551,7 @@ namespace _02148_Project
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Message", msg.Context);
+                    command.Parameters.AddWithValue("@Message", msg.Content);
                     command.Parameters.AddWithValue("@Sender", msg.SenderName);
                     command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
                     command.ExecuteNonQuery();

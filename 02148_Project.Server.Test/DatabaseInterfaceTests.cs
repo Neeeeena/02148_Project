@@ -192,8 +192,9 @@ namespace Server.Test
         [TestCategory("Chat")]
         public void RecieveMessageTest()
         {
-            Message msg = DatabaseInterface.GetMessage("Alex");
-            Console.WriteLine("{0}\t{1}\t{2}", msg.Context, msg.SenderName, msg.RecieverName);
+            List<Message> messages = DatabaseInterface.ReadMessages("Alex");
+            foreach (Message msg in messages)
+                Console.WriteLine("{0}\t{1}\t{2}", msg.Content, msg.SenderName, msg.RecieverName);
         }
 
 
@@ -201,7 +202,7 @@ namespace Server.Test
         [TestCategory("Trade Offer")]
         public void PutTradeOfferInDatabaseTest()
         {
-            TradeOffer offer = new TradeOffer("Oliver", "Alex", ResourceType.Stone, 15, ResourceType.Gold, 10);
+            TradeOffer offer = new TradeOffer("Oliver", "Alex", new Dictionary<ResourceType, int>(), new Dictionary<ResourceType, int>());
             DatabaseInterface.PutTradeOffer(offer);
         }
 
@@ -209,12 +210,12 @@ namespace Server.Test
         [TestCategory("Trade Offer")]
         public void ReadTradeOffersInDatabaseTest()
         {
-            List<TradeOffer> offers = DatabaseInterface.ReadAllTradeOffers("Alex");
+            List<TradeOffer> offers = DatabaseInterface.ReadAllTradeOffers("carl");
             Console.WriteLine("Id\tSeller\tReciever\tType\tCount\tPrice");
             foreach (TradeOffer offer in offers)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
-                    offer.RecieverName, (ResourceType)offer.Type, offer.Count, offer.Price);
+                Console.WriteLine("{0}\t{1}\t{2}", offer.Id, offer.SellerName,
+                    offer.RecieverName);
             }
         }
 
@@ -223,8 +224,8 @@ namespace Server.Test
         public void GetTradeOfferInDatabaseTest()
         {
             TradeOffer offer = DatabaseInterface.GetTradeOffer(1);
-            Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}", offer.Id, offer.SellerName,
-                offer.RecieverName, offer.Type, offer.Count, offer.Price);
+            Console.WriteLine("{0}\t{1}\t{2}", offer.Id, offer.SellerName,
+                offer.RecieverName);
         }
 
         [TestMethod]
