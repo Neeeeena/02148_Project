@@ -21,7 +21,7 @@ namespace _02148_Project.Website
         public List<ResourceOffer> marketresources;
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
-        public Message message;
+        public List<Message> messages;
 
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
@@ -146,7 +146,7 @@ namespace _02148_Project.Website
             // Get the latest message and save it locally
             if (MainClient.player != null)
             {
-                message = DatabaseInterface.GetMessage(MainClient.player.Name);
+                messages = DatabaseInterface.ReadMessages(MainClient.player.Name);
             }
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }

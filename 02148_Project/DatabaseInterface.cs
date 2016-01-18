@@ -647,14 +647,17 @@ namespace _02148_Project
         /// </summary>
         /// <param name="reciever">Name of the reciever</param>
         /// <returns>The latest message to the reciever</returns>
-        public static Message GetMessage(string reciever)
+        public static List<Message> ReadMessages(string reciever)
         {
+            List<Message> messages = new List<Message>();
             try
             {
-                string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
-                    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
-                    + "DELETE FROM toprow "
-                    + "OUTPUT DELETED.*;";
+                //string query = "WITH toprow AS (SELECT TOP 1 * FROM Chat "
+                //    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
+                //    + "DELETE FROM toprow "
+                //    + "OUTPUT DELETED.*;";
+                string query = "SELECT TOP 10 * FROM Chat " +
+                    "WHERE RecieverName = '" + reciever + "' ORDER BY Id DESC" ;
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -664,9 +667,12 @@ namespace _02148_Project
                         {
                             if (reader.HasRows)
                             {
-                                reader.Read();
-                                return new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                                while (reader.Read())
+                                {
+                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                                }
                             }
+                            return messages;
                         }
                     }
                 }
@@ -675,7 +681,7 @@ namespace _02148_Project
             {
                 SqlExceptionHandling(ex);
             }
-            return null;
+            return messages;
         }
         #endregion
 

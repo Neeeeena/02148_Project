@@ -329,10 +329,10 @@ namespace _02148_Project.Client
 
         // Message stuff:
         //Kan ikke returne string
-        public static Message GetNewMessage()
+        public static List<Message> GetNewMessage()
         {
             try {
-                return DatabaseInterface.GetMessage(player.Name);
+                return DatabaseInterface.ReadMessages(player.Name);
             }
             catch(Exception ex)
             {

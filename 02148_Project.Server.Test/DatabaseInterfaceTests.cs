@@ -192,8 +192,9 @@ namespace Server.Test
         [TestCategory("Chat")]
         public void RecieveMessageTest()
         {
-            Message msg = DatabaseInterface.GetMessage("Alex");
-            Console.WriteLine("{0}\t{1}\t{2}", msg.Context, msg.SenderName, msg.RecieverName);
+            List<Message> messages = DatabaseInterface.ReadMessages("Alex");
+            foreach (Message msg in messages)
+                Console.WriteLine("{0}\t{1}\t{2}", msg.Context, msg.SenderName, msg.RecieverName);
         }
 
 
