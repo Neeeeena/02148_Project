@@ -60,8 +60,7 @@ namespace _02148_Project.Website
                 try
                 {
                     MainClient.ReadAPlayer(existingusername.Value);
-
-                    Response.Redirect("~/MarketView");
+                    Response.Redirect("~/MarketView?player="+existingusername.Value);
                 }
                 catch (Exception ex)
                 {

@@ -58,6 +58,42 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button buttonConfirmSell;
         
         /// <summary>
+        /// player1Tab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl player1Tab;
+        
+        /// <summary>
+        /// player2Tab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl player2Tab;
+        
+        /// <summary>
+        /// player3Tab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl player3Tab;
+        
+        /// <summary>
+        /// allChat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl allChat;
+        
+        /// <summary>
         /// allMsg control.
         /// </summary>
         /// <remarks>
@@ -67,13 +103,67 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.HtmlControls.HtmlInputText allMsg;
         
         /// <summary>
-        /// allBtn control.
+        /// btnSendToAll control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton allBtn;
+        protected global::System.Web.UI.WebControls.Button btnSendToAll;
+        
+        /// <summary>
+        /// p1Msg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText p1Msg;
+        
+        /// <summary>
+        /// btnSendToPlayer1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSendToPlayer1;
+        
+        /// <summary>
+        /// p2Msg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText p2Msg;
+        
+        /// <summary>
+        /// btnSendToPlayer2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSendToPlayer2;
+        
+        /// <summary>
+        /// p3Msg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText p3Msg;
+        
+        /// <summary>
+        /// btnSendToPlayer3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSendToPlayer3;
         
         /// <summary>
         /// up control.

@@ -22,33 +22,41 @@ namespace _02148_Project.Website
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
         public Message message;
+        public Player Player1;
+        public Player Player2;
+        public Player Player3;
 
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
+
+
             if (!Page.IsPostBack)
             {
-                //MainClient.deletePlayer("Martin");
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
-                RenderMarket();
-                RenderLocalResources();
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
-            else
-            {
-                if (MainClient.player != null)
-                {
-                    RenderMarket();
-                    RenderLocalResources();
-                    repMarketResources.DataSource = marketresources;
-                    repMarketResources.DataBind();
-                    repLocalResources.DataSource = localresources;
-                    repLocalResources.DataBind();
-                }
-            }
+            RenderMarket();
+            RenderLocalResources();
+            repMarketResources.DataSource = marketresources;
+            repMarketResources.DataBind();
+            repLocalResources.DataSource = localresources;
+            repLocalResources.DataBind();
+
+            //Load data into allOtherPlayers list
+            MainClient.ReadOtherPlayers();
+
+            Player1 = MainClient.allOtherPlayers[0];
+            player1Tab.InnerText = Player1.Name;
+
+            Player2 = MainClient.allOtherPlayers[1];
+            player2Tab.InnerText = Player2.Name;
+
+            Player3 = MainClient.allOtherPlayers[2];
+            player3Tab.InnerText = Player3.Name;
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
@@ -71,7 +79,17 @@ namespace _02148_Project.Website
 
         protected void RenderChat()
         {
-
+            List<Message> m = new List<Message>() { new Message("Hej Mathias", "Nina", "Mathias"), new Message("Hej Nina", "Mathias", "Nina") };
+            foreach(var mes in m){
+                Label l = new Label();
+                l.Text = mes.SenderName + ": "+ mes.Context;
+                if (mes.SenderName.Equals(MainClient.player.Name))
+                {
+                    l.Attributes.Add("Class", "myMessage");
+                }
+                allChat.Controls.Add(l);
+                allChat.Controls.Add(new Literal { ID = "row", Text = "<hr/>" });
+            }
         }
 
 
@@ -172,5 +190,33 @@ namespace _02148_Project.Website
                 bidwarning.Visible = false;
                 bidPrice.Value = "";
         }
+
+        protected void btnSendToAll_Click(object sender, EventArgs e)
+        {
+            var message = allMsg.Value;
+            var messageObject = new Message(message,MainClient.player.Name,"");
+            MainClient.SendNewMessageToAll(messageObject);
+        }
+
+        protected void btnSendToPlayer1_Click(object sender, EventArgs e)
+        {
+            var message = p1Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player1.Name);
+            MainClient.SendNewMessage(messageObject);
+        }
+
+        protected void btnSendToPlayer2_Click(object sender, EventArgs e)
+        {
+            var message = p2Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player2.Name);
+            MainClient.SendNewMessage(messageObject);
+        }
+        protected void btnSendToPlayer3_Click(object sender, EventArgs e)
+        {
+            var message = p3Msg.Value;
+            var messageObject = new Message(message, MainClient.player.Name, Player3.Name);
+            MainClient.SendNewMessage(messageObject);
+        }
+
     }
 }
