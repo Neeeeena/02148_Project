@@ -30,7 +30,7 @@ namespace _02148_Project.Website
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            MainClient.ReadAPlayer(Request.QueryString["player"]);
 
             if (!Page.IsPostBack)
             {
@@ -60,6 +60,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
+            RenderTradeOffers();
 
             
             
@@ -155,6 +156,8 @@ namespace _02148_Project.Website
         protected void RenderChat()
         {
             messages = MainClient.GetNewMessage();
+            messages.OrderBy(a => a.Id).ToList();
+            messages.Reverse();
             foreach(var mes in messages)
             {
                 if (mes.ToAll)

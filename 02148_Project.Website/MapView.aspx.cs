@@ -14,6 +14,7 @@ namespace _02148_Project.Website
         public List<LocalResource> localresources;
         protected void Page_Load(object sender, EventArgs e)
         {
+            MainClient.ReadAPlayer(Request.QueryString["player"]);
             if (!Page.IsPostBack)
             {
 
