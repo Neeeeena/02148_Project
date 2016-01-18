@@ -727,7 +727,9 @@ namespace _02148_Project
                             {
                                 while (reader.Read())
                                 {
-                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4)));
+                                    messages.Add(new Message(reader.GetInt32(0), 
+                                        reader.GetString(1), reader.GetString(2), 
+                                        reader.GetString(3), reader.GetBoolean(4)));
                                 }
                             }
                             return messages;

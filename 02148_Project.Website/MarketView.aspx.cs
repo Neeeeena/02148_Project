@@ -251,7 +251,7 @@ namespace _02148_Project.Website
             // Find a way to update with the latest resource offers
             RenderLocalResources();
             RenderMarket();
-
+            
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
