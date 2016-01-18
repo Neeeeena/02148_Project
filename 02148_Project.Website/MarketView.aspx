@@ -10,9 +10,9 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        <div id="tradeOffers">
-
-        </div>
+            <div runat="server" id="tradeOffers">
+                <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
+            </div>
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>

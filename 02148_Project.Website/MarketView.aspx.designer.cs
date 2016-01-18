@@ -13,6 +13,24 @@ namespace _02148_Project.Website {
     public partial class MarketView {
         
         /// <summary>
+        /// tradeOffers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tradeOffers;
+        
+        /// <summary>
+        /// tradeOfferASP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder tradeOfferASP;
+        
+        /// <summary>
         /// hiddenValue control.
         /// </summary>
         /// <remarks>

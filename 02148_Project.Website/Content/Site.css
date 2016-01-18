@@ -231,3 +231,13 @@ div.scroll {
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 }
+
+.tradeOffer img {
+    width: 50px;
+    height: 50px;
+}
+
+.tradeOffer {
+    border: 1px solid black;
+
+}
