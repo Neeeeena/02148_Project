@@ -14,9 +14,9 @@ namespace _02148_Project.Model
 
         public string RecieverName { get; set; }
 
-        public Dictionary<ResourceType,int> Resources { get; set; }
+        public Dictionary<ResourceType,int> SellerResources { get; set; }
 
-        public Dictionary<ResourceType, int> Price { get; set; }
+        public Dictionary<ResourceType, int> ReceiverResources { get; set; }
 
         /// <summary>
         /// Create a trade offer object with all the data
@@ -39,8 +39,8 @@ namespace _02148_Project.Model
         {
             this.SellerName = sellerName;
             this.RecieverName = recieverName;
-            this.Resources = resources;
-            this.Price = price;
+            this.SellerResources = resources;
+            this.ReceiverResources = price;
         }
     }
 }
