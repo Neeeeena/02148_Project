@@ -62,7 +62,7 @@ namespace _02148_Project.Website
             foreach(var t in tradeOffersO)
             {
                 System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
-                tradeOffers.Controls.Add(div);
+                //tradeOffers.Controls.Add(div);
             }
         }
 
@@ -76,8 +76,8 @@ namespace _02148_Project.Website
             tradeOffer.Controls.Add(sellerName);
             tradeOffer.Controls.Add(receiverName);
 
-            Dictionary<ResourceType, int> resources = to.resources;
-            Dictionary<ResourceType, int> price = to.price;
+            Dictionary<ResourceType, int> resources = to.SellerResources;
+            Dictionary<ResourceType, int> price = to.ReceiverResources;
 
             foreach (KeyValuePair<ResourceType, int> r in resources)
             {
