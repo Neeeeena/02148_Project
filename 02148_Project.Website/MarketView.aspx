@@ -99,12 +99,14 @@
 
         </div>
         <div class="span8">
+       
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
             <asp:UpdatePanel ID="up" runat="server">        
     <ContentTemplate>
         <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repMarketResources" runat="server" >
+         
           <HeaderTemplate>
             <table>
               <thead>
