@@ -201,3 +201,33 @@ h3 {
     visibility:hidden;
     clear:both;
 }
+
+div.scroll {
+    background-color: #FFFFFF;
+    width: 100px;
+    height: 100px;
+    overflow-y: scroll;
+}
+
+.nav-tabs > li{
+  width:25%;
+}
+
+.nav-tabs > li > a > p{
+  word-wrap:break-word;
+  margin-left:-14px;
+  margin-right:-14px;
+  margin-top:-10px;
+  margin-bottom:-10px;
+  height:45px;
+  font-size:80%
+}
+
+.chatbox{
+	overflow-y:scroll;
+	height:300px;
+	font-size:90%;
+	padding:8px;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
