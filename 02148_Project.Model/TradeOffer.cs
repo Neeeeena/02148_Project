@@ -14,13 +14,9 @@ namespace _02148_Project.Model
 
         public string RecieverName { get; set; }
 
-        public ResourceType Type { get; set; }
+        public Dictionary<ResourceType,int> resources { get; set; }
 
-        public int Count { get; set; }
-
-        public ResourceType PriceType { get; set; }
-
-        public int Price { get; set; }
+        public Dictionary<ResourceType, int> price { get; set; }
 
         /// <summary>
         /// Create a trade offer object with all the data

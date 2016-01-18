@@ -10,7 +10,11 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        
+        <div id="tradeOffers">
+
+
+
+        </div>
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
