@@ -678,16 +678,17 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Chat (Message, SenderName, RecieverName) "
-                    + "VALUES (@Message, @Sender, @Reciever);";
+                string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                    + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Message", msg.Context);
+                        command.Parameters.AddWithValue("@Message", msg.Content);
                         command.Parameters.AddWithValue("@Sender", msg.SenderName);
                         command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+                        command.Parameters.AddWithValue("@ToAll", msg.ToAll);
                         command.ExecuteNonQuery();
                     }
                 }
@@ -701,9 +702,9 @@ namespace _02148_Project
         /// <summary>
         /// Get/reciev a message from the server to the specifed reciever
         /// </summary>
-        /// <param name="reciever">Name of the reciever</param>
+        /// <param name="name">Name of the reciever</param>
         /// <returns>The latest message to the reciever</returns>
-        public static List<Message> ReadMessages(string reciever)
+        public static List<Message> ReadMessages(string name)
         {
             List<Message> messages = new List<Message>();
             try
@@ -712,8 +713,9 @@ namespace _02148_Project
                 //    + "WHERE RecieverName = '" + reciever + "' ORDER BY Id ASC) "
                 //    + "DELETE FROM toprow "
                 //    + "OUTPUT DELETED.*;";
-                string query = "SELECT TOP 10 * FROM Chat " +
-                    "WHERE RecieverName = '" + reciever + "' ORDER BY Id DESC" ;
+                string query = "SELECT TOP 100 * FROM Chat " +
+                    "WHERE RecieverName = '" + name + "' OR SenderName = '" + name + "' " +
+                    "ORDER BY Id DESC" ;
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -725,7 +727,7 @@ namespace _02148_Project
                             {
                                 while (reader.Read())
                                 {
-                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3)));
+                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4)));
                                 }
                             }
                             return messages;
