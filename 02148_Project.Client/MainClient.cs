@@ -377,18 +377,8 @@ namespace _02148_Project.Client
         {
             try
             {
-                if (message.ToAll == false)
-                {
-                    DatabaseInterface.SendMessage(message);
-                }
-                else
-                {
-                    foreach (Player player in allOtherPlayers)
-                    {
-                        message.RecieverName = player.Name;
-                        DatabaseInterface.SendMessage(message);
-                    }
-                }
+                DatabaseInterface.SendMessage(message);
+
             }
             catch(Exception ex)
             {
