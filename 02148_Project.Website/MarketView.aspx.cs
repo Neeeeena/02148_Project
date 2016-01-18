@@ -92,6 +92,12 @@ namespace _02148_Project.Website
             RenderMarket();
         }
 
+        protected void send_message_btn_click(Object sender, EventArgs e)
+        {
+            var msg = allMsg.Value;
+            //var msgTuple =  new Message(message, )
+        }
+
         protected void submitName_Click(object sender, EventArgs e)
         {
             //var name = nameInput.Value;

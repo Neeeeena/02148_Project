@@ -15,9 +15,6 @@
 <asp:Button runat="server" ID="Button1" OnClick="submitexistingusername_Click" Text="Submit"></asp:Button>
 <div class="alert alert-warning" id="existinguserwarning" visible="false" runat="server"></div>
 
-
-
-
 </asp:Content>
 
 
