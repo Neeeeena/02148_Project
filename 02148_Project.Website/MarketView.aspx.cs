@@ -75,7 +75,7 @@ namespace _02148_Project.Website
             foreach(var t in tradeOffersO)
             {
                 System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
-                //tradeOffers.Controls.Add(div);
+                tradeOffers.Controls.Add(div);
             }
         }
 
@@ -88,6 +88,7 @@ namespace _02148_Project.Website
             receiverName.Text = to.RecieverName;
             tradeOffer.Controls.Add(sellerName);
             tradeOffer.Controls.Add(receiverName);
+            tradeOffer.Attributes.Add("class","tradeOffer");
 
             Dictionary<ResourceType, int> resources = to.SellerResources;
             Dictionary<ResourceType, int> price = to.ReceiverResources;
@@ -103,6 +104,19 @@ namespace _02148_Project.Website
                 tradeOffer.Controls.Add(numberOfRes);
             }
 
+            System.Web.UI.HtmlControls.HtmlButton acceptButton = new System.Web.UI.HtmlControls.HtmlButton();
+            acceptButton.InnerText = "Accept";
+            acceptButton.ID = to.Id.ToString();
+            acceptButton.Attributes.Add("runat", "server");
+            acceptButton.Attributes.Add("onclick", "acceptTradeOffer_click");
+            acceptButton.Attributes.Add("class", "btn btn-default");
+            System.Web.UI.HtmlControls.HtmlButton declineButton = new System.Web.UI.HtmlControls.HtmlButton();
+            declineButton.InnerText = "Decline";
+            declineButton.Attributes.Add("runat", "server");
+            declineButton.Attributes.Add("class", "btn btn-default");
+            tradeOffer.Controls.Add(acceptButton);
+            tradeOffer.Controls.Add(declineButton);
+
             return tradeOffer;
             
             //tradeOffer.Attributes.Add("class", "tradeOffer");
@@ -112,6 +126,12 @@ namespace _02148_Project.Website
             //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
             //createDiv.InnerHtml = " I'm a div, from code behind ";
             //tradeOffers.Controls.Add(tradeOffer);
+        }
+
+        protected void acceptTradeOffer_click(Object sender, EventArgs e)
+        {
+            Button button = (Button)sender;
+            MainClient.AcceptTradeOffer(Int32.Parse(button.ID));
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
