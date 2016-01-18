@@ -262,7 +262,7 @@ namespace _02148_Project.Client
 
                 //SubtractResource(offer.Type, offer.Count); - skal måske slet ikke bruges
 
-                SubtractPlayerResources(offer, player.Name);
+                SubtractPlayerResources(offer.SellerResources, player.Name);
 
                 Timer timer = new Timer(10000);
                 timer.Elapsed += TakeBackTradeOffer;
@@ -291,7 +291,7 @@ namespace _02148_Project.Client
             //Try get
             TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
             //If gotten
-            if (offer != null) AddPlayerResources(offer, player.Name);
+            if (offer != null) AddPlayerResources(offer.SellerResources, player.Name);
 
             timersWithId.RemoveAt(0);
         }
@@ -302,11 +302,11 @@ namespace _02148_Project.Client
                 TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
                 //SubtractResource(offer.PriceType, offer.Price); - skal måske ikke bruges
                 //DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.PriceType, offer.Price);
-                AddPlayerResources(offer, offer.SellerName);
+                AddPlayerResources(offer.ReceiverResources, offer.SellerName);
                 //DatabaseInterface.UpdatePlayerResource(player.Name, offer.PriceType, -offer.Price);
-                SubtractPlayerResources(offer, player.Name);
+                SubtractPlayerResources(offer.ReceiverResources, player.Name);
                 //DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, offer.Count);
-                AddPlayerResources(offer, player.Name);
+                AddPlayerResources(offer.SellerResources, player.Name);
                 SendNewMessage(new Message("Trade accepted", player.Name, offer.SellerName));           
             }
             catch(Exception ex)
@@ -322,7 +322,7 @@ namespace _02148_Project.Client
             {
                 TradeOffer offer = DatabaseInterface.GetTradeOffer(id);
                 //DatabaseInterface.UpdatePlayerResource(offer.SellerName, offer.Type, offer.Count); 
-                AddPlayerResources(offer, offer.SellerName);
+                AddPlayerResources(offer.SellerResources, offer.SellerName);
                 SendNewMessage(new Message("Trade declined", player.Name, offer.SellerName));
             }
             catch (Exception ex)
@@ -332,9 +332,9 @@ namespace _02148_Project.Client
             return "";
         }
 
-        public static void AddPlayerResources(TradeOffer offer, string name)
+        public static void AddPlayerResources(Dictionary<ResourceType,int> dic ,string name)
         {
-            foreach(var pair in offer.resources)
+            foreach(var pair in dic)
             {
                 if(pair.Value != 0)
                 {
@@ -343,9 +343,9 @@ namespace _02148_Project.Client
             }
         }
 
-        public static void SubtractPlayerResources(TradeOffer offer, string name)
+        public static void SubtractPlayerResources(Dictionary<ResourceType, int> dic, string name)
         {
-            foreach (var pair in offer.resources)
+            foreach (var pair in dic)
             {
                 if (pair.Value != 0)
                 {
@@ -375,8 +375,8 @@ namespace _02148_Project.Client
         public static string SendNewMessage(Message msg)
         {
             try {
-            DatabaseInterface.SendMessage(msg);
-        }
+                DatabaseInterface.SendMessage(msg);
+            }
             catch(Exception ex)
             {
                 return ex.Message;
@@ -387,17 +387,18 @@ namespace _02148_Project.Client
         public static string SendNewMessageToAll(Message msg)
         {
             try {
-            List<Player> players = new List<Player>();
-            players = DatabaseInterface.ReadAllPlayers();
-            foreach (Player p in players)
-            {
-                if (p.Name != player.Name)
+                msg.ToAll = true;
+                List<Player> players = new List<Player>();
+                players = DatabaseInterface.ReadAllPlayers();
+                foreach (Player p in players)
                 {
-                    msg.RecieverName = p.Name;
-                    DatabaseInterface.SendMessage(msg);
+                    if (p.Name != player.Name)
+                    {
+                        msg.RecieverName = p.Name;
+                        DatabaseInterface.SendMessage(msg);
+                    }
                 }
             }
-        }
             catch(Exception ex)
             {
                 return ex.Message;
