@@ -76,6 +76,42 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button buttonConfirmSell;
         
         /// <summary>
+        /// dropdownSelected control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dropdownSelected;
+        
+        /// <summary>
+        /// PS1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PS1;
+        
+        /// <summary>
+        /// PS2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PS2;
+        
+        /// <summary>
+        /// PS3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl PS3;
+        
+        /// <summary>
         /// player1Tab control.
         /// </summary>
         /// <remarks>

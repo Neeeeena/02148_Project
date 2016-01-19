@@ -35,7 +35,7 @@
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
 
             <!-- Modal -->
-            <div id="modelTradeOffer" class="modal fade" role="dialog">
+            <div id="modalTradeOffer" class="modal fade" role="dialog">
                 <div class="modal-dialog">
 
                 <!-- Modal content-->
@@ -47,14 +47,15 @@
                     <div class="modal-body">
                         <div class="dropdown">
                           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                              <span runat="server" id="dropdownSelected">Select Player</span>
                           <span class="caret"></span></button>
-                          <ul class="dropdown-menu">
-                            <li><a href="#">Player1</a></li>
-                            <li><a href="#">Player2</a></li>
-                            <li><a href="#">Player3</a></li>
+                          <ul class="dropdown-menu" runat="server">
+                              <li id="PS1" runat="server" onclick="player1Selected_click"></li>
+                              <li id="PS2" runat="server" onclick="player2Selected_click"></li>
+                              <li id="PS3" runat="server" onclick="player3Selected_click"></li>
                           </ul>
                         </div>
-                    <p>Some text in the modal.</p>
+                    <p>ROFL: </p>
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -399,8 +400,6 @@ function changeIDOnChat()
         $(this).attr('id','activeChat');
     });
 </script>
-
-
 
 
 

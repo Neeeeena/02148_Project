@@ -54,6 +54,12 @@ namespace _02148_Project.Website
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
 
+            
+            PS1.InnerHtml = Player1.Name;
+            PS2.InnerHtml = Player2.Name;
+            PS3.InnerHtml = Player3.Name;
+            dropdownSelected.InnerHtml = "Select Player";
+
             RenderMarket();
             RenderLocalResources();
             repMarketResources.DataSource = marketresources;
@@ -149,6 +155,11 @@ namespace _02148_Project.Website
             //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
             //createDiv.InnerHtml = " I'm a div, from code behind ";
             //tradeOffers.Controls.Add(tradeOffer);
+        }
+
+        protected void player1Selected_click(Object sender, EventArgs)
+        {
+            //HtmlLink
         }
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
