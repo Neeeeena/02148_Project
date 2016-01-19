@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
 using System.Web.UI.HtmlControls;
+using Microsoft.AspNet.SignalR;
 
 namespace _02148_Project.Website
 {
@@ -31,13 +32,14 @@ namespace _02148_Project.Website
         public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            MainClient.ReadAPlayer(Request.QueryString["player"]);
 
             if (!Page.IsPostBack)
             {
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
                 messages = new List<Message>();
+
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
@@ -54,6 +56,12 @@ namespace _02148_Project.Website
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
 
+            
+            PS1.InnerHtml = Player1.Name;
+            PS2.InnerHtml = Player2.Name;
+            PS3.InnerHtml = Player3.Name;
+            dropdownSelected.InnerHtml = "Select Player";
+
             RenderMarket();
             RenderLocalResources();
             repMarketResources.DataSource = marketresources;
@@ -67,30 +75,41 @@ namespace _02148_Project.Website
 
 
 
+
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
+            // code before base oninit
+            base.OnInit(e);
+            RenderTradeOffers();
+            // code after base oninit
         }
 
         protected void RenderTradeOffers()
         {
             List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
+            tradeOffers.Controls.Clear();
             foreach(var t in tradeOffersO)
             {
                 System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
-                //tradeOffers.Controls.Add(div);
+                tradeOffers.Controls.Add(div);
             }
         }
-
         protected HtmlGenericControl createDiv(TradeOffer to)
         {
             System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-            System.Web.UI.WebControls.Label sellerName = new System.Web.UI.WebControls.Label();
-            sellerName.Text = to.SellerName;
-            System.Web.UI.WebControls.Label receiverName = new System.Web.UI.WebControls.Label();
-            receiverName.Text = to.RecieverName;
+            System.Web.UI.HtmlControls.HtmlGenericControl sellerName = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            sellerName.InnerHtml = "<b>Seller: " + to.SellerName + "</b>";
+            System.Web.UI.HtmlControls.HtmlGenericControl resP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            resP.InnerHtml = "<b>You will receive:</b> ";
             tradeOffer.Controls.Add(sellerName);
-            tradeOffer.Controls.Add(receiverName);
+            tradeOffer.Controls.Add(resP);
+            tradeOffer.Attributes.Add("class","tradeOffer");
+            
 
             Dictionary<ResourceType, int> resources = to.SellerResources;
-            Dictionary<ResourceType, int> price = to.ReceiverResources;
+            
 
             foreach (KeyValuePair<ResourceType, int> r in resources)
             {
@@ -103,6 +122,38 @@ namespace _02148_Project.Website
                 tradeOffer.Controls.Add(numberOfRes);
             }
 
+            System.Web.UI.HtmlControls.HtmlGenericControl priceP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            priceP.InnerHtml = "<b>You will have to pay:</b> ";
+            tradeOffer.Controls.Add(priceP);
+            Dictionary<ResourceType, int> price = to.ReceiverResources;
+
+            foreach (KeyValuePair<ResourceType, int> r in price)
+            {
+                ResourceType res = r.Key;
+                int numb = r.Value;
+                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+                tradeOffer.Controls.Add(image);
+                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+                numberOfRes.Text = numb.ToString();
+                tradeOffer.Controls.Add(numberOfRes);
+            }
+
+            System.Web.UI.HtmlControls.HtmlButton acceptButton = new System.Web.UI.HtmlControls.HtmlButton();
+            acceptButton.InnerText = "Accept";
+            acceptButton.ID = "a" + to.Id.ToString();
+            acceptButton.Attributes.Add("runat", "server");
+            acceptButton.ServerClick += new EventHandler(acceptTradeOffer_click);
+            acceptButton.Attributes.Add("class", "btn btn-default");
+            tradeOffer.Controls.Add(acceptButton);
+
+            System.Web.UI.HtmlControls.HtmlButton declineButton = new System.Web.UI.HtmlControls.HtmlButton();
+            declineButton.InnerText = "Decline";
+            declineButton.ID = "d" + to.Id.ToString();
+            declineButton.Attributes.Add("runat", "server");
+            acceptButton.ServerClick += new EventHandler(declineTradeOffer_click);
+            declineButton.Attributes.Add("class", "btn btn-default");
+            tradeOffer.Controls.Add(declineButton);
+
             return tradeOffer;
             
             //tradeOffer.Attributes.Add("class", "tradeOffer");
@@ -112,6 +163,25 @@ namespace _02148_Project.Website
             //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
             //createDiv.InnerHtml = " I'm a div, from code behind ";
             //tradeOffers.Controls.Add(tradeOffer);
+        }
+
+        protected void player1Selected_click(Object sender, EventArgs e)
+        {
+            //HtmlLink
+        }
+
+        protected void acceptTradeOffer_click(Object sender, EventArgs e)
+        {
+            HtmlButton button = (HtmlButton)sender;
+            MainClient.AcceptTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
+            RenderTradeOffers();
+        }
+
+        protected void declineTradeOffer_click(Object sender, EventArgs e)
+        {
+            HtmlButton button = (HtmlButton)sender;
+            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0, 1)));
+            RenderTradeOffers();
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
@@ -135,6 +205,8 @@ namespace _02148_Project.Website
         protected void RenderChat()
         {
             messages = MainClient.GetNewMessage();
+            messages.OrderBy(a => a.Id).ToList();
+            messages.Reverse();
             foreach(var mes in messages)
             {
                 if (mes.ToAll)
@@ -150,6 +222,7 @@ namespace _02148_Project.Website
                 }
                 else
                 {
+                    if (mes.RecieverName != null)
                     if(mes.RecieverName.Equals(Player1.Name) || mes.SenderName.Equals(Player1.Name))
                     {
                         Label l = new Label();
@@ -244,6 +317,7 @@ namespace _02148_Project.Website
                 allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
                 allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
             }
+            RenderTradeOffers();
             DatabaseInterface.MonitorTradeOffer(OnChange_TradeOffer);
         }
 
@@ -286,6 +360,11 @@ namespace _02148_Project.Website
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
             RenderChat();
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            if (hubContext != null)
+            {
+                hubContext.Clients.All.Receive(message);
+            }
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)

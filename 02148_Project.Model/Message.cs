@@ -8,6 +8,9 @@ namespace _02148_Project.Model
 {
     public class Message
     {
+
+        public int Id { get; set; }
+
         public string Content { get; set; }
 
         public string SenderName { get; set; }
@@ -16,6 +19,12 @@ namespace _02148_Project.Model
 
         public bool ToAll { get; set; }
 
+        public Message(int id, string content, string sender, string receiver, bool toAll = false)
+            : this(content, sender, receiver, toAll)
+        {
+            this.Id = id;
+        }
+        
         /// <summary>
         /// Create a new message with all data objects
         /// </summary>

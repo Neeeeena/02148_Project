@@ -232,10 +232,33 @@ div.scroll {
 	border-right: 1px solid #ddd;
 }
 
+.tradeOffer img {
+    width: 50px;
+    height: 50px;
+}
+
+#tradeOffers {
+    
+}
+
+.tradeOffer {
+    float: right;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.tradeOffer button{
+    
+}
+
 .myMessage{
     float:right;
 }
 
 .otherMessage {
     float:left;
+}
+
+#dropdownSelected {
+    margin: 0;
 }

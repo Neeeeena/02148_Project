@@ -10,9 +10,9 @@
   <div class="row-fluid">
         <div class="span3">
       <!--Sidebar content-->
-        <div id="tradeOffers">
-
-        </div>
+            <div runat="server" id="tradeOffers">
+                <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
+            </div>
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
@@ -30,6 +30,39 @@
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
                 <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+            </div>
+
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
+
+            <!-- Modal -->
+            <div id="modalTradeOffer" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Send Trade Offer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                              <span runat="server" id="dropdownSelected">Select Player</span>
+                          <span class="caret"></span></button>
+                          <ul class="dropdown-menu" runat="server">
+                              <li id="PS1" runat="server" onclick="player1Selected_click"></li>
+                              <li id="PS2" runat="server" onclick="player2Selected_click"></li>
+                              <li id="PS3" runat="server" onclick="player3Selected_click"></li>
+                          </ul>
+                        </div>
+                    <p>ROFL: </p>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+                </div>
             </div>
 
 
@@ -120,9 +153,9 @@
               <td>
                 <div class="resource">
 		        <img class="resource_image" id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
-		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
-		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
-		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+		        <h3>Seller: <%#Eval("SellerName")%></h3>
+		        <h3>Bidder: <%#Eval("HighestBidder")%></h3>
+		        <h3>Bid: <%#Eval("HighestBid")%></h3>
                 <button id="but" class="open-myModal btn btn-default btn-sm" onclick="saveId(this)" data-id="<%#Eval("Id")%>" data-toggle="modal" data-target="#myModal" >Bid</button>
 
                 </div>
@@ -368,10 +401,18 @@ function changeIDOnChat()
     });
 </script>
 
+<script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
+<script src="signalr/hubs" type="text/javascript"></script>
+<script type="text/javascript">
+    var connection = $.hubConnection();
+    var hub = connection.createHubProxy("ChatHub");
+    hub.on("Receive", function (message) {
+        $('#allChat').append('<p>' + message + '</p>');
+    });
 
-
-
-
+    connection.start();
+</script>
 
 
 
