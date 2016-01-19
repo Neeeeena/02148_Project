@@ -9,7 +9,7 @@ namespace _02148_Project
 {
     public static class DatabaseInterface
     {
-        public const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk";
+        public const string connectionString = @"Data Source=ALEX-PC;Initial Catalog=UseThis;User ID=fuk;Password=fuk;Max Pool Size=1000";
         //private const string connectionString = @"Data Source=DESKTOP-E0GOLC2\SQLEXPRESS;Initial Catalog=nacmo_db;User ID=oliver;Password=zaq1xsw2;Max Pool Size = 1000;Connect Timeout=30";
         //private const string connectionString = @"Data Source=SURFACE\SQLDatabase;Initial Catalog=VillageRush;User ID=local;Password=1234;Max Pool Size=1000";
 
@@ -673,34 +673,23 @@ namespace _02148_Project
         /// <summary>
         /// Send a message to the server
         /// </summary>
-        /// <param name="msg">Message to send</param>
-        public static void SendMessage(Message msg)
+        /// <param name="message">Message to send</param>
+        public static void SendMessage(Message message)
         {
             try
             {
-                string query;
-                if (msg.RecieverName != null)
-                {
-                    query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
                         + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
-                }
-                else
-                {
-                    query = "INSERT INTO Chat (Message, SenderName, ToAll) "
-                        + "VALUES (@Message, @Sender, @ToAll);";
-                }
+                
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Message", msg.Content);
-                        command.Parameters.AddWithValue("@Sender", msg.SenderName);
-                        if (msg.RecieverName != null)
-                        {
-                            command.Parameters.AddWithValue("@Reciever", msg.RecieverName ?? Convert.DBNull);
-                        }
-                        command.Parameters.AddWithValue("@ToAll", msg.ToAll);
+                        command.Parameters.AddWithValue("@Message", message.Content);
+                        command.Parameters.AddWithValue("@Sender", message.SenderName);
+                        command.Parameters.AddWithValue("@Reciever", (message.RecieverName == "") ? Convert.DBNull : message.RecieverName);
+                        command.Parameters.AddWithValue("@ToAll", message.ToAll);
                         command.ExecuteNonQuery();
                     }
                 }
