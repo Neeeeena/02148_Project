@@ -405,13 +405,28 @@ function changeIDOnChat()
 <script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
 <script src="signalr/hubs" type="text/javascript"></script>
 <script type="text/javascript">
-    var connection = $.hubConnection();
-    var hub = connection.createHubProxy("ChatHub");
-    hub.on("Receive", function (message) {
-        $('#allChat').append('<p>' + message + '</p>');
+    $(function () {
+        // Declare a proxy to reference the hub.
+        var notifications = $.connection.chatHub;
+
+        //debugger;
+        // Create a function that the hub can call to broadcast messages.
+        notifications.client.updateMessages = function () {
+            getAllMessages()
+
+        };
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            alert("connection started")
+            getAllMessages();
+        }).fail(function (e) {
+            alert(e);
+        });
     });
 
-    connection.start();
+    function getAllMessages() {
+        alert("Youve got a new message");
+    }
 </script>
 
 

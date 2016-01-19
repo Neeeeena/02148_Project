@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommunicationFunctionality.cs" />
     <Compile Include="MainClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -48,10 +47,6 @@
     <ProjectReference Include="..\02148_Project.Model\02148_Project.Model.csproj">
       <Project>{8a46cc17-4fb7-4121-8874-708b443e89e1}</Project>
       <Name>02148_Project.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\02148_Project\02148_Project.Server.csproj">
-      <Project>{1fb89982-af6e-44e6-b202-974dfe5ed9f4}</Project>
-      <Name>02148_Project.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

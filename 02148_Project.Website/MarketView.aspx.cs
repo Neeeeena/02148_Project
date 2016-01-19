@@ -41,7 +41,7 @@ namespace _02148_Project.Website
                 
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
-                    OnChange_TradeOffer, OnChange_Chat);
+                    OnChange_TradeOffer);
             }
             //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
@@ -318,10 +318,9 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-            if (MainClient.player != null)
-            {
-                messages = DatabaseInterface.ReadMessages(MainClient.player.Name);
-            }
+
+            ChatHub.SendMessages();
+        
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion
