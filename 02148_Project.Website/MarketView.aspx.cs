@@ -29,6 +29,7 @@ namespace _02148_Project.Website
         public Player Player3;
 
         public int movedId;
+        public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
             MainClient.ReadAPlayer(Request.QueryString["player"]);
@@ -38,7 +39,7 @@ namespace _02148_Project.Website
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
                 messages = new List<Message>();
-                
+
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer);
@@ -68,7 +69,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
-
+            MainServer.initGame();
         }
 
         protected override void OnInit(EventArgs e)
@@ -297,7 +298,7 @@ namespace _02148_Project.Website
             // Find a way to update with the latest resource offers
             RenderLocalResources();
             RenderMarket();
-            
+
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
