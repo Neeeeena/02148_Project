@@ -13,6 +13,8 @@ using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
 using System.Web.UI.HtmlControls;
 using Microsoft.AspNet.SignalR;
+using System.Web.Services;
+using System.Text;
 
 namespace _02148_Project.Website
 {
@@ -305,6 +307,18 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
         }
+        [WebMethod]
+        public Literal ReturnMessages()
+        {
+            messages = MainClient.GetNewMessage();
+            StringBuilder sb = new StringBuilder();
+            foreach(var m in messages)
+            {
+                sb.Append("<p>" + m.Content+"</p>" );
+            }
+            
+            return new Literal() { Text = sb.ToString() };
+        }
 
         protected void RenderChat()
         {
@@ -463,11 +477,7 @@ namespace _02148_Project.Website
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
             RenderChat();
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
-            if (hubContext != null)
-            {
-                hubContext.Clients.All.Receive(message);
-            }
+
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)
