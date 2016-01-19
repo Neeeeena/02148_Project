@@ -61,7 +61,6 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
-            RenderTradeOffers();
 
         }
 
@@ -76,13 +75,13 @@ namespace _02148_Project.Website
         protected void RenderTradeOffers()
         {
             List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
+            tradeOffers.Controls.Clear();
             foreach(var t in tradeOffersO)
             {
                 System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
                 tradeOffers.Controls.Add(div);
             }
         }
-
         protected HtmlGenericControl createDiv(TradeOffer to)
         {
             System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");

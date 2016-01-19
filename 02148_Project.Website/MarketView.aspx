@@ -45,6 +45,15 @@
                         <h4 class="modal-title">Send Trade Offer</h4>
                     </div>
                     <div class="modal-body">
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                          <span class="caret"></span></button>
+                          <ul class="dropdown-menu">
+                            <li><a href="#">Player1</a></li>
+                            <li><a href="#">Player2</a></li>
+                            <li><a href="#">Player3</a></li>
+                          </ul>
+                        </div>
                     <p>Some text in the modal.</p>
                     </div>
                     <div class="modal-footer">
