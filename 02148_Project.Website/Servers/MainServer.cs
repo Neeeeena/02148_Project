@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Timers;
 using _02148_Project.Model;
-namespace _02148_Project
+namespace _02148_Project.Website
 {
     public static class MainServer
     {
         //static int nextid = 0;
         static List<Advert> adverts = new List<Advert>();
-        public static System.Timers.Timer timer;
-        public static bool yes = true;
+
 
         //Initializing game
-        public static void initGame() //List<Player> players
+        public static void initGame()
         {
             //foreach(Player p in players)
             //{
@@ -29,16 +28,8 @@ namespace _02148_Project
             //    p.Clay = 0;
             //    p.Food = 0;
             //}
-            //Thread thread = new Thread(advertTimer);
-            if (yes)
-            {
-                timer = new System.Timers.Timer();
-                timer.Interval = 4000;
-                timer.AutoReset = true;
-                timer.Elapsed += createAdvert;
-                timer.Start();
-                yes = false;
-            }
+            Thread thread = new Thread(advertTimer);
+
 
         }
 
@@ -48,7 +39,7 @@ namespace _02148_Project
         {
             
             //offercount = amount of adverts the market is currently offering
-            int offercount = DatabaseInterface.ReadAllResourceOffers().FindAll(s => s.SellerName.Equals("Server")).Count;
+            int offercount = DatabaseInterface.ReadAllResourceOffers().FindAll(s => s.SellerName.Equals("Market")).Count;
             Random r = new Random();
 
             //TEMP
@@ -71,7 +62,7 @@ namespace _02148_Project
 
                 //Picking a random resource from the array, except the last, which is gold
                 ResourceType res = (ResourceType)resTypes.GetValue(r.Next(resTypes.Length-1));
-                ResourceOffer ro = new ResourceOffer(0, "Server", res, count, price);
+                ResourceOffer ro = new ResourceOffer(0, "Market", res, count, price);
                 int id = DatabaseInterface.PutResourceOfferOnMarket(ro);
                 adverts.Add(new Advert(id));
 
@@ -85,7 +76,7 @@ namespace _02148_Project
         private static void advertTimer()
         {
             System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 4000;
+            timer.Interval = 5000;
             timer.AutoReset = true;
             timer.Elapsed += createAdvert;
             timer.Start();
@@ -101,5 +92,9 @@ namespace _02148_Project
                 }
                      
         }
+
+
+        
+
     }
 }

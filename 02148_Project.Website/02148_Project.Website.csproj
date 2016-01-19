@@ -272,6 +272,9 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="ChatHub.cs" />
+    <Compile Include="Client\MainClient.cs" />
+    <Compile Include="Client\MainClientTest.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -298,6 +301,10 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Servers\Advert.cs" />
+    <Compile Include="Servers\DatabaseInterface.cs" />
+    <Compile Include="Servers\DatabaseInterfaceTests.cs" />
+    <Compile Include="Servers\MainServer.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -318,17 +325,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\02148_Project.Client\02148_Project.Client.csproj">
-      <Project>{dbd1f5ff-401e-441f-b154-95ce2f1d8531}</Project>
-      <Name>02148_Project.Client</Name>
-    </ProjectReference>
     <ProjectReference Include="..\02148_Project.Model\02148_Project.Model.csproj">
       <Project>{8a46cc17-4fb7-4121-8874-708b443e89e1}</Project>
       <Name>02148_Project.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\02148_Project\02148_Project.Server.csproj">
-      <Project>{1fb89982-af6e-44e6-b202-974dfe5ed9f4}</Project>
-      <Name>02148_Project.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
 using System.Web.UI.HtmlControls;
+using Microsoft.AspNet.SignalR;
 
 namespace _02148_Project.Website
 {
@@ -26,10 +27,9 @@ namespace _02148_Project.Website
         public Player Player1;
         public Player Player2;
         public Player Player3;
-        public Dictionary<ResourceType, int> SellerResources { get; set; }
-        public Dictionary<ResourceType, int> ReceiverResources { get; set; }
 
         public int movedId;
+        public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
             MainClient.ReadAPlayer(Request.QueryString["player"]);
@@ -56,7 +56,7 @@ namespace _02148_Project.Website
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
 
-
+            
             dd.Items[0].Text = Player1.Name;
             dd.Items[1].Text = Player2.Name;
             dd.Items[1].Text = Player3.Name;
@@ -71,7 +71,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
-
+            MainServer.initGame();
         }
 
 
@@ -271,7 +271,8 @@ namespace _02148_Project.Website
             //createDiv.InnerHtml = " I'm a div, from code behind ";
             //tradeOffers.Controls.Add(tradeOffer);
         }
-        
+
+      
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
@@ -428,10 +429,9 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-            if (MainClient.player != null)
-            {
-                messages = DatabaseInterface.ReadMessages(MainClient.player.Name);
-            }
+
+            ChatHub.SendMessages();
+        
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion
@@ -463,6 +463,11 @@ namespace _02148_Project.Website
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
             RenderChat();
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            if (hubContext != null)
+            {
+                hubContext.Clients.All.Receive(message);
+            }
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)

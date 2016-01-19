@@ -5,7 +5,8 @@ using System.Data;
 using _02148_Project.Model.Exceptions;
 using System;
 
-namespace _02148_Project
+
+namespace _02148_Project.Website
 {
     public static class DatabaseInterface
     {
@@ -358,6 +359,7 @@ namespace _02148_Project
                 }
             }
         }
+
 
         /// <summary>
         /// Read a list of resource offers from the market
@@ -918,6 +920,9 @@ namespace _02148_Project
             catch (SqlException ex) { }
 #pragma warning restore CS0168 // Variable is declared but never used
         }
+
+
+
         #endregion
     }
 }

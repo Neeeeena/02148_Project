@@ -53,20 +53,23 @@
                             <asp:ListItem Value="2"></asp:ListItem>
                         </asp:DropDownList>
 
-                        <div runat="server" id="tradeOfferContainer">
+                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" onclick="tradeOfferSellerImage0_click" />
+                                <label runat="server" id="ls0">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" onclick="tradeOfferSellerImage1_click"/>
+                                <label runat="server" id="ls1">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" onclick="tradeOfferSellerImage2_click"/>
+                                <label runat="server" id="ls2">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" onclick="tradeOfferSellerImage3_click"/>
+                                <label runat="server" id="ls3">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" onclick="tradeOfferSellerImage4_click"/>
+                                <label runat="server" id="ls4">0</label>
+
+                     
                             <div runat="server" id="tradeOfferSeller">
 
-                                <button style="background-image: url(Images/firewood.png)" id="ss0" runat="server" onclick="tradeOfferSellerImage0_click"/>
-                                <label runat="server" id="ls0">0</label>
-                                <button style="background-image: url(Images/får.png)" id="ss1" runat="server" onclick="tradeOfferSellerImage1_click"/>
-                                <label runat="server" id="ls1">0</label>
-                                <button style="background-image: url(Images/mursten.png)" id="ss2" runat="server" onclick="tradeOfferSellerImage2_click"/>
-                                <label runat="server" id="ls2">0</label>
-                                <button style="background-image: url(Images/stone.png)" id="ss3" runat="server" onclick="tradeOfferSellerImage3_click"/>
-                                <label runat="server" id="ls3">0</label>
-                                <button style="background-image: url(Images/Straw.png); width: 100px;" id="ss4" runat="server" onclick="tradeOfferSellerImage4_click"/>
-                                <label runat="server" id="ls4">0</label>
+                                
                             </div>
+                            <!--
                             <div runat="server" id="tradeOfferReceiver">
                                 <img id="r0" runat="server" src="Images/wood.jpg" onclick="tradeOfferReceiver0Image_click"/>
                                 <label id="lr0" runat="server">0</label>
@@ -80,7 +83,8 @@
                                 <label id="lr4" runat="server">0</label>
 
                             </div>
-                        </div>
+                            -->
+                 
                     
                         <asp:button runat="server" onclick="sendTradeOffer_click"></asp:button>
                             </div>
@@ -430,8 +434,37 @@ function changeIDOnChat()
     });
 </script>
 
+<script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
+<script src="signalr/hubs" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        // Declare a proxy to reference the hub.
+        var notifications = $.connection.chatHub;
 
+        //debugger;
+        // Create a function that the hub can call to broadcast messages.
+        notifications.client.updateMessages = function () {
+            getAllMessages()
 
+        };
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            alert("connection started")
+            getAllMessages();
+        }).fail(function (e) {
+            alert(e);
+        });
+    });
+
+    function getAllMessages() {
+        alert("Youve got a new message");
+    }
+</script>
+
+<script>
+    $('.')
+</script>
 
 
 
