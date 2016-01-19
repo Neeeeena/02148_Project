@@ -42,7 +42,7 @@ namespace _02148_Project.Website
 
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
-                    OnChange_TradeOffer);
+                    OnChange_TradeOffer, OnChange_Chat);
             }
             //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
