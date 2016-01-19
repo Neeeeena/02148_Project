@@ -37,6 +37,7 @@ namespace _02148_Project.Website
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
                 messages = new List<Message>();
+                
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
@@ -61,12 +62,14 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
 
-            
-            
-            
+        }
 
-
-
+        protected override void OnInit(EventArgs e)
+        {
+            // code before base oninit
+            base.OnInit(e);
+            RenderTradeOffers();
+            // code after base oninit
         }
 
         protected void RenderTradeOffers()
@@ -82,16 +85,17 @@ namespace _02148_Project.Website
         protected HtmlGenericControl createDiv(TradeOffer to)
         {
             System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-            System.Web.UI.WebControls.Label sellerName = new System.Web.UI.WebControls.Label();
-            sellerName.Text = to.SellerName;
-            System.Web.UI.WebControls.Label receiverName = new System.Web.UI.WebControls.Label();
-            receiverName.Text = to.RecieverName;
+            System.Web.UI.HtmlControls.HtmlGenericControl sellerName = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            sellerName.InnerHtml = "<b>Seller: " + to.SellerName + "</b>";
+            System.Web.UI.HtmlControls.HtmlGenericControl resP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            resP.InnerHtml = "<b>You will receive:</b> ";
             tradeOffer.Controls.Add(sellerName);
-            tradeOffer.Controls.Add(receiverName);
+            tradeOffer.Controls.Add(resP);
             tradeOffer.Attributes.Add("class","tradeOffer");
+            
 
             Dictionary<ResourceType, int> resources = to.SellerResources;
-            Dictionary<ResourceType, int> price = to.ReceiverResources;
+            
 
             foreach (KeyValuePair<ResourceType, int> r in resources)
             {
@@ -104,17 +108,36 @@ namespace _02148_Project.Website
                 tradeOffer.Controls.Add(numberOfRes);
             }
 
+            System.Web.UI.HtmlControls.HtmlGenericControl priceP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+            priceP.InnerHtml = "<b>You will have to pay:</b> ";
+            tradeOffer.Controls.Add(priceP);
+            Dictionary<ResourceType, int> price = to.ReceiverResources;
+
+            foreach (KeyValuePair<ResourceType, int> r in price)
+            {
+                ResourceType res = r.Key;
+                int numb = r.Value;
+                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+                tradeOffer.Controls.Add(image);
+                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+                numberOfRes.Text = numb.ToString();
+                tradeOffer.Controls.Add(numberOfRes);
+            }
+
             System.Web.UI.HtmlControls.HtmlButton acceptButton = new System.Web.UI.HtmlControls.HtmlButton();
             acceptButton.InnerText = "Accept";
-            acceptButton.ID = to.Id.ToString();
+            acceptButton.ID = "a" + to.Id.ToString();
             acceptButton.Attributes.Add("runat", "server");
-            acceptButton.Attributes.Add("onclick", "acceptTradeOffer_click");
+            acceptButton.ServerClick += new EventHandler(acceptTradeOffer_click);
             acceptButton.Attributes.Add("class", "btn btn-default");
+            tradeOffer.Controls.Add(acceptButton);
+
             System.Web.UI.HtmlControls.HtmlButton declineButton = new System.Web.UI.HtmlControls.HtmlButton();
             declineButton.InnerText = "Decline";
+            declineButton.ID = "d" + to.Id.ToString();
             declineButton.Attributes.Add("runat", "server");
+            acceptButton.ServerClick += new EventHandler(declineTradeOffer_click);
             declineButton.Attributes.Add("class", "btn btn-default");
-            tradeOffer.Controls.Add(acceptButton);
             tradeOffer.Controls.Add(declineButton);
 
             return tradeOffer;
@@ -130,8 +153,16 @@ namespace _02148_Project.Website
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
-            Button button = (Button)sender;
-            MainClient.AcceptTradeOffer(Int32.Parse(button.ID));
+            HtmlButton button = (HtmlButton)sender;
+            MainClient.AcceptTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
+            RenderTradeOffers();
+        }
+
+        protected void declineTradeOffer_click(Object sender, EventArgs e)
+        {
+            HtmlButton button = (HtmlButton)sender;
+            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0, 1)));
+            RenderTradeOffers();
         }
 
         protected void timer_Ticked(object sender, EventArgs e)
@@ -264,6 +295,7 @@ namespace _02148_Project.Website
                 allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
                 allYourSentTradeOffers = DatabaseInterface.ReadAllSendTradeOffers(MainClient.player.Name);
             }
+            RenderTradeOffers();
             DatabaseInterface.MonitorTradeOffer(OnChange_TradeOffer);
         }
 
