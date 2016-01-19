@@ -28,6 +28,7 @@ namespace _02148_Project.Website
         public Player Player3;
 
         public int movedId;
+        public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -60,10 +61,9 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
+            MainServer.initGame();
 
-            
-            
-            
+
 
 
 
