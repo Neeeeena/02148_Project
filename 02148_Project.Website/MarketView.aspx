@@ -32,6 +32,8 @@
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
 
+
+
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
 
             <!-- Modal -->
@@ -45,17 +47,44 @@
                         <h4 class="modal-title">Send Trade Offer</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                              <span runat="server" id="dropdownSelected">Select Player</span>
-                          <span class="caret"></span></button>
-                          <ul class="dropdown-menu" runat="server">
-                              <li id="PS1" runat="server" onclick="player1Selected_click"></li>
-                              <li id="PS2" runat="server" onclick="player2Selected_click"></li>
-                              <li id="PS3" runat="server" onclick="player3Selected_click"></li>
-                          </ul>
+                        <asp:DropDownList ID="dd" runat="server" Width="200px">
+                            <asp:ListItem Value="0"></asp:ListItem>
+                            <asp:ListItem Value="1"></asp:ListItem>
+                            <asp:ListItem Value="2"></asp:ListItem>
+                        </asp:DropDownList>
+
+                        <div runat="server" id="tradeOfferContainer">
+                            <div runat="server" id="tradeOfferSeller">
+
+                                <button style="background-image: url(Images/firewood.png)" id="ss0" runat="server" onclick="tradeOfferSellerImage0_click"/>
+                                <label runat="server" id="ls0">0</label>
+                                <button style="background-image: url(Images/får.png)" id="ss1" runat="server" onclick="tradeOfferSellerImage1_click"/>
+                                <label runat="server" id="ls1">0</label>
+                                <button style="background-image: url(Images/mursten.png)" id="ss2" runat="server" onclick="tradeOfferSellerImage2_click"/>
+                                <label runat="server" id="ls2">0</label>
+                                <button style="background-image: url(Images/stone.png)" id="ss3" runat="server" onclick="tradeOfferSellerImage3_click"/>
+                                <label runat="server" id="ls3">0</label>
+                                <button style="background-image: url(Images/Straw.png); width: 100px;" id="ss4" runat="server" onclick="tradeOfferSellerImage4_click"/>
+                                <label runat="server" id="ls4">0</label>
+                            </div>
+                            <div runat="server" id="tradeOfferReceiver">
+                                <img id="r0" runat="server" src="Images/wood.jpg" onclick="tradeOfferReceiver0Image_click"/>
+                                <label id="lr0" runat="server">0</label>
+                                <img id="r1" runat="server" src="Images/får.png" onclick="tradeOfferReceiver1Image_click"/>
+                                <label id="lr1" runat="server">0</label>
+                                <img id="r2" runat="server" src="Images/mursten.png" onclick="tradeOfferReceiver2Image_click"/>
+                                <label id="lr2" runat="server">0</label>
+                                <img id="r3" runat="server" src="Images/stone.png" onclick="tradeOfferReceiver3Image_click"/>
+                                <label id="lr3" runat="server">0</label>
+                                <img id="r4" runat="server" src="Images/Straw.png" onclick="tradeOfferReceiver4Image_click"/>
+                                <label id="lr4" runat="server">0</label>
+
+                            </div>
                         </div>
-                    <p>ROFL: </p>
+                    
+                        <asp:button runat="server" onclick="sendTradeOffer_click"></asp:button>
+                            </div>
+                    
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -63,7 +92,7 @@
                 </div>
 
                 </div>
-            </div>
+            
 
 
 	<div class="container" style="width:300px">

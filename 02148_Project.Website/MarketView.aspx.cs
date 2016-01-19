@@ -26,6 +26,8 @@ namespace _02148_Project.Website
         public Player Player1;
         public Player Player2;
         public Player Player3;
+        public Dictionary<ResourceType, int> SellerResources { get; set; }
+        public Dictionary<ResourceType, int> ReceiverResources { get; set; }
 
         public int movedId;
         protected void Page_Load(object sender, EventArgs e)
@@ -54,11 +56,13 @@ namespace _02148_Project.Website
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
 
-            
-            PS1.InnerHtml = Player1.Name;
-            PS2.InnerHtml = Player2.Name;
-            PS3.InnerHtml = Player3.Name;
-            dropdownSelected.InnerHtml = "Select Player";
+
+            dd.Items[0].Text = Player1.Name;
+            dd.Items[1].Text = Player2.Name;
+            dd.Items[1].Text = Player3.Name;
+
+            fillTradeOffers();
+            //createTradeOfferElements();
 
             RenderMarket();
             RenderLocalResources();
@@ -70,12 +74,123 @@ namespace _02148_Project.Website
 
         }
 
+
         protected override void OnInit(EventArgs e)
         {
             // code before base oninit
             base.OnInit(e);
             RenderTradeOffers();
             // code after base oninit
+        }
+
+        //protected void createTradeOfferElements()
+        //{
+
+        //    System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferSeller = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+        //    System.Web.UI.HtmlControls.HtmlGenericControl labelSeller = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+        //    labelSeller.InnerHtml = "Resources you want to sell: ";
+        //    tradeOfferSeller.Controls.Add(labelSeller);
+        //    foreach (KeyValuePair<ResourceType, int> r in SellerResources)
+        //    {
+        //        ResourceType res = r.Key;
+        //        int numb = r.Value;
+        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+        //        image.Attributes.Add("runat", "server");
+        //        image.Attributes.Add("onclick", "tradeOfferSellerImage_click");
+        //        tradeOfferSeller.Controls.Add(image);
+        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+        //        numberOfRes.Text = numb.ToString();
+        //        numberOfRes.ID = "S" + res;
+        //        tradeOfferSeller.Controls.Add(numberOfRes);
+        //    }
+
+
+
+        //    System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferReceiver = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+        //    System.Web.UI.HtmlControls.HtmlGenericControl labelReceiver = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+        //    labelReceiver.InnerHtml = "Resources you want to receive: ";
+        //    tradeOfferReceiver.Controls.Add(labelReceiver);
+        //    foreach (KeyValuePair<ResourceType, int> r in ReceiverResources)
+        //    {
+        //        ResourceType res = r.Key;
+        //        int numb = r.Value;
+        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+        //        image.ID = "" + res;
+        //        tradeOfferReceiver.Controls.Add(image);
+        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+        //        numberOfRes.Text = numb.ToString();
+        //        numberOfRes.ID = "R" + res;
+        //        tradeOfferReceiver.Controls.Add(numberOfRes);
+        //    }
+
+        //}
+
+        protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
+        {
+            ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
+        {
+            ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
+        {
+            ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
+        {
+            ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
+        {
+            ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferReceiverImage0_click(Object sender, EventArgs e)
+        {
+            lr0.InnerHtml = (Int32.Parse(lr0.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferReceiverImage1_click(Object sender, EventArgs e)
+        {
+            lr1.InnerHtml = (Int32.Parse(lr1.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferReceiverImage2_click(Object sender, EventArgs e)
+        {
+            lr2.InnerHtml = (Int32.Parse(lr2.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferReceiverImage3_click(Object sender, EventArgs e)
+        {
+            lr3.InnerHtml = (Int32.Parse(lr3.InnerHtml) + 1).ToString();
+        }
+
+        protected void tradeOfferReceiverImage4_click(Object sender, EventArgs e)
+        {
+            lr4.InnerHtml = (Int32.Parse(lr4.InnerHtml) + 1).ToString();
+        }
+
+        protected void fillTradeOffers()
+        {
+            var values = Enum.GetValues(typeof(ResourceType));
+            foreach (ResourceType v in values)
+            {
+                //SellerResources.Add(v,0);
+                //ReceiverResources.Add(v,0);
+            }
+
+
+
+        }
+
+        protected void sendTradeOffer_click(Object sender, EventArgs e)
+        {
+
         }
 
         protected void RenderTradeOffers()
@@ -156,11 +271,7 @@ namespace _02148_Project.Website
             //createDiv.InnerHtml = " I'm a div, from code behind ";
             //tradeOffers.Controls.Add(tradeOffer);
         }
-
-        protected void player1Selected_click(Object sender, EventArgs)
-        {
-            //HtmlLink
-        }
+        
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
