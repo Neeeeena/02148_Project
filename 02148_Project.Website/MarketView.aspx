@@ -401,8 +401,18 @@ function changeIDOnChat()
     });
 </script>
 
+<script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
+<script src="signalr/hubs" type="text/javascript"></script>
+<script type="text/javascript">
+    var connection = $.hubConnection();
+    var hub = connection.createHubProxy("ChatHub");
+    hub.on("Receive", function (message) {
+        $('#allChat').append('<p>' + message + '</p>');
+    });
 
-
+    connection.start();
+</script>
 
 
 

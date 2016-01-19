@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using System.Web.Caching;
 using _02148_Project.Model.Exceptions;
 using System.Web.UI.HtmlControls;
+using Microsoft.AspNet.SignalR;
 
 namespace _02148_Project.Website
 {
@@ -157,7 +158,7 @@ namespace _02148_Project.Website
             //tradeOffers.Controls.Add(tradeOffer);
         }
 
-        protected void player1Selected_click(Object sender, EventArgs)
+        protected void player1Selected_click(Object sender, EventArgs e)
         {
             //HtmlLink
         }
@@ -352,6 +353,11 @@ namespace _02148_Project.Website
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
             RenderChat();
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            if (hubContext != null)
+            {
+                hubContext.Clients.All.Receive(message);
+            }
         }
 
         protected void btnSendToPlayer1_Click(object sender, EventArgs e)
