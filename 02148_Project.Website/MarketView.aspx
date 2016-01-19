@@ -143,9 +143,9 @@
               <td>
                 <div class="resource">
 		        <img class="resource_image" id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"/>
-		        <h3>Seller: "<%#Eval("SellerName")%>"</h3>
-		        <h3>Bidder:" <%#Eval("HighestBidder")%>"</h3>
-		        <h3>Bid:" <%#Eval("HighestBid")%>"</h3>
+		        <h3>Seller: <%#Eval("SellerName")%></h3>
+		        <h3>Bidder: <%#Eval("HighestBidder")%></h3>
+		        <h3>Bid: <%#Eval("HighestBid")%></h3>
                 <button id="but" class="open-myModal btn btn-default btn-sm" onclick="saveId(this)" data-id="<%#Eval("Id")%>" data-toggle="modal" data-target="#myModal" >Bid</button>
 
                 </div>

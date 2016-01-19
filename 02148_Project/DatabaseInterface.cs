@@ -328,7 +328,7 @@ namespace _02148_Project
 
         #endregion
 
-        #region ResourceOffer
+        #region Market
         /// <summary>
         /// Read a resource offer on the market, without removing it
         /// </summary>
@@ -678,8 +678,17 @@ namespace _02148_Project
         {
             try
             {
-                string query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
-                    + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+                string query;
+                if (msg.RecieverName != null)
+                {
+                    query = "INSERT INTO Chat (Message, SenderName, RecieverName, ToAll) "
+                        + "VALUES (@Message, @Sender, @Reciever, @ToAll);";
+                }
+                else
+                {
+                    query = "INSERT INTO Chat (Message, SenderName, ToAll) "
+                        + "VALUES (@Message, @Sender, @ToAll);";
+                }
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -687,7 +696,10 @@ namespace _02148_Project
                     {
                         command.Parameters.AddWithValue("@Message", msg.Content);
                         command.Parameters.AddWithValue("@Sender", msg.SenderName);
-                        command.Parameters.AddWithValue("@Reciever", msg.RecieverName);
+                        if (msg.RecieverName != null)
+                        {
+                            command.Parameters.AddWithValue("@Reciever", msg.RecieverName ?? Convert.DBNull);
+                        }
                         command.Parameters.AddWithValue("@ToAll", msg.ToAll);
                         command.ExecuteNonQuery();
                     }
@@ -715,6 +727,7 @@ namespace _02148_Project
                 //    + "OUTPUT DELETED.*;";
                 string query = "SELECT TOP 100 * FROM Chat " +
                     "WHERE RecieverName = '" + name + "' OR SenderName = '" + name + "' " +
+                    "OR ToAll = 1 " +
                     "ORDER BY Id DESC" ;
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -727,7 +740,10 @@ namespace _02148_Project
                             {
                                 while (reader.Read())
                                 {
-                                    messages.Add(new Message(reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetBoolean(4)));
+                                    messages.Add(new Message(reader.GetInt32(0), 
+                                        reader.GetString(1), reader.GetString(2), 
+                                        (reader.IsDBNull(3)) ? null : reader.GetString(3), 
+                                        reader.GetBoolean(4)));
                                 }
                             }
                             return messages;

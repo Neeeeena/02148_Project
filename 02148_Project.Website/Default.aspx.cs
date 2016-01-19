@@ -34,7 +34,7 @@ namespace _02148_Project.Website
                 string ret = MainClient.createPlayer(username.Value);
                 if (ret == null)
                 {
-                    Response.Redirect("~/MarketView");
+                    Response.Redirect("~/MarketView?player=" + username.Value);
                 }
                 else
                 {
