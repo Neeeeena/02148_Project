@@ -14,7 +14,7 @@ namespace _02148_Project.Model
 
         public string RecieverName { get; set; }
 
-        public Dictionary<ResourceType,int> SellerResources { get; set; }
+        public Dictionary<ResourceType, int> SellerResources { get; set; }
 
         public Dictionary<ResourceType, int> ReceiverResources { get; set; }
 
