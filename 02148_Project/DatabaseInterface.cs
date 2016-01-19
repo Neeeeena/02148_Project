@@ -688,7 +688,7 @@ namespace _02148_Project
                     {
                         command.Parameters.AddWithValue("@Message", message.Content);
                         command.Parameters.AddWithValue("@Sender", message.SenderName);
-                        command.Parameters.AddWithValue("@Reciever", (message.RecieverName == "") ? "Server" : message.RecieverName);
+                        command.Parameters.AddWithValue("@Reciever", (message.RecieverName == "") ? Convert.DBNull : message.RecieverName);
                         command.Parameters.AddWithValue("@ToAll", message.ToAll);
                         command.ExecuteNonQuery();
                     }
