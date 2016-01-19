@@ -273,15 +273,6 @@
 
 <script>
 
-var p1name = "Bob";
-var p2name = "p2";
-var p3name = "p3";
-var p4name = "p4";
-
-
-
-var allchat = "";
-var name = "Mathias";
 
 $(document).ready(function(){
     $('#allMsg').keypress(function(e){
@@ -315,83 +306,6 @@ $(document).ready(function(){
 	
 });
 
-/*$(document).ready(function(){
-    $('#allBtn').click(function(e){
-	if($(allMsg).val() != "") {
-	  $("#allChat").append("<p><b>"+name+": </b>"+$(allMsg).val()+"</p>");
-	  $('#allChat').scrollTop($('#allChat')[0].scrollHeight);
-	  
-	  sendMsg(name,"all",$(allMsg).val(),false);
-	  
-	  $('#allMsg').val("");
-	 // recieveMsg("Bob","Hello Mathias. How are you? Can I buy five stone?",true);
-	  
-	  
-	}
-	
-	
-	
-      
-    });
-	
-	
-	
-});
-*/
-
-
-function prepareMsg(sender,recieverName,content,recieverChat,msgTag,personal) {
-	if(content != "") {
-		$(recieverChat).append("<p><b>"+sender+": </b>"+content+"</p>");
-		$(recieverChat).scrollTop($(recieverChat)[0].scrollHeight);
-		
-		sendMsg(sender,recieverName,content,true);
-		
-		$(msgTag).val("");
-	}
-}
-
-
-function sendMsg(sender, reciever, content, personal) {
-}
-
-
-function recieveMsg(sender, reciever, content, personal) {
-	if(!personal) {
-		$('#allChat').append("<p><b>"+sender+": </b>"+content+"</p>")
-	}else{
-		var pl;
-		switch (sender) {
-			case p1name:
-				pl = '#p1hat';
-				break;
-			case p2name:
-				pl = '#p2';
-				pk = p2msg;
-				break;
-			case p3name:
-				pl = '#p3';
-				pk = p3msg;
-				break;
-			case p4name:
-				pl = '#p4';
-				pk = p4msg;
-				break;
-			default:
-				alert("Something happened :(");
-		}
-		$(pl).append("<p><b>"+sender+": </b>"+content+"</p>")
-	}
-}
-
-
-function changeIDOnChat()
-{
-    $('#activeChat').removeAttr('id');
-
-}
-
-
 </script>
 
 <script>
@@ -404,6 +318,7 @@ function changeIDOnChat()
 <script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
 <script src="signalr/hubs" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         // Declare a proxy to reference the hub.
@@ -425,7 +340,19 @@ function changeIDOnChat()
     });
 
     function getAllMessages() {
-        alert("Youve got a new message");
+        var pageUrl = "<%= ResolveUrl("~/MarketView.aspx/ReturnMessages")%>";
+        $.ajax({
+            url: pageUrl,
+            contentType: 'application/html ; charset:utf-8',
+            type: 'GET',
+            dataType: 'html'
+        }).success(function (result) {
+            $("#allChat").add(result);
+            alert("carl snyder");
+        }).error(function () {
+            alert("Det her virker jo ikke");
+        });
+        return false;
     }
 </script>
 
