@@ -70,12 +70,6 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
             MainServer.initGame();
-
-
-
-
-
-
         }
 
         protected override void OnInit(EventArgs e)
