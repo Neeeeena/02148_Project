@@ -237,9 +237,18 @@ div.scroll {
     height: 50px;
 }
 
-.tradeOffer {
-    border: 1px solid black;
+#tradeOffers {
+    
+}
 
+.tradeOffer {
+    float: right;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.tradeOffer button{
+    
 }
 
 .myMessage{
