@@ -81,11 +81,11 @@ namespace _02148_Project.Website
             if (MainClient.player.Name == "Alex") MainServer.initGame();
             if (!MainClient.incomeTimerHasBeenSet) MainClient.incomeHandler();
 
-            if (!hasGottenMission)
-            {
-                hasGottenMission = true;
-                MainClient.GiveMission();
-            }
+            //if (!hasGottenMission)
+            //{
+            //    hasGottenMission = true;
+            //    MainClient.GiveMission();
+            //}
         }
 
 
@@ -318,12 +318,8 @@ namespace _02148_Project.Website
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
-            if(MainClient.youWin)
-            {
-                DatabaseInterface.UpdatePlayerResource(MainClient.player.Name, ResourceType.Gold, 999999);
-                MainClient.youWin = false;
-            }
         }
+
         [WebMethod]
         public static string ReturnMessages()
         {
