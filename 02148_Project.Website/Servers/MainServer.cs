@@ -11,7 +11,7 @@ namespace _02148_Project.Website
     public static class MainServer
     {
         //static int nextid = 0;
-        static List<Advert> adverts = new List<Advert>();
+        public static List<Advert> adverts = new List<Advert>();
         private static System.Timers.Timer timer;
         public static bool yes = true;
 

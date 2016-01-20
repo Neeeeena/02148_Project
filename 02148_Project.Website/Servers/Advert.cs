@@ -5,14 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using _02148_Project.Model;
+using _02148_Project.Client;
 
 namespace _02148_Project.Website
 {
-    class Advert
+    public class Advert
     {
-
-
-
+        
         public int id { get; set; }
 
         int stopwatchThreshold = 25000;
@@ -54,7 +53,8 @@ namespace _02148_Project.Website
             //DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ResourceType.Gold, - ro.Price);
 
             //Give the ware
-            DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ro.Type, ro.Count);
+            if (ro.HighestBidder == "Server" && ro.SellerName != "Server") DatabaseInterface.UpdatePlayerResource(MainClient.player.Name, ro.Type, ro.Count);
+            else DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ro.Type, ro.Count);
         }
 
         //This should be called every time a bid is accepted, in order to possibly extend the remaining time.

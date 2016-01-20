@@ -76,7 +76,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
-            MainServer.initGame();
+            if (MainClient.player.Name == "Alex") MainServer.initGame();
         }
 
 
@@ -262,7 +262,7 @@ namespace _02148_Project.Website
             declineButton.InnerText = "Decline";
             declineButton.ID = "d" + to.Id.ToString();
             declineButton.Attributes.Add("runat", "server");
-            acceptButton.ServerClick += new EventHandler(declineTradeOffer_click);
+            declineButton.ServerClick += new EventHandler(declineTradeOffer_click);
             declineButton.Attributes.Add("class", "btn btn-default");
             tradeOffer.Controls.Add(declineButton);
 
@@ -289,7 +289,7 @@ namespace _02148_Project.Website
         protected void declineTradeOffer_click(Object sender, EventArgs e)
         {
             HtmlButton button = (HtmlButton)sender;
-            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0, 1)));
+            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
             RenderTradeOffers();
         }
 
