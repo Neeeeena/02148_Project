@@ -9,6 +9,11 @@
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
+            <h2 runat="server" id="playerName"></h2>
+            <figure>
+                <img id="goldImage" src="Images/gold3.png" />
+                <figcaption><p runat="server" id="goldAmount"></p></figcaption>
+            </figure>
       <!--Sidebar content-->
             <div runat="server" id="tradeOffers">
                 <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
@@ -109,15 +114,15 @@
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
                                     <label runat="server" id="r5">0</label>
-                                </div>
+                            </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
                                     <label runat="server" id="r6">0</label>
-                                </div>
-                                 </div>
+                            </div>
+                            </div>
                                 <br/>
                            <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
-                            
+                    
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -126,8 +131,8 @@
                 </div>
 
                 </div>
-
             
+
 
 
 	<div class="container" style="width:300px">
@@ -195,7 +200,7 @@
 	</div>
 
         
-    </div>
+        </div>
         <div class="span8">
        
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
@@ -340,9 +345,11 @@
 
 
 $(document).ready(function(){
+    
     $('#allMsg').keypress(function(e){
       if(e.keyCode==13)
       $('#allBtn').click();
+        alert("test");
     });
 	
 	$('#p1Msg').keypress(function(e){
@@ -373,6 +380,16 @@ $(document).ready(function(){
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        $(".tradeOfferDiv").click(function () {
+            $("#lbls1").Text = $("#lbls1").Text + 1;
+        });
+    });
+</script>
+
+
+    <!--
 <script type="text/javascript">
     $(document).ready(function(){
         $(".tradeOfferDiv").click(function () {
@@ -384,6 +401,8 @@ $(document).ready(function(){
         });
     });
 </script>
+
+        -->
 
 <script>
     $('#chatTab2').click(function () {
@@ -409,28 +428,32 @@ $(document).ready(function(){
         // Start the connection.
         $.connection.hub.start().done(function () {
             alert("connection started")
-
+            getAllMessages();
         }).fail(function (e) {
             alert(e);
         });
     });
 
     function getAllMessages() {
-        var pageUrl = "<%= ResolveUrl("~/MarketView.aspx/ReturnMessages")%>";
         $.ajax({
-            url: pageUrl,
-            contentType: 'application/html ; charset:utf-8',
-            type: 'GET',
-            dataType: 'html'
+            url: "MarketView.aspx/ReturnMessages",
+            contentType: 'application/json ; charset:utf-8',
+            type: 'POST',
+            dataType: 'json'
         }).success(function (result) {
-            $("#allChat").add(result);
-            alert("carl snyder");
+            alert("res"+result.d);
         }).error(function () {
             alert("Det her virker jo ikke");
         });
         return false;
     }
 </script>
+
+<script>
+    $('.')
+</script>
+
+
 
 
 

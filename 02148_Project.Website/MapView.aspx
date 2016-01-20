@@ -6,19 +6,26 @@
 <div class="container-fluid">
   <div class="row-fluid">
           <div class="span3">
+               <h2 runat="server" id="playerName"></h2>
+            <figure>
+                <img id="goldImage" src="Images/gold3.png" />
+                <figcaption><p runat="server" id="goldAmount"></p></figcaption>
+            </figure>
                 <table class="table table-hover">
 				    <tr>
 					    <td id="cottageRow">
 					        <img class="buildings" src="Images/Cottage.png" />
                             <p>Cottage: 1 wood, 1 wool, 1 straw</p>
-						    <asp:Button runat="server" text="Buy" OnClick="buyCottage_Click" OnClientClick="return cottage();" class="btn btn-default" id="buyCottage"></asp:Button>
-					    </td>
+						    <asp:Button runat="server" text="Buy" OnClick="buyCottage_Click" class="btn btn-default" id="buyCottage"></asp:Button><br />
+					        <div>You have: <asp:Label id="cottageNo" runat="server" ></asp:Label> cottages</div>
+                        </td>
 				    </tr>
                     <tr>
 					    <td id="millRow">
 					        <img class="buildings" src="Images/Mill.png" />
                             <p>Mill: 2 food, 3 wood, 2 straw, 1 wool</p>
 						    <asp:Button runat="server" OnClick="buyMill_Click" text="Buy" class="btn btn-default" id="buyMill"></asp:Button>
+                            <div>You have: <asp:Label id="millNo" runat="server"></asp:Label> mills</div>
 					    </td>
 				    </tr>
                     <tr>
@@ -26,28 +33,32 @@
 					        <img class="buildings" src="Images/forge.png" />
                             <p>Forge: 3 stone, 2 food, 2 iron</p>
 						    <asp:Button runat="server" OnClick="buyForge_Click" text="Buy" class="btn btn-default" id="buyForge"></asp:Button>
-					    </td>
+					        <div>You have: <asp:Label id="forgeNo" runat="server"></asp:Label> forges</div>
+                        </td>
 				    </tr>
                     <tr>
 					    <td id="farmRow">
 					        <img class="buildings" src="Images/Farm.png" />
                             <p>Farm: 3 food, 2 straw, 2 clay, 1 wood</p>
 						    <asp:Button runat="server" OnClick="buyFarm_Click" text="Buy" class="btn btn-default" id="buyFarm"></asp:Button>
-					    </td>
+					        <div>You have: <asp:Label id="farmNo" runat="server"></asp:Label> farms</div>
+                        </td>
 				    </tr>
                     <tr>
 					    <td id="townhallRow">
 					        <img class="buildings" src="Images/TownHall.png" />
                             <p>Town Hall: 40 gold, 5 clay, 5 food, 5 wood</p>
 						    <asp:Button runat="server" OnClick="buyTownHall_Click" text="Buy" class="btn btn-default" id="buyTownHall"></asp:Button>
-					    </td>
+					        <div>You have: <asp:Label id="townHallNo" runat="server"></asp:Label> town halls</div>
+                        </td>
 				    </tr>
                     <tr>
 					    <td id="goldmineRow">
 					        <img class="buildings" src="Images/Goldmine.png" />
                             <p>Goldmine: 10 gold, 15 iron, 10 stone, 5 wood</p>
 						    <asp:Button runat="server" OnClick="buyGoldmine_Click" text="Buy" class="btn btn-default" id="buyGoldmine"></asp:Button>
-					    </td>
+					        <div>You have: <asp:Label id="goldMineNo" runat="server"></asp:Label> gold mines</div>
+                        </td>
 				    </tr>
                     
                     
@@ -60,6 +71,7 @@
         <div style="background-image:url(Images/map.png); background-repeat:no-repeat; height: 600px;width: 880px" class="markedImage" id="marked" >
   
         </div>
+
         <asp:Repeater ID="repLocalResources" runat="server" >
           <HeaderTemplate>
             <table>
@@ -88,13 +100,36 @@
 
       </div>
     </div>
-
 <script type="text/javascript">
-    function cottage(){
-        alert("You bought a cottage");
-    }
+    $("#MainContent_buyCottage").click(function () {
+        $("#MainContent_cottageNo").Text = parseInt($("#MainContent_cottageNo").Text) + 1;
+    });
 </script>
-
+    <script type="text/javascript">
+    $("#MainContent_buyMill").click(function () {
+        $("#MainContent_millNo").Text = parseInt($("#MainContent_millNo").Text) + 1;
+    });
+</script>
+    <script type="text/javascript">
+    $("#MainContent_buyForge").click(function () {
+        $("#MainContent_forgeNo").Text = parseInt($("#MainContent_forgeNo").Text) + 1;
+    });
+</script>
+<script type="text/javascript">
+    $("#MainContent_buyFarm").click(function () {
+        $("#MainContent_farmNo").Text = parseInt($("#MainContent_farmNo").Text) + 1;
+    });
+</script>
+<script type="text/javascript">
+    $("#MainContent_buyTownHall").click(function () {
+        $("#MainContent_townHallNo").Text = parseInt($("#MainContent_townHallNo").Text) + 1;
+    });
+</script>
+<script type="text/javascript">
+    $("#MainContent_buyGoldmine").click(function () {
+        $("#MainContent_goldMineNo").Text = parseInt($("#MainContent_goldMineNo").Text) + 1;
+    });
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         if ("<%=hasResourcesFor(_02148_Project.Model.Construction.Cottage)%>" == "True") {

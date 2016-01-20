@@ -11,8 +11,9 @@ namespace _02148_Project.Website
     public static class MainServer
     {
         //static int nextid = 0;
-        static List<Advert> adverts = new List<Advert>();
-
+        public static List<Advert> adverts = new List<Advert>();
+        private static System.Timers.Timer timer;
+        public static bool yes = true;
 
         //Initializing game
         public static void initGame()
@@ -28,18 +29,27 @@ namespace _02148_Project.Website
             //    p.Clay = 0;
             //    p.Food = 0;
             //}
-            Thread thread = new Thread(advertTimer);
-
+            if (yes)
+            {
+                timer = new System.Timers.Timer();
+                timer.Interval = 4000;
+                timer.AutoReset = true;
+                timer.Elapsed += createAdvert;
+                timer.Start();
+                yes = false;
+            }
 
         }
 
         
         static int MAX_MARKET_ADVERTS = 8;
+        
+
         private static void createAdvert(Object source, System.Timers.ElapsedEventArgs e)
         {
             
             //offercount = amount of adverts the market is currently offering
-            int offercount = DatabaseInterface.ReadAllResourceOffers().FindAll(s => s.SellerName.Equals("Market")).Count;
+            int offercount = DatabaseInterface.ReadAllResourceOffers().FindAll(s => s.SellerName.Equals("Server")).Count;
             Random r = new Random();
 
             //TEMP
@@ -62,7 +72,7 @@ namespace _02148_Project.Website
 
                 //Picking a random resource from the array, except the last, which is gold
                 ResourceType res = (ResourceType)resTypes.GetValue(r.Next(resTypes.Length-1));
-                ResourceOffer ro = new ResourceOffer(0, "Market", res, count, price);
+                ResourceOffer ro = new ResourceOffer(0, "Server", res, count, price);
                 int id = DatabaseInterface.PutResourceOfferOnMarket(ro);
                 adverts.Add(new Advert(id));
 
@@ -92,9 +102,5 @@ namespace _02148_Project.Website
                 }
                      
         }
-
-
-        
-
     }
 }

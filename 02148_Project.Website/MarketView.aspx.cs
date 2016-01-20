@@ -15,6 +15,7 @@ using System.Web.UI.HtmlControls;
 using Microsoft.AspNet.SignalR;
 using System.Web.Services;
 using System.Text;
+using System.Web.Script.Serialization;
 
 namespace _02148_Project.Website
 {
@@ -34,7 +35,9 @@ namespace _02148_Project.Website
         public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
-            MainClient.ReadAPlayer(Request.QueryString["player"]);
+
+            playerName.InnerText = MainClient.player.Name;
+            goldAmount.InnerText = "You have "+MainClient.player.Gold + " pieces of gold";
 
             if (!Page.IsPostBack)
             {
@@ -73,7 +76,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             RenderChat();
-            MainServer.initGame();
+            if (MainClient.player.Name == "Alex") MainServer.initGame();
         }
 
 
@@ -153,57 +156,7 @@ namespace _02148_Project.Website
 
         //}
 
-        /*
-    protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
-    {
-        ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
-    {
-        ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
-    {
-        ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
-    {
-        ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
-    {
-        ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferReceiverImage0_click(Object sender, EventArgs e)
-    {
-        lr0.InnerHtml = (Int32.Parse(lr0.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferReceiverImage1_click(Object sender, EventArgs e)
-    {
-        lr1.InnerHtml = (Int32.Parse(lr1.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferReceiverImage2_click(Object sender, EventArgs e)
-    {
-        lr2.InnerHtml = (Int32.Parse(lr2.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferReceiverImage3_click(Object sender, EventArgs e)
-    {
-        lr3.InnerHtml = (Int32.Parse(lr3.InnerHtml) + 1).ToString();
-    }
-
-    protected void tradeOfferReceiverImage4_click(Object sender, EventArgs e)
-    {
-        lr4.InnerHtml = (Int32.Parse(lr4.InnerHtml) + 1).ToString();
-    }
-    */
+    
         protected void fillTradeOffers()
         {
             var values = Enum.GetValues(typeof(ResourceType));
@@ -308,7 +261,7 @@ namespace _02148_Project.Website
         protected void declineTradeOffer_click(Object sender, EventArgs e)
         {
             HtmlButton button = (HtmlButton)sender;
-            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0, 1)));
+            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
             RenderTradeOffers();
         }
 
@@ -330,16 +283,21 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
         [WebMethod]
-        public Literal ReturnMessages()
-        {
-            messages = MainClient.GetNewMessage();
-            StringBuilder sb = new StringBuilder();
-            foreach(var m in messages)
+        public static string ReturnMessages()
             {
-                sb.Append("<p>" + m.Content+"</p>" );
-            }
-            
-            return new Literal() { Text = sb.ToString() };
+            //messages = MainClient.GetNewMessage();
+            ////StringBuilder sb = new StringBuilder();
+            ////foreach(var m in messages)
+            ////{
+            ////    sb.Append(m.Content);
+            ////}
+            //HtmlGenericControl divcontrol = new HtmlGenericControl();
+            //divcontrol.TagName = "div";
+            //Label l = new Label();
+            //l.Text = messages.ElementAt(messages.Count - 1).Content;
+            //divcontrol.Controls.Add(l);
+            //return divcontrol;
+            return "Hejsa";
         }
 
         protected void RenderChat()
@@ -484,8 +442,9 @@ namespace _02148_Project.Website
                     ro.HighestBidder = MainClient.player.Name;
 
             string returnedMessage = MainClient.BidOnResource(ro);
+            goldAmount.InnerText = "You have " + MainClient.player.Gold + " pieces of gold";
              
-            if(returnedMessage != "")
+            if (returnedMessage != "")
             {
                 //Message box error
                 }

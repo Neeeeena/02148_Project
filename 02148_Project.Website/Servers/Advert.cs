@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using _02148_Project.Model;
+using _02148_Project.Client;
 
 namespace _02148_Project.Website
 {
-    class Advert
+    public class Advert
     {
-
-
-
+        
         public int id { get; set; }
 
-        int stopwatchThreshold = 50000;
+        int stopwatchThreshold = 25000;
 
         //The timer is used for calling the event "closeAdvert(..)"
         System.Timers.Timer timer;
@@ -27,7 +26,7 @@ namespace _02148_Project.Website
 
             this.id = id;
             timer = new System.Timers.Timer();
-            timer.Interval = 60000;
+            timer.Interval = 30000;
             timer.AutoReset = false;
             timer.Elapsed += closeAdvert;
             timer.Enabled = true;
@@ -54,7 +53,8 @@ namespace _02148_Project.Website
             //DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ResourceType.Gold, - ro.Price);
 
             //Give the ware
-            DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ro.Type, ro.Count);
+            if (ro.HighestBidder == "Server" && ro.SellerName != "Server") DatabaseInterface.UpdatePlayerResource(MainClient.player.Name, ro.Type, ro.Count);
+            else DatabaseInterface.UpdatePlayerResource(ro.HighestBidder, ro.Type, ro.Count);
         }
 
         //This should be called every time a bid is accepted, in order to possibly extend the remaining time.

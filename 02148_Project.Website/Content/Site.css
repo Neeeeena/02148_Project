@@ -271,6 +271,11 @@ div.scroll {
     background-image: url('Images/firewood.png');
 }
 
+#goldImage {
+    width:60px;
+    height:60px;
+}
+
 .resContainer {
     clear: both;
     background-color:red;
@@ -286,4 +291,3 @@ div.scroll {
     height: 50px;
 
 }
-

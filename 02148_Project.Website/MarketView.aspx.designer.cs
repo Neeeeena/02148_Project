@@ -13,6 +13,24 @@ namespace _02148_Project.Website {
     public partial class MarketView {
         
         /// <summary>
+        /// playerName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl playerName;
+        
+        /// <summary>
+        /// goldAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl goldAmount;
+        
+        /// <summary>
         /// tradeOffers control.
         /// </summary>
         /// <remarks>
