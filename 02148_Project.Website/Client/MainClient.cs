@@ -87,9 +87,11 @@ namespace _02148_Project.Client
 
         public static void GiveMission()
         {
-            //Random r = new Random();
-            //r.Next(0, 6);
-            //if(r.Next)
+            Random r = new Random();
+            for (int i = 0; i < 5; i++)
+            {
+                MissionList.Add((Construction)r.Next(0, 6));
+            }
         }
 
         // Market stuff:
