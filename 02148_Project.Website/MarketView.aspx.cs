@@ -85,6 +85,32 @@ namespace _02148_Project.Website
             // code after base oninit
         }
 
+        protected void sendTradeOffer_click(Object sender, EventArgs e)
+        {
+            Dictionary<ResourceType, int> sell = new Dictionary<ResourceType, int>();
+            
+            sell.Add(ResourceType.Wood, Int32.Parse(lbls1.Text));
+            sell.Add(ResourceType.Wool, Int32.Parse(s1.InnerText));
+            sell.Add(ResourceType.Clay, Int32.Parse(s2.InnerText));
+            sell.Add(ResourceType.Stone, Int32.Parse(s3.InnerText));
+            sell.Add(ResourceType.Straw, Int32.Parse(s4.InnerText));
+            sell.Add(ResourceType.Iron, Int32.Parse(s5.InnerText));
+            sell.Add(ResourceType.Food, Int32.Parse(s6.InnerText));
+
+            Dictionary<ResourceType, int> rec = new Dictionary<ResourceType, int>();
+            rec.Add(ResourceType.Wood, Int32.Parse(r0.InnerText));
+            rec.Add(ResourceType.Wool, Int32.Parse(r1.InnerText));
+            rec.Add(ResourceType.Clay, Int32.Parse(r2.InnerText));
+            rec.Add(ResourceType.Stone, Int32.Parse(r3.InnerText));
+            rec.Add(ResourceType.Straw, Int32.Parse(r4.InnerText));
+            rec.Add(ResourceType.Iron, Int32.Parse(r5.InnerText));
+            rec.Add(ResourceType.Food, Int32.Parse(r6.InnerText));
+            string test = dd.SelectedValue;
+            TradeOffer to = new TradeOffer(MainClient.player.Name, dd.SelectedValue, sell, rec);
+            MainClient.SendTradeOfferToPlayer(to);
+            
+        }
+
         //protected void createTradeOfferElements()
         //{
 
@@ -127,56 +153,57 @@ namespace _02148_Project.Website
 
         //}
 
-        protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
-        {
-            ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
-        }
+        /*
+    protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
+    {
+        ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
-        {
-            ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
+    {
+        ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
-        {
-            ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
+    {
+        ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
-        {
-            ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
+    {
+        ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
-        {
-            ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
+    {
+        ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferReceiverImage0_click(Object sender, EventArgs e)
-        {
-            lr0.InnerHtml = (Int32.Parse(lr0.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferReceiverImage0_click(Object sender, EventArgs e)
+    {
+        lr0.InnerHtml = (Int32.Parse(lr0.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferReceiverImage1_click(Object sender, EventArgs e)
-        {
-            lr1.InnerHtml = (Int32.Parse(lr1.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferReceiverImage1_click(Object sender, EventArgs e)
+    {
+        lr1.InnerHtml = (Int32.Parse(lr1.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferReceiverImage2_click(Object sender, EventArgs e)
-        {
-            lr2.InnerHtml = (Int32.Parse(lr2.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferReceiverImage2_click(Object sender, EventArgs e)
+    {
+        lr2.InnerHtml = (Int32.Parse(lr2.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferReceiverImage3_click(Object sender, EventArgs e)
-        {
-            lr3.InnerHtml = (Int32.Parse(lr3.InnerHtml) + 1).ToString();
-        }
+    protected void tradeOfferReceiverImage3_click(Object sender, EventArgs e)
+    {
+        lr3.InnerHtml = (Int32.Parse(lr3.InnerHtml) + 1).ToString();
+    }
 
-        protected void tradeOfferReceiverImage4_click(Object sender, EventArgs e)
-        {
-            lr4.InnerHtml = (Int32.Parse(lr4.InnerHtml) + 1).ToString();
-        }
-
+    protected void tradeOfferReceiverImage4_click(Object sender, EventArgs e)
+    {
+        lr4.InnerHtml = (Int32.Parse(lr4.InnerHtml) + 1).ToString();
+    }
+    */
         protected void fillTradeOffers()
         {
             var values = Enum.GetValues(typeof(ResourceType));
@@ -187,11 +214,6 @@ namespace _02148_Project.Website
             }
 
 
-
-        }
-
-        protected void sendTradeOffer_click(Object sender, EventArgs e)
-        {
 
         }
 
@@ -259,7 +281,7 @@ namespace _02148_Project.Website
             declineButton.InnerText = "Decline";
             declineButton.ID = "d" + to.Id.ToString();
             declineButton.Attributes.Add("runat", "server");
-            acceptButton.ServerClick += new EventHandler(declineTradeOffer_click);
+            declineButton.ServerClick += new EventHandler(declineTradeOffer_click);
             declineButton.Attributes.Add("class", "btn btn-default");
             tradeOffer.Controls.Add(declineButton);
 

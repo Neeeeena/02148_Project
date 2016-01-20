@@ -85,22 +85,13 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.DropDownList dd;
         
         /// <summary>
-        /// s0 control.
+        /// lbls1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s0;
-        
-        /// <summary>
-        /// ls0 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls0;
+        protected global::System.Web.UI.WebControls.Label lbls1;
         
         /// <summary>
         /// s1 control.
@@ -109,16 +100,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s1;
-        
-        /// <summary>
-        /// ls1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s1;
         
         /// <summary>
         /// s2 control.
@@ -127,16 +109,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s2;
-        
-        /// <summary>
-        /// ls2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls2;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s2;
         
         /// <summary>
         /// s3 control.
@@ -145,16 +118,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s3;
-        
-        /// <summary>
-        /// ls3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls3;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s3;
         
         /// <summary>
         /// s4 control.
@@ -163,34 +127,25 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s4;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s4;
         
         /// <summary>
-        /// ls4 control.
+        /// s5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls4;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s5;
         
         /// <summary>
-        /// tradeOfferSeller control.
+        /// s6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferSeller;
-        
-        /// <summary>
-        /// tradeOfferReceiver control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferReceiver;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s6;
         
         /// <summary>
         /// r0 control.
@@ -199,16 +154,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage r0;
-        
-        /// <summary>
-        /// lr0 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lr0;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r0;
         
         /// <summary>
         /// r1 control.
@@ -217,16 +163,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage r1;
-        
-        /// <summary>
-        /// lr1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lr1;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r1;
         
         /// <summary>
         /// r2 control.
@@ -235,16 +172,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage r2;
-        
-        /// <summary>
-        /// lr2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lr2;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r2;
         
         /// <summary>
         /// r3 control.
@@ -253,16 +181,7 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage r3;
-        
-        /// <summary>
-        /// lr3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lr3;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r3;
         
         /// <summary>
         /// r4 control.
@@ -271,16 +190,34 @@ namespace _02148_Project.Website {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlImage r4;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r4;
         
         /// <summary>
-        /// lr4 control.
+        /// r5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lr4;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r5;
+        
+        /// <summary>
+        /// r6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r6;
+        
+        /// <summary>
+        /// sendTradeOfferBtns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button sendTradeOfferBtns;
         
         /// <summary>
         /// player1Tab control.

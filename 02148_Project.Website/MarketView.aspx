@@ -53,49 +53,80 @@
                             <asp:ListItem Value="2"></asp:ListItem>
                         </asp:DropDownList>
 
-                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" onclick="tradeOfferSellerImage0_click" />
-                                <label runat="server" id="ls0">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" onclick="tradeOfferSellerImage1_click"/>
-                                <label runat="server" id="ls1">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" onclick="tradeOfferSellerImage2_click"/>
-                                <label runat="server" id="ls2">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" onclick="tradeOfferSellerImage3_click"/>
-                                <label runat="server" id="ls3">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" onclick="tradeOfferSellerImage4_click"/>
-                                <label runat="server" id="ls4">0</label>
-
-                     
-                            <div runat="server" id="tradeOfferSeller">
-
-                                
-                            </div>
-                            <!--
-                            <div runat="server" id="tradeOfferReceiver">
-                                <img id="r0" runat="server" src="Images/wood.jpg" onclick="tradeOfferReceiver0Image_click"/>
-                                <label id="lr0" runat="server">0</label>
-                                <img id="r1" runat="server" src="Images/får.png" onclick="tradeOfferReceiver1Image_click"/>
-                                <label id="lr1" runat="server">0</label>
-                                <img id="r2" runat="server" src="Images/mursten.png" onclick="tradeOfferReceiver2Image_click"/>
-                                <label id="lr2" runat="server">0</label>
-                                <img id="r3" runat="server" src="Images/stone.png" onclick="tradeOfferReceiver3Image_click"/>
-                                <label id="lr3" runat="server">0</label>
-                                <img id="r4" runat="server" src="Images/Straw.png" onclick="tradeOfferReceiver4Image_click"/>
-                                <label id="lr4" runat="server">0</label>
-
-                            </div>
-                            -->
-                 
-                    
-                        <asp:button runat="server" onclick="sendTradeOffer_click"></asp:button>
-                            </div>
-                    
+                                <div class="resContainer">
+                                <h3><b>Resources you want to sell:</b></h3>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/firewood.png" />
+                                    <asp:label Text="0" runat="server" id="lbls1" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/får.png" />
+                                    <label runat="server" id="s1">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/mursten.png" />
+                                    <label runat="server" id="s2" >0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/stone.png" />
+                                    <label runat="server" id="s3">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/Straw.png" />
+                                    <label runat="server" id="s4">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/anvil.png" />
+                                    <label runat="server" id="s5">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/food.png" />
+                                    <label runat="server" id="s6">0</label>
+                                </div>
+                                </div>
+                                <div class="resContainer">
+                                <h3><b>Resources you want to receive:</b></h3>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/firewood.png" />
+                                    <label runat="server" id="r0">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/får.png" />
+                                    <label runat="server" id="r1">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/mursten.png" />
+                                    <label runat="server" id="r2">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/stone.png" />
+                                    <label runat="server" id="r3">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/Straw.png" />
+                                    <label runat="server" id="r4">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/anvil.png" />
+                                    <label runat="server" id="r5">0</label>
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/food.png" />
+                                    <label runat="server" id="r6">0</label>
+                                </div>
+                                 </div>
+                                <br/>
+                           <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
+                            
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
+                </div>
 
                 </div>
+
             
 
 
@@ -163,7 +194,8 @@
 	  </div>
 	</div>
 
-        </div>
+        
+    </div>
         <div class="span8">
        
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
@@ -341,6 +373,18 @@ $(document).ready(function(){
 
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".tradeOfferDiv").click(function () {
+            $(this).find("#lbls1").Text = $(this).find("#lbls1").Text
+
+            
+            $(this).find("#lbls1").text(String(parseInt($(this).find("#lbls1").text()) + 1));
+            
+        });
+    });
+</script>
+
 <script>
     $('#chatTab2').click(function () {
         $().att('id','')
@@ -351,7 +395,6 @@ $(document).ready(function(){
 <script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
 <script src="signalr/hubs" type="text/javascript"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         // Declare a proxy to reference the hub.
@@ -366,7 +409,7 @@ $(document).ready(function(){
         // Start the connection.
         $.connection.hub.start().done(function () {
             alert("connection started")
-            getAllMessages();
+
         }).fail(function (e) {
             alert(e);
         });
@@ -387,10 +430,6 @@ $(document).ready(function(){
         });
         return false;
     }
-</script>
-
-<script>
-    $('.')
 </script>
 
 
