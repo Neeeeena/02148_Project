@@ -13,6 +13,24 @@ namespace _02148_Project.Website {
     public partial class MarketView {
         
         /// <summary>
+        /// playerName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl playerName;
+        
+        /// <summary>
+        /// goldAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl goldAmount;
+        
+        /// <summary>
         /// tradeOffers control.
         /// </summary>
         /// <remarks>
@@ -85,15 +103,6 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.DropDownList dd;
         
         /// <summary>
-        /// s0 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s0;
-        
-        /// <summary>
         /// ls0 control.
         /// </summary>
         /// <remarks>
@@ -101,15 +110,6 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls0;
-        
-        /// <summary>
-        /// s1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s1;
         
         /// <summary>
         /// ls1 control.
@@ -121,15 +121,6 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls1;
         
         /// <summary>
-        /// s2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s2;
-        
-        /// <summary>
         /// ls2 control.
         /// </summary>
         /// <remarks>
@@ -139,15 +130,6 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls2;
         
         /// <summary>
-        /// s3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s3;
-        
-        /// <summary>
         /// ls3 control.
         /// </summary>
         /// <remarks>
@@ -155,15 +137,6 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl ls3;
-        
-        /// <summary>
-        /// s4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button s4;
         
         /// <summary>
         /// ls4 control.

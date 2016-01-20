@@ -34,7 +34,9 @@ namespace _02148_Project.Website
         public int test;
         protected void Page_Load(object sender, EventArgs e)
         {
-            MainClient.ReadAPlayer(Request.QueryString["player"]);
+
+            playerName.InnerText = MainClient.player.Name;
+            goldAmount.InnerText = "You have "+MainClient.player.Gold + " pieces of gold";
 
             if (!Page.IsPostBack)
             {
@@ -127,30 +129,30 @@ namespace _02148_Project.Website
 
         //}
 
-        protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
-        {
-            ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
-        }
+        //protected void tradeOfferSellerImage0_click(Object sender, EventArgs e)
+        //{
+        //    ls0.InnerHtml = (Int32.Parse(ls0.InnerHtml) + 1).ToString();
+        //}
 
-        protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
-        {
-            ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
-        }
+        //protected void tradeOfferSellerImage1_click(Object sender, EventArgs e)
+        //{
+        //    ls1.InnerHtml = (Int32.Parse(ls1.InnerHtml) + 1).ToString();
+        //}
 
-        protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
-        {
-            ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
-        }
+        //protected void tradeOfferSellerImage2_click(Object sender, EventArgs e)
+        //{
+        //    ls2.InnerHtml = (Int32.Parse(ls2.InnerHtml) + 1).ToString();
+        //}
 
-        protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
-        {
-            ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
-        }
+        //protected void tradeOfferSellerImage3_click(Object sender, EventArgs e)
+        //{
+        //    ls3.InnerHtml = (Int32.Parse(ls3.InnerHtml) + 1).ToString();
+        //}
 
-        protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
-        {
-            ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
-        }
+        //protected void tradeOfferSellerImage4_click(Object sender, EventArgs e)
+        //{
+        //    ls4.InnerHtml = (Int32.Parse(ls4.InnerHtml) + 1).ToString();
+        //}
 
         protected void tradeOfferReceiverImage0_click(Object sender, EventArgs e)
         {
