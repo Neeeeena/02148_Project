@@ -450,14 +450,15 @@ namespace _02148_Project.Client
 
         //Constructions with their required resources to build
         static Tuple<Construction, Tuple<int, ResourceType>[]>[] constructionPrice = {
-            Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
-                Tuple.Create(1,ResourceType.Wood),
-                Tuple.Create(1,ResourceType.Wool),
-                Tuple.Create(1,ResourceType.Straw) }),
+            
             Tuple.Create(Construction.Forge, new Tuple<int,ResourceType>[] {
                 Tuple.Create(3,ResourceType.Stone),
                 Tuple.Create(2,ResourceType.Food),
                 Tuple.Create(2,ResourceType.Iron) }),
+            Tuple.Create(Construction.Cottage, new Tuple<int,ResourceType>[] {
+                Tuple.Create(1,ResourceType.Wood),
+                Tuple.Create(1,ResourceType.Wool),
+                Tuple.Create(1,ResourceType.Straw) }),
             Tuple.Create(Construction.Mill, new Tuple<int,ResourceType>[] {
                 Tuple.Create(3,ResourceType.Wood),
                 Tuple.Create(2,ResourceType.Straw),
@@ -568,8 +569,9 @@ namespace _02148_Project.Client
         {
             foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
             {
-                if(cp.Item1 == type)
-                    foreach (Tuple<int,ResourceType> ir in cp.Item2)
+                if (cp.Item1 == type)
+                {
+                    foreach (Tuple<int, ResourceType> ir in cp.Item2)
                         switch (ir.Item2)
                         {
                             case ResourceType.Clay:
@@ -597,7 +599,8 @@ namespace _02148_Project.Client
                                 if (player.Wool < ir.Item1) return false;
                                 break;
                         }
-                return true;            
+                    return true;
+                }          
             }
             //building does not exist error??
             return false;
