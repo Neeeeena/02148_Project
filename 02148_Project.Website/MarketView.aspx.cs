@@ -79,6 +79,8 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
             if (MainClient.player.Name == "Alex") MainServer.initGame();
+            if (!MainClient.incomeTimerHasBeenSet) MainClient.incomeHandler();
+
             if (!hasGottenMission)
             {
                 hasGottenMission = true;
@@ -316,10 +318,10 @@ namespace _02148_Project.Website
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
-            if(MainClient.YouWin)
+            if(MainClient.youWin)
             {
                 DatabaseInterface.UpdatePlayerResource(MainClient.player.Name, ResourceType.Gold, 999999);
-                MainClient.YouWin = false;
+                MainClient.youWin = false;
             }
         }
         [WebMethod]

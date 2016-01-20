@@ -30,8 +30,12 @@ namespace _02148_Project.Client
 
         public static List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
 
-        public static bool YouWin = false;
-        
+        public static bool youWin = false;
+
+        public static System.Timers.Timer incomeTimer = new System.Timers.Timer();
+
+        public static bool incomeTimerHasBeenSet = false;
+
         public static void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
@@ -533,7 +537,7 @@ namespace _02148_Project.Client
                 MissionList.Remove(con);
                 if (MissionList.Count == 0)
                 {
-                    YouWin = true;
+                    youWin = true;
                 }
             }
 
@@ -560,11 +564,11 @@ namespace _02148_Project.Client
         //START IN NEW THREAD
         public static void incomeHandler()
         {
-            System.Timers.Timer incomeTimer = new System.Timers.Timer();
-            incomeTimer.Interval = 30000; // 30 seconds, possibly change?
+            incomeTimer.Interval = 10000; // 30 seconds, possibly change?
             incomeTimer.AutoReset = true;
             incomeTimer.Elapsed += giveIncome;
             incomeTimer.Start();
+            incomeTimerHasBeenSet = true;
         }
 
         public static bool hasResourcesFor(Construction type)
