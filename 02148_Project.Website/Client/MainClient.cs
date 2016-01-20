@@ -131,8 +131,9 @@ namespace _02148_Project.Client
         {
             try
             {
-                DatabaseInterface.PutResourceOfferOnMarket(offer);
+                int id = DatabaseInterface.PutResourceOfferOnMarket(offer);
                 DatabaseInterface.UpdatePlayerResource(player.Name, offer.Type, -1);
+                MainServer.adverts.Add(new Advert(id));
             }
             catch(Exception ex)
             {
