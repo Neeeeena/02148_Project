@@ -15,6 +15,7 @@ using System.Web.UI.HtmlControls;
 using Microsoft.AspNet.SignalR;
 using System.Web.Services;
 using System.Text;
+using System.Web.Script.Serialization;
 
 namespace _02148_Project.Website
 {
@@ -310,16 +311,21 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
         [WebMethod]
-        public Literal ReturnMessages()
+        public static string ReturnMessages()
         {
-            messages = MainClient.GetNewMessage();
-            StringBuilder sb = new StringBuilder();
-            foreach(var m in messages)
-            {
-                sb.Append("<p>" + m.Content+"</p>" );
-            }
-            
-            return new Literal() { Text = sb.ToString() };
+            //messages = MainClient.GetNewMessage();
+            ////StringBuilder sb = new StringBuilder();
+            ////foreach(var m in messages)
+            ////{
+            ////    sb.Append(m.Content);
+            ////}
+            //HtmlGenericControl divcontrol = new HtmlGenericControl();
+            //divcontrol.TagName = "div";
+            //Label l = new Label();
+            //l.Text = messages.ElementAt(messages.Count - 1).Content;
+            //divcontrol.Controls.Add(l);
+            //return divcontrol;
+            return "Hejsa";
         }
 
         protected void RenderChat()
@@ -464,8 +470,9 @@ namespace _02148_Project.Website
                     ro.HighestBidder = MainClient.player.Name;
 
             string returnedMessage = MainClient.BidOnResource(ro);
-             
-            if(returnedMessage != "")
+            goldAmount.InnerText = "You have " + MainClient.player.Gold + " pieces of gold";
+
+            if (returnedMessage != "")
             {
                 //Message box error
                 }

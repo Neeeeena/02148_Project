@@ -12,8 +12,18 @@ namespace _02148_Project.Website
     public partial class MapView : Page
     {
         public List<LocalResource> localresources;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
+            playerName.InnerText = MainClient.player.Name;
+            goldAmount.InnerText = "You have " + MainClient.player.Gold + " pieces of gold";
+
+            cottageNo.Text = ""+MainClient.player.Cottage;
+            millNo.Text = "" + MainClient.player.Mill;
+            forgeNo.Text = "" + MainClient.player.Forge;
+            townHallNo.Text = "" + MainClient.player.Townhall;
+            goldMineNo.Text = "" + MainClient.player.Goldmine;
+            farmNo.Text = "" + MainClient.player.Farm;
 
             if (!Page.IsPostBack)
             {

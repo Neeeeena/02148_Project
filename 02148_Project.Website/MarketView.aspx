@@ -102,20 +102,7 @@
 
                 </div>
 
-<script type="text/javascript">
-    $("#s0").click(function () {
-        var count = $("#MainContent_ls0").val;
-        $("#MainContent_ls0").val = count + 1;
-    });
-</script>
-            
-<script type="text/javascript">
-    function addResToTradeOffer(ele) {
-        var label = document.getElementById(ele.getAttribute('data-id'));
-        var count = label.innerHtml;
-        label.innerHtml = count + 1;
-    }
-</script>
+
 
 	<div class="container" style="width:300px">
 	  <h2>CHAT</h2>
@@ -382,7 +369,6 @@ $(document).ready(function(){
         };
         // Start the connection.
         $.connection.hub.start().done(function () {
-            alert("connection started")
         }).fail(function (e) {
             alert(e);
         });
@@ -391,18 +377,19 @@ $(document).ready(function(){
     function getAllMessages() {
         $.ajax({
             url: "MarketView.aspx/ReturnMessages",
-            contentType: 'application/html ; charset:utf-8',
-            type: 'GET',
-            dataType: 'html'
+            contentType: 'application/json ; charset:utf-8',
+            type: 'POST',
+            dataType: 'json'
         }).success(function (result) {
-            $("#allChat").add(result);
-            alert("carl snyder");
+            alert("res"+result.d);
         }).error(function () {
             alert("Det her virker jo ikke");
         });
         return false;
     }
 </script>
+
+
 
 <script>
     $('.')
