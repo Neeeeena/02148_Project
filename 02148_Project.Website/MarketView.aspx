@@ -9,6 +9,11 @@
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
+            <h2 runat="server" id="playerName"></h2>
+            <figure>
+                <img id="goldImage" src="Images/gold3.png" />
+                <figcaption><p runat="server" id="goldAmount"></p></figcaption>
+            </figure>
       <!--Sidebar content-->
             <div runat="server" id="tradeOffers">
                 <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
@@ -53,15 +58,15 @@
                             <asp:ListItem Value="2"></asp:ListItem>
                         </asp:DropDownList>
 
-                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" data-id="ls0" OnClientClick="tradeOfferSellerImage_click(this)" />
+                        <button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0"  data-id="ls0" ></button>
                                 <label runat="server" id="ls0">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" data-id="ls1" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" data-id="ls1" onclick="addResToTradeOffer(this)"></button>
                                 <label runat="server" id="ls1">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" data-id="ls2" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2"  data-id="ls2" onclick="addResToTradeOffer(this)"></button>
                                 <label runat="server" id="ls2">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" data-id="ls3" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" data-id="ls3" onclick="addResToTradeOffer(this)"></button>
                                 <label runat="server" id="ls3">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" data-id="ls4" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" data-id="ls4" onclick="addResToTradeOffer(this)"></button>
                                 <label runat="server" id="ls4">0</label>
 
                      
@@ -96,12 +101,19 @@
                 </div>
 
                 </div>
+
+<script type="text/javascript">
+    $("#s0").click(function () {
+        var count = $("#MainContent_ls0").val;
+        $("#MainContent_ls0").val = count + 1;
+    });
+</script>
             
 <script type="text/javascript">
-    function tradeOfferSellerImage_click(ele) {
+    function addResToTradeOffer(ele) {
         var label = document.getElementById(ele.getAttribute('data-id'));
-        var count = label.innerText;
-        label.innerText = count + 1;
+        var count = label.innerHtml;
+        label.innerHtml = count + 1;
     }
 </script>
 
@@ -357,7 +369,6 @@ $(document).ready(function(){
 <script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
 <script src="signalr/hubs" type="text/javascript"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         // Declare a proxy to reference the hub.
@@ -372,7 +383,6 @@ $(document).ready(function(){
         // Start the connection.
         $.connection.hub.start().done(function () {
             alert("connection started")
-            getAllMessages();
         }).fail(function (e) {
             alert(e);
         });

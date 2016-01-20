@@ -270,3 +270,8 @@ div.scroll {
     border: 0;
     background-image: url('Images/firewood.png');
 }
+
+#goldImage {
+    width:60px;
+    height:60px;
+}
