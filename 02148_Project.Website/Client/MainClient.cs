@@ -19,6 +19,9 @@ namespace _02148_Project.Client
         //public List<TradeOffer> allYourRecievedTradeOffers;
         //public static List<TradeOffer> allYourSentTradeOffers;
         //public List<Message> collectedMessages = new List<Message>();
+
+        public static List<Construction> MissionList = new List<Construction>();
+
         public static List<Player> allOtherPlayers = new List<Player>();
         
         public static Player player;
@@ -26,7 +29,13 @@ namespace _02148_Project.Client
         public static Timer updateTimer;
 
         public static List<Tuple<Timer, int>> timersWithId = new List<Tuple<Timer, int>>();
-        
+
+        public static bool youWin = false;
+
+        public static System.Timers.Timer incomeTimer = new System.Timers.Timer();
+
+        public static bool incomeTimerHasBeenSet = false;
+
         public static void GameSetup()
         {
             //Setup all fields before game, like username, goldamount at start, etc.
@@ -78,6 +87,15 @@ namespace _02148_Project.Client
             ReadOtherPlayers();
             ReadAllTradeOffersForYou();
             GetNewMessage();
+        }
+
+        public static void GiveMission()
+        {
+            Random r = new Random();
+            for (int i = 0; i < 5; i++)
+            {
+                MissionList.Add((Construction)r.Next(0, 6));
+            }
         }
 
         // Market stuff:
@@ -470,19 +488,22 @@ namespace _02148_Project.Client
         };
 
 
-        public static void constructConstruction(Construction type)
+        public static string constructConstruction(Construction type)
         {
             foreach (Tuple<Construction, Tuple<int, ResourceType>[]> cp in constructionPrice)
+            {
                 if (cp.Item1 == type)
+                {
                     foreach (Tuple<int, ResourceType> priceres in cp.Item2)
                     {
                         //Muligvis tilføj noget handling her, hvis det ikke er muligt at tage alle resourcerne?
                         //Eller bare formod at gui siger "NEJ!!!!!!"?
-                        try {
+                        try
+                        {
                             DatabaseInterface.UpdatePlayerResource(player.Name, priceres.Item2, -priceres.Item1);
                             SubtractResource(priceres.Item2, priceres.Item1);
                         }
-                        catch(Exception e) //INDSÆT RIGTIG ERROR
+                        catch (Exception e) //INDSÆT RIGTIG ERROR
                         {
                             // If an error should happen while taking the resources, the
                             // already paid resources are returned to the buyer
@@ -491,22 +512,37 @@ namespace _02148_Project.Client
                             {
                                 if (priceresReturn == priceres)
                                 {
-                                    return;
+                                    return e.Message;
                                 }
                                 DatabaseInterface.UpdatePlayerResource(player.Name, priceresReturn.Item2, priceresReturn.Item1);
                                 SubtractResource(priceresReturn.Item2, priceresReturn.Item1);
                             }
-
+                            return e.Message;
 
                         }
                     }
-                    //DENNE FUKTION SKAL TILFØJES TIL DB (minder om UpdatePlayerResources)
-                    DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
-                    return;
+                }
+            }
+            DatabaseInterface.UpdatePlayerConstructions(player.Name, type, 1);
+            UpdateMissionListAndWinCheck(type);
+            return "";
 
             //THROW ERROR (construction does not exist)
         }
 
+        private static void UpdateMissionListAndWinCheck(Construction con)
+        {
+            if(MissionList.Contains(con))
+            {
+                MissionList.Remove(con);
+                if (MissionList.Count == 0)
+                {
+                    youWin = true;
+                }
+            }
+
+            
+        }
 
         private static int getIncome()
         {
@@ -528,11 +564,11 @@ namespace _02148_Project.Client
         //START IN NEW THREAD
         public static void incomeHandler()
         {
-            System.Timers.Timer incomeTimer = new System.Timers.Timer();
-            incomeTimer.Interval = 30000; // 30 seconds, possibly change?
+            incomeTimer.Interval = 10000; // 30 seconds, possibly change?
             incomeTimer.AutoReset = true;
             incomeTimer.Elapsed += giveIncome;
             incomeTimer.Start();
+            incomeTimerHasBeenSet = true;
         }
 
         public static bool hasResourcesFor(Construction type)

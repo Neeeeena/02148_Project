@@ -33,6 +33,8 @@ namespace _02148_Project.Website
 
         public int movedId;
         public int test;
+
+        public bool hasGottenMission = false;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -77,6 +79,13 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
             if (MainClient.player.Name == "Alex") MainServer.initGame();
+            if (!MainClient.incomeTimerHasBeenSet) MainClient.incomeHandler();
+
+            //if (!hasGottenMission)
+            //{
+            //    hasGottenMission = true;
+            //    MainClient.GiveMission();
+            //}
         }
 
 
@@ -282,6 +291,7 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
         }
+
         [WebMethod]
         public static string ReturnMessages()
             {
