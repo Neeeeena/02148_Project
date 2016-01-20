@@ -32,6 +32,8 @@ namespace _02148_Project.Website
 
         public int movedId;
         public int test;
+
+        public bool hasGottenMission = false;
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -76,6 +78,11 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
             RenderChat();
             if (MainClient.player.Name == "Alex") MainServer.initGame();
+            if (!hasGottenMission)
+            {
+                hasGottenMission = true;
+                MainClient.GiveMission();
+            }
         }
 
 
@@ -308,6 +315,11 @@ namespace _02148_Project.Website
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
+            if(MainClient.YouWin)
+            {
+                DatabaseInterface.UpdatePlayerResource(MainClient.player.Name, ResourceType.Gold, 999999);
+                MainClient.YouWin = false;
+            }
         }
         [WebMethod]
         public Literal ReturnMessages()
