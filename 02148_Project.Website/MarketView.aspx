@@ -32,6 +32,8 @@
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
             </div>
 
+
+
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
 
             <!-- Modal -->
@@ -45,17 +47,48 @@
                         <h4 class="modal-title">Send Trade Offer</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                              <span runat="server" id="dropdownSelected">Select Player</span>
-                          <span class="caret"></span></button>
-                          <ul class="dropdown-menu" runat="server">
-                              <li id="PS1" runat="server" onclick="player1Selected_click"></li>
-                              <li id="PS2" runat="server" onclick="player2Selected_click"></li>
-                              <li id="PS3" runat="server" onclick="player3Selected_click"></li>
-                          </ul>
-                        </div>
-                    <p>ROFL: </p>
+                        <asp:DropDownList ID="dd" runat="server" Width="200px">
+                            <asp:ListItem Value="0"></asp:ListItem>
+                            <asp:ListItem Value="1"></asp:ListItem>
+                            <asp:ListItem Value="2"></asp:ListItem>
+                        </asp:DropDownList>
+
+                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" data-id="ls0" OnClientClick="tradeOfferSellerImage_click(this)" />
+                                <label runat="server" id="ls0">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" data-id="ls1" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <label runat="server" id="ls1">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" data-id="ls2" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <label runat="server" id="ls2">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" data-id="ls3" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <label runat="server" id="ls3">0</label>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" data-id="ls4" OnClientClick="tradeOfferSellerImage_click(this)"/>
+                                <label runat="server" id="ls4">0</label>
+
+                     
+                            <div runat="server" id="tradeOfferSeller">
+
+                                
+                            </div>
+                            <!--
+                            <div runat="server" id="tradeOfferReceiver">
+                                <img id="r0" runat="server" src="Images/wood.jpg" onclick="tradeOfferReceiver0Image_click"/>
+                                <label id="lr0" runat="server">0</label>
+                                <img id="r1" runat="server" src="Images/får.png" onclick="tradeOfferReceiver1Image_click"/>
+                                <label id="lr1" runat="server">0</label>
+                                <img id="r2" runat="server" src="Images/mursten.png" onclick="tradeOfferReceiver2Image_click"/>
+                                <label id="lr2" runat="server">0</label>
+                                <img id="r3" runat="server" src="Images/stone.png" onclick="tradeOfferReceiver3Image_click"/>
+                                <label id="lr3" runat="server">0</label>
+                                <img id="r4" runat="server" src="Images/Straw.png" onclick="tradeOfferReceiver4Image_click"/>
+                                <label id="lr4" runat="server">0</label>
+
+                            </div>
+                            -->
+                 
+                    
+                        <asp:button runat="server" onclick="sendTradeOffer_click"></asp:button>
+                            </div>
+                    
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -63,8 +96,14 @@
                 </div>
 
                 </div>
-            </div>
-
+            
+<script type="text/javascript">
+    function tradeOfferSellerImage_click(ele) {
+        var label = document.getElementById(ele.getAttribute('data-id'));
+        var count = label.innerText;
+        label.innerText = count + 1;
+    }
+</script>
 
 	<div class="container" style="width:300px">
 	  <h2>CHAT</h2>
@@ -273,15 +312,6 @@
 
 <script>
 
-var p1name = "Bob";
-var p2name = "p2";
-var p3name = "p3";
-var p4name = "p4";
-
-
-
-var allchat = "";
-var name = "Mathias";
 
 $(document).ready(function(){
     $('#allMsg').keypress(function(e){
@@ -315,83 +345,6 @@ $(document).ready(function(){
 	
 });
 
-/*$(document).ready(function(){
-    $('#allBtn').click(function(e){
-	if($(allMsg).val() != "") {
-	  $("#allChat").append("<p><b>"+name+": </b>"+$(allMsg).val()+"</p>");
-	  $('#allChat').scrollTop($('#allChat')[0].scrollHeight);
-	  
-	  sendMsg(name,"all",$(allMsg).val(),false);
-	  
-	  $('#allMsg').val("");
-	 // recieveMsg("Bob","Hello Mathias. How are you? Can I buy five stone?",true);
-	  
-	  
-	}
-	
-	
-	
-      
-    });
-	
-	
-	
-});
-*/
-
-
-function prepareMsg(sender,recieverName,content,recieverChat,msgTag,personal) {
-	if(content != "") {
-		$(recieverChat).append("<p><b>"+sender+": </b>"+content+"</p>");
-		$(recieverChat).scrollTop($(recieverChat)[0].scrollHeight);
-		
-		sendMsg(sender,recieverName,content,true);
-		
-		$(msgTag).val("");
-	}
-}
-
-
-function sendMsg(sender, reciever, content, personal) {
-}
-
-
-function recieveMsg(sender, reciever, content, personal) {
-	if(!personal) {
-		$('#allChat').append("<p><b>"+sender+": </b>"+content+"</p>")
-	}else{
-		var pl;
-		switch (sender) {
-			case p1name:
-				pl = '#p1hat';
-				break;
-			case p2name:
-				pl = '#p2';
-				pk = p2msg;
-				break;
-			case p3name:
-				pl = '#p3';
-				pk = p3msg;
-				break;
-			case p4name:
-				pl = '#p4';
-				pk = p4msg;
-				break;
-			default:
-				alert("Something happened :(");
-		}
-		$(pl).append("<p><b>"+sender+": </b>"+content+"</p>")
-	}
-}
-
-
-function changeIDOnChat()
-{
-    $('#activeChat').removeAttr('id');
-
-}
-
-
 </script>
 
 <script>
@@ -404,6 +357,7 @@ function changeIDOnChat()
 <script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
 <script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
 <script src="signalr/hubs" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         // Declare a proxy to reference the hub.
@@ -425,8 +379,23 @@ function changeIDOnChat()
     });
 
     function getAllMessages() {
-        alert("Youve got a new message");
+        $.ajax({
+            url: "MarketView.aspx/ReturnMessages",
+            contentType: 'application/html ; charset:utf-8',
+            type: 'GET',
+            dataType: 'html'
+        }).success(function (result) {
+            $("#allChat").add(result);
+            alert("carl snyder");
+        }).error(function () {
+            alert("Det her virker jo ikke");
+        });
+        return false;
     }
+</script>
+
+<script>
+    $('.')
 </script>
 
 
