@@ -15,7 +15,7 @@ namespace _02148_Project.Website
 
         public int id { get; set; }
 
-        int stopwatchThreshold = 50000;
+        int stopwatchThreshold = 25000;
 
         //The timer is used for calling the event "closeAdvert(..)"
         System.Timers.Timer timer;
@@ -27,7 +27,7 @@ namespace _02148_Project.Website
 
             this.id = id;
             timer = new System.Timers.Timer();
-            timer.Interval = 60000;
+            timer.Interval = 30000;
             timer.AutoReset = false;
             timer.Elapsed += closeAdvert;
             timer.Enabled = true;
