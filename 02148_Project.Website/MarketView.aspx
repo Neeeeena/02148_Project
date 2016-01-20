@@ -53,15 +53,15 @@
                             <asp:ListItem Value="2"></asp:ListItem>
                         </asp:DropDownList>
 
-                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" onclick="tradeOfferSellerImage0_click" />
+                        <asp:button class="tradeOfferButton" style="background-image: url(Images/firewood.png)" id="s0" runat="server" data-id="ls0" OnClientClick="tradeOfferSellerImage_click(this)" />
                                 <label runat="server" id="ls0">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" onclick="tradeOfferSellerImage1_click"/>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/får.png)" id="s1" runat="server" data-id="ls1" OnClientClick="tradeOfferSellerImage_click(this)"/>
                                 <label runat="server" id="ls1">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" onclick="tradeOfferSellerImage2_click"/>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/mursten.png)" id="s2" runat="server" data-id="ls2" OnClientClick="tradeOfferSellerImage_click(this)"/>
                                 <label runat="server" id="ls2">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" onclick="tradeOfferSellerImage3_click"/>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/stone.png)" id="s3" runat="server" data-id="ls3" OnClientClick="tradeOfferSellerImage_click(this)"/>
                                 <label runat="server" id="ls3">0</label>
-                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" onclick="tradeOfferSellerImage4_click"/>
+                                <asp:button class="tradeOfferButton" style="background-image: url(Images/Straw.png);" id="s4" runat="server" data-id="ls4" OnClientClick="tradeOfferSellerImage_click(this)"/>
                                 <label runat="server" id="ls4">0</label>
 
                      
@@ -97,7 +97,13 @@
 
                 </div>
             
-
+<script type="text/javascript">
+    function tradeOfferSellerImage_click(ele) {
+        var label = document.getElementById(ele.getAttribute('data-id'));
+        var count = label.innerText;
+        label.innerText = count + 1;
+    }
+</script>
 
 	<div class="container" style="width:300px">
 	  <h2>CHAT</h2>
@@ -373,9 +379,8 @@ $(document).ready(function(){
     });
 
     function getAllMessages() {
-        var pageUrl = "<%= ResolveUrl("~/MarketView.aspx/ReturnMessages")%>";
         $.ajax({
-            url: pageUrl,
+            url: "MarketView.aspx/ReturnMessages",
             contentType: 'application/html ; charset:utf-8',
             type: 'GET',
             dataType: 'html'
