@@ -69,16 +69,60 @@
 
 
       <div class="span10">
-        <div style="background-image:url(Images/map.png); background-repeat:no-repeat; height: 600px;width: 880px" class="markedImage" id="marked" >
+                <div class="col-md-6" style="width:70%;">
+                    <img src="Images/map.png", style="width:100%;height:100%">
+                
+                
+                <!--<div style="background-image: url(Images/map.png); background-repeat: no-repeat; height: 400px; width: 100%" class="markedImage" id="marked">
+                </div>-->
+                <div style="width:100%">
+                    <asp:Repeater ID="repLocalResources" runat="server">
+                        <HeaderTemplate>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th id="headlineResources">
+                                            <h3>Resources</h3>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <tr class="dockFloating">
+                                <td>
+                                    <div class="dockResource">
+                                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </ItemTemplate>
+                        <FooterTemplate>
+                            </tbody>
+                </table>
+                        </FooterTemplate>
+                    </asp:Repeater>
+                </div>
+                </div>
+                <div class="col col-md-6">
+                    <div>
+                        <a runat="server" href="~/MarketView" class="horseLink">
+                            <img src="Images/Horse.png", style="margin-left:-100%; margin-right:10%">
+                        </a>
   
         </div>
+                    <br />
+                    <p>
 
-        <asp:Repeater ID="repLocalResources" runat="server" >
+                    </p>
+                    <asp:Repeater ID="repMission" runat="server">
           <HeaderTemplate>
             <table>
               <thead>
                 <tr>
-                    <th id="headlineResources"><h3 >Resources</h3></th>
+                                        <th id="headlineMission">
+                                            <h3>Your current mission is to gather the following:</h3>
+                                        </th>
                 </tr>
               </thead>
               <tbody>
@@ -86,8 +130,8 @@
           <ItemTemplate>
             <tr class="dockFloating">
               <td>
-                  <div class="dockResource" >
-                       <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>"  />
+                                    <div class="dockResource">
+                                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>" />
                  </div>
               </td>
             </tr>
@@ -97,7 +141,10 @@
             </table>
           </FooterTemplate>
     </asp:Repeater>
+
+                </div>
       </div>
+
 
       </div>
     </div>

@@ -12,6 +12,7 @@ namespace _02148_Project.Website
     public partial class MapView : Page
     {
         public List<LocalResource> localresources;
+        public List<MissionGoal> missionGoals;
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -54,6 +55,10 @@ namespace _02148_Project.Website
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
+            missionGoals = MainClient.GetMissionGoals();
+            repMission.DataSource = missionGoals;
+            repMission.DataBind();
+            
 
         }
 
