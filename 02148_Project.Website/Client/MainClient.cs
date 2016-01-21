@@ -277,7 +277,7 @@ namespace _02148_Project.Client
 
                 SubtractPlayerResources(offer.SellerResources, player.Name);
 
-                Timer timer = new Timer(10000);
+                Timer timer = new Timer(30000);
                 timer.Elapsed += TakeBackTradeOffer;
                 timer.AutoReset = false;
 

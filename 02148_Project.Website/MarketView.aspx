@@ -22,13 +22,13 @@
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
             
-            <p>Sell resources here!</p>
+            <h3>Sell resources here!</h3>
             <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
             </div>
             <input runat="server" class="hidden" id="hiddenValue" type="text" value="" />
             <div id="sellInput" runat="server">
-                How much do you want to sell it for? <br />
+                <h3>How much do you want to sell it for?</h3>
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
@@ -215,20 +215,21 @@
 		</div>
           <div id="p2" class="tab-pane fade">
 			<div class="chatbox" runat="server" id="p2Chat">
+                <div class="message"> 
         <asp:UpdatePanel ID="UpdatePanel3" runat="server">        
+                  
     <ContentTemplate>
         <asp:Timer ID="Timer4" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP2Chat" runat="server" >
          
           <ItemTemplate>
-
-                <div class="message">
-                    <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span> <br />
-                </div>
+                <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span>
           </ItemTemplate>
+
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
+			</div>
 			</div>
 		
 			
@@ -273,7 +274,7 @@
        
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
-            <asp:UpdatePanel ID="up" runat="server"> 
+            <asp:UpdatePanel ID="up" runat="server">        
                 <Triggers>
                     <asp:AsyncPostBackTrigger ControlId="Timer1" EventName="Tick"/>
                 </Triggers>       
@@ -439,7 +440,7 @@
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
 });
-        
+     */   
 
 </script>
 
