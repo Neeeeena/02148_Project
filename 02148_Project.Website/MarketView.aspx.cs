@@ -26,7 +26,11 @@ namespace _02148_Project.Website
         public List<ResourceOffer> marketresources;
         public List<TradeOffer> allYourRecievedTradeOffers;
         public List<TradeOffer> allYourSentTradeOffers;
-        public List<Message> messages;
+        public List<Message> messages = new List<Message>();
+        public List<Message> messagesToAll = new List<Message>();
+        public List<Message> messagesP1 = new List<Message>();
+        public List<Message> messagesP2 = new List<Message>();
+        public List<Message> messagesP3 = new List<Message>();
         public Player Player1;
         public Player Player2;
         public Player Player3;
@@ -37,7 +41,6 @@ namespace _02148_Project.Website
         public bool hasGottenMission = false;
         protected void Page_Load(object sender, EventArgs e)
         {
-
             playerName.InnerText = MainClient.player.Name;
             goldAmount.InnerText = "You have "+MainClient.player.Gold + " pieces of gold";
 
@@ -45,12 +48,13 @@ namespace _02148_Project.Website
             {
                 localresources = new List<LocalResource>();
                 marketresources = new List<ResourceOffer>();
-                messages = new List<Message>();
-                
+
+
 
                 MainClient.SetupDatabaseListeners(OnChange_Players, OnChange_ResourceOffer,
                     OnChange_TradeOffer, OnChange_Chat);
             }
+            //RegisterAsyncTask(new PageAsyncTask(GetResourceOfferEvent));
             //Load data into allOtherPlayers list
             MainClient.ReadOtherPlayers();
 
@@ -73,21 +77,15 @@ namespace _02148_Project.Website
 
             RenderMarket();
             RenderLocalResources();
-            repMarketResources.DataSource = marketresources;
-            repMarketResources.DataBind();
-            repLocalResources.DataSource = localresources;
-            repLocalResources.DataBind();
             RenderChat();
             if (MainClient.player.Name == "Alex") MainServer.initGame();
             if (!MainClient.incomeTimerHasBeenSet) MainClient.incomeHandler();
-
             //if (!hasGottenMission)
             //{
             //    hasGottenMission = true;
             //    MainClient.GiveMission();
             //}
         }
-
 
         protected override void OnInit(EventArgs e)
         {
@@ -291,81 +289,59 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
 
-        [WebMethod]
-        public static string ReturnMessages()
-            {
-            //messages = MainClient.GetNewMessage();
-            ////StringBuilder sb = new StringBuilder();
-            ////foreach(var m in messages)
-            ////{
-            ////    sb.Append(m.Content);
-            ////}
-            //HtmlGenericControl divcontrol = new HtmlGenericControl();
-            //divcontrol.TagName = "div";
-            //Label l = new Label();
-            //l.Text = messages.ElementAt(messages.Count - 1).Content;
-            //divcontrol.Controls.Add(l);
-            //return divcontrol;
-            return "Hejsa";
-        }
 
         protected void RenderChat()
         {
             messages = MainClient.GetNewMessage();
             messages.OrderBy(a => a.Id).ToList();
-            messages.Reverse();
+            //messages.Reverse();
             foreach(var mes in messages)
             {
                 if (mes.ToAll)
                 {
-                    Label l = new Label();
-                    l.Text = mes.SenderName + ": " + mes.Content;
                     if (mes.SenderName.Equals(MainClient.player.Name))
                     {
-                        l.Attributes.Add("Class", "myMessage");
+                        mes.htmlClass = "myMessage";
                     }
-                    allChat.Controls.Add(l);
-                    allChat.Controls.Add(new Literal {Text = "<hr/>" });
+                    messagesToAll.Add(mes);
                 }
                 else
                 {
-                    if (mes.RecieverName != null)
                     if(mes.RecieverName.Equals(Player1.Name) || mes.SenderName.Equals(Player1.Name))
                     {
-                        Label l = new Label();
-                        l.Text = mes.SenderName + ": " + mes.Content;
                         if (mes.SenderName.Equals(MainClient.player.Name))
                         {
-                            l.Attributes.Add("Class", "myMessage");
+                            mes.htmlClass = "myMessage";
                         }
-                        p1Chat.Controls.Add(l);
-                        p1Chat.Controls.Add(new Literal { Text = "<hr/>" });
+                        messagesP1.Add(mes);
                     }
                     else if(mes.RecieverName.Equals(Player2.Name) || mes.SenderName.Equals(Player2.Name)){
-                        Label l = new Label();
-                        l.Text = mes.SenderName + ": " + mes.Content;
                         if (mes.SenderName.Equals(MainClient.player.Name))
                         {
-                            l.Attributes.Add("Class", "myMessage");
+                            mes.htmlClass = "myMessage";
                         }
-                        p2Chat.Controls.Add(l);
-                        p2Chat.Controls.Add(new Literal { Text = "<hr/>" });
+                        messagesP2.Add(mes);
                     }
                     else
                     {
-                        Label l = new Label();
-                        l.Text = mes.SenderName + ": " + mes.Content;
                         if (mes.SenderName.Equals(MainClient.player.Name))
                         {
-                            l.Attributes.Add("Class", "myMessage");
+                            mes.htmlClass = "myMessage";
                         }
-                        p3Chat.Controls.Add(l);
-                        p3Chat.Controls.Add(new Literal {  Text = "<hr/>" });
+                        messagesP3.Add(mes);
                     }
                 }
             }
+            repAllChat.DataSource = messagesToAll;
+            repAllChat.DataBind();
+            repP1Chat.DataSource = messagesP1;
+            repP1Chat.DataBind();
+            repP2Chat.DataSource = messagesP2;
+            repP2Chat.DataBind();
+            repP3Chat.DataSource = messagesP3;
+            repP3Chat.DataBind();
 
-           }
+        }
 
 
         protected void buttonCancelSell_Click(Object sender, EventArgs e)
@@ -411,7 +387,7 @@ namespace _02148_Project.Website
             // Find a way to update with the latest resource offers
             RenderLocalResources();
             RenderMarket();
-            
+
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
@@ -436,9 +412,7 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-
-            ChatHub.SendMessages();
-        
+            
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion

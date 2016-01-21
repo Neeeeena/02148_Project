@@ -47,6 +47,7 @@
     <Compile Include="Exceptions\ResourceOfferException.cs" />
     <Compile Include="LocalResource.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="MissionGoal.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceOffer.cs" />

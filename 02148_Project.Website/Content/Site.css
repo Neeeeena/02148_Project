@@ -50,7 +50,7 @@ input[type="select"] {
 
 .resource {
     width:70px;
-    height:150px;
+
 }
 
 .dockFloating {
@@ -89,6 +89,8 @@ input[type="select"] {
     margin-left:17%;
 }
 
+
+
 .span3 {
     width: 15%;
     float: left;
@@ -120,7 +122,7 @@ input[type="select"] {
         min-height: 74px; 
         width: 16.66%; 
         padding: 12px; 
-        background-color:  #FFBE7F;
+        background-color:  #ffffff;
         color:#302E2A; 
     }
 
@@ -164,10 +166,11 @@ input.hidden {
     position:relative;
 }
 #markedContent{
-    height:400px;
+    overflow-y:scroll;
+    height:280px;
     width:500px;
     position:absolute;
-    top:150px;
+    top:130px;
     left:50px;
 }
 
@@ -177,6 +180,7 @@ input.hidden {
 
 .horseLink {
     float:right;
+    margin-bottom:10px;
 }
 
 .horseLink img {
@@ -191,10 +195,22 @@ input.hidden {
 }
 
 h3 {
-    font-size: small;
+    font-size:medium;
     margin: 0;
+    font-family: Medieval, serif;
 }
 
+h1,h2,h4 {
+    font-family: Medieval, serif;
+}
+
+p{
+    font-size:medium;
+}
+li{
+    font-size:14px;
+    display:inline-block;
+}
 #invisibleLines {
     border:0 none;
     color:white;
@@ -292,7 +308,15 @@ div.scroll {
 
 }
 
+@font-face {
+  font-family: Medieval;
+  src: url(GoudyMediaevalRegular.ttf);
+}
+
 .playerOnline {
     display: block;
     clear: both;
 }
+
+
+*{ font-family: Medieval, serif; }

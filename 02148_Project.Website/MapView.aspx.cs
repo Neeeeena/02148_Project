@@ -12,6 +12,7 @@ namespace _02148_Project.Website
     public partial class MapView : Page
     {
         public List<LocalResource> localresources;
+        public List<MissionGoal> missionGoals;
         
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -54,6 +55,10 @@ namespace _02148_Project.Website
             localresources = MainClient.GetLocalResources();
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
+            missionGoals = MainClient.GetMissionGoals();
+            repMission.DataSource = missionGoals;
+            repMission.DataBind();
+            
 
         }
 
@@ -61,12 +66,14 @@ namespace _02148_Project.Website
         {
             MainClient.constructConstruction(Construction.Mill);
             RenderLocalResources();
+            millNo.Text = "" + MainClient.player.Mill;
         }
 
         protected void buyCottage_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Cottage);
             RenderLocalResources();
+            cottageNo.Text = "" + MainClient.player.Cottage;
         }
         protected bool hasResourcesFor(Construction type)
         {
@@ -77,25 +84,28 @@ namespace _02148_Project.Website
         {
             MainClient.constructConstruction(Construction.Forge);
             RenderLocalResources();
+            forgeNo.Text = "" + MainClient.player.Forge;
         }
 
         protected void buyTownHall_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Townhall);
             RenderLocalResources();
+            townHallNo.Text = "" + MainClient.player.Townhall;
         }
 
         protected void buyGoldmine_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Goldmine);
             RenderLocalResources();
+            goldMineNo.Text = "" + MainClient.player.Goldmine;
         }
 
         protected void buyFarm_Click(object sender, EventArgs e)
         {
             MainClient.constructConstruction(Construction.Farm);
             RenderLocalResources();
-
+            farmNo.Text = "" + MainClient.player.Farm;
         }
     }
 }

@@ -5,7 +5,6 @@
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
 
-
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
@@ -14,6 +13,7 @@
                 <img id="goldImage" src="Images/gold3.png" />
                 <figcaption><p runat="server" id="goldAmount"></p></figcaption>
             </figure>
+            <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
       <!--Sidebar content-->
             <div runat="server" id="tradeOffers">
                 <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
@@ -33,13 +33,14 @@
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
-                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                
             </div>
 
 
 
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
+            
 
             <!-- Modal -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
@@ -177,6 +178,20 @@
 		<div id="all" class="tab-pane fade in active">
 			<div class="chatbox" id="allChat" runat="server">
 			  <p><b>Market: </b>Everyone can see everything here :)</p>
+                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">        
+    <ContentTemplate>
+        <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="timer_Ticked" />
+        <asp:Repeater ID="repAllChat" runat="server" >
+          <ItemTemplate>
+                <div class="message">
+                    <li class=<%# Eval("htmlClass")%> ><span> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></li>
+                </div>
+          </ItemTemplate>
+    </asp:Repeater>
+    </ContentTemplate>
+</asp:UpdatePanel>
+
+
 			</div>
 		
 			
@@ -190,6 +205,20 @@
 		
 		<div id="p1" class="tab-pane fade">
 			<div class="chatbox" runat="server" id="p1Chat">
+     <asp:UpdatePanel ID="UpdatePanel2" runat="server">        
+    <ContentTemplate>
+        <asp:Timer ID="Timer3" runat="server" Interval="1000" OnTick="timer_Ticked" />
+        <asp:Repeater ID="repP1Chat" runat="server" >
+
+          <ItemTemplate>
+
+                <div class="message">
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
+                </div>
+          </ItemTemplate>
+    </asp:Repeater>
+    </ContentTemplate>
+</asp:UpdatePanel>
 			</div>
 		
 			
@@ -202,6 +231,21 @@
 		</div>
           <div id="p2" class="tab-pane fade">
 			<div class="chatbox" runat="server" id="p2Chat">
+        <asp:UpdatePanel ID="UpdatePanel3" runat="server">        
+    <ContentTemplate>
+        <asp:Timer ID="Timer4" runat="server" Interval="1000" OnTick="timer_Ticked" />
+        <asp:Repeater ID="repP2Chat" runat="server" >
+         
+          <ItemTemplate>
+
+                <div class="message">
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
+                    <hr />
+                </div>
+    </ItemTemplate>
+    </asp:Repeater>
+    </ContentTemplate>
+</asp:UpdatePanel>
 			</div>
 		
 			
@@ -214,6 +258,18 @@
 		</div>
           <div id="p3" class="tab-pane fade">
 			<div class="chatbox" runat="server" id="p3Chat">
+                            <asp:UpdatePanel ID="UpdatePanel4" runat="server">        
+    <ContentTemplate>
+        <asp:Timer ID="Timer5" runat="server" Interval="1000" OnTick="timer_Ticked" />
+        <asp:Repeater ID="repP3Chat" runat="server" >      
+          <ItemTemplate>
+                <div class="message">
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p><br/>
+                </div>
+          </ItemTemplate>
+    </asp:Repeater>
+    </ContentTemplate>
+</asp:UpdatePanel>
 			</div>
 		
 			
@@ -340,6 +396,7 @@
         $("#myModal").modal("show");
     }
 </script>
+
 
 <script type="text/javascript">
 
@@ -483,48 +540,6 @@ $(document).ready(function(){
         $().att('id','')
         $(this).attr('id','activeChat');
     });
-</script>
-
-<script src="Scripts/jquery-1.10.2.js" type="text/javascript"></script>
-<script src="Scripts/jquery.signalR-2.2.0.js" type="text/javascript"></script>
-<script src="signalr/hubs" type="text/javascript"></script>
-<script type="text/javascript">
-    $(function () {
-        // Declare a proxy to reference the hub.
-        var notifications = $.connection.chatHub;
-
-        //debugger;
-        // Create a function that the hub can call to broadcast messages.
-        notifications.client.updateMessages = function () {
-            getAllMessages()
-
-        };
-        // Start the connection.
-        $.connection.hub.start().done(function () {
-            alert("connection started")
-            getAllMessages();
-        }).fail(function (e) {
-            alert(e);
-        });
-    });
-
-    function getAllMessages() {
-        $.ajax({
-            url: "MarketView.aspx/ReturnMessages",
-            contentType: 'application/json ; charset:utf-8',
-            type: 'POST',
-            dataType: 'json'
-        }).success(function (result) {
-            alert("res"+result.d);
-        }).error(function () {
-            alert("Det her virker jo ikke");
-        });
-        return false;
-    }
-</script>
-
-<script>
-    $('.')
 </script>
 
 
