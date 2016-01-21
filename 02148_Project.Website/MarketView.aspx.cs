@@ -70,7 +70,10 @@ namespace _02148_Project.Website
             List<string> names = new List<string>();
             foreach (Player player in MainClient.allOtherPlayers)
             {
-                names.Add(player.Name);
+                if (player.Name != "Server")
+                {
+                    names.Add(player.Name);
+                }
             }
             tradeOfferReceiver.DataSource = names;
             tradeOfferReceiver.DataBind();
@@ -393,10 +396,6 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            Console.Write(lbls1.InnerText);
-        }
         public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
         {
             (sender as SqlDependency).OnChange -= OnChange_TradeOffer;

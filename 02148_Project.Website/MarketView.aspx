@@ -37,29 +37,22 @@
                 <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 
             </div>
-
-
-
-
-
-            <!-- Modal -->
+            <!-- Modal for sending trade offers -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Send Trade Offer</h4>
-                    </div>
-                    <div class="modal-body">
-                        <asp:DropDownList ID="tradeOfferReceiver" runat="server" Width="200px">
-                            <asp:ListItem></asp:ListItem>
-                            <asp:ListItem></asp:ListItem>
-                            <asp:ListItem></asp:ListItem>
-                        </asp:DropDownList>
-
-                                <div class="resContainer">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Send Trade Offer</h4>
+                        </div>
+                        <div class="modal-body">
+                            <asp:DropDownList ID="tradeOfferReceiver" runat="server" Width="200px">
+                                <asp:ListItem></asp:ListItem>
+                                <asp:ListItem></asp:ListItem>
+                                <asp:ListItem></asp:ListItem>
+                            </asp:DropDownList>
+                            <div class="resContainer">
                                 <h3><b>Resources you want to sell:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
@@ -69,7 +62,7 @@
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="woolOffer" value="0"/>
+                                    <input class="tradeInput" runat="server" type="number" id="woolOffer" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
@@ -96,87 +89,65 @@
                                     <br />
                                     <input class="tradeInput" runat="server" type="number" id="foodOffer" value="0" />
                                 </div>
-                                </div>
-                                <div class="resContainer">
+                            </div>
+                            <div class="resContainer">
                                 <h3><b>Resources you want to receive:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" />
-                            </div>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" />
+                                </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
-                                        <br /> 
-                                        <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" />
-                            </div>
-
-                                
-
-
-                            </div>
-                                <br/>
-                        <br />
-                            
-                           <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
-                    
-
-                                 <div>
-                                 <asp:UpdatePanel ID="UpdatePanel10" runat="server"
-                                 UpdateMode="Conditional">
-                                 <ContentTemplate>
-                                
-                                 
-
-                                 
-                                 </ContentTemplate>
-                                  <Triggers>
-                                 <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
-                                 </Triggers>
-                                 </asp:UpdatePanel>
-                    </div>
-                                   
-                        <h3><b>Resources you want to sell:</b></h3>
-                                <div id="ds1" class="tradeOfferDiv">
-                                    <img src="Images/firewood.png" />
-                                    <p runat="server" id="lbls1">0</p> 
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" />
                                 </div>
-                        <asp:Button ID="Button1" runat="server"
-                                 Text="Update Both Panels" OnClick="Button1_Click" />
-
-
+                            </div>
+                            <br />
+                            <br />
+                            <asp:Button Text="Send Trade Offer" runat="server" ID="sendTradeOfferBtns" OnClick="sendTradeOffer_click"></asp:Button>
+                            <div>
+                                <asp:UpdatePanel ID="UpdatePanel10" runat="server"
+                                    UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                    </ContentTemplate>
+                                    <Triggers>
+                                        <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
+                                    </Triggers>
+                                </asp:UpdatePanel>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
                 </div>
-                </div>
-
-                </div>
+            </div>
             
 
 
