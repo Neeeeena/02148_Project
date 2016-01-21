@@ -18,6 +18,7 @@
                             <p>Cottage: 1 wood, 1 wool, 1 straw</p>
 						    <asp:Button runat="server" text="Buy" OnClick="buyCottage_Click" class="btn btn-default" id="buyCottage"></asp:Button><br />
 					        <div>You have: <asp:Label id="cottageNo" runat="server" ></asp:Label> cottages</div>
+                            <asp:HiddenField ID="hiddenCottageNo" runat="server" />
                         </td>
 				    </tr>
                     <tr>
@@ -100,36 +101,7 @@
 
       </div>
     </div>
-<script type="text/javascript">
-    $("#MainContent_buyCottage").click(function () {
-        $("#MainContent_cottageNo").Text = parseInt($("#MainContent_cottageNo").Text) + 1;
-    });
-</script>
-    <script type="text/javascript">
-    $("#MainContent_buyMill").click(function () {
-        $("#MainContent_millNo").Text = parseInt($("#MainContent_millNo").Text) + 1;
-    });
-</script>
-    <script type="text/javascript">
-    $("#MainContent_buyForge").click(function () {
-        $("#MainContent_forgeNo").Text = parseInt($("#MainContent_forgeNo").Text) + 1;
-    });
-</script>
-<script type="text/javascript">
-    $("#MainContent_buyFarm").click(function () {
-        $("#MainContent_farmNo").Text = parseInt($("#MainContent_farmNo").Text) + 1;
-    });
-</script>
-<script type="text/javascript">
-    $("#MainContent_buyTownHall").click(function () {
-        $("#MainContent_townHallNo").Text = parseInt($("#MainContent_townHallNo").Text) + 1;
-    });
-</script>
-<script type="text/javascript">
-    $("#MainContent_buyGoldmine").click(function () {
-        $("#MainContent_goldMineNo").Text = parseInt($("#MainContent_goldMineNo").Text) + 1;
-    });
-</script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         if ("<%=hasResourcesFor(_02148_Project.Model.Construction.Cottage)%>" == "True") {

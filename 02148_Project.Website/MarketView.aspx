@@ -5,7 +5,6 @@
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
 
-
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
@@ -14,6 +13,7 @@
                 <img id="goldImage" src="Images/gold3.png" />
                 <figcaption><p runat="server" id="goldAmount"></p></figcaption>
             </figure>
+            <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
       <!--Sidebar content-->
             <div runat="server" id="tradeOffers">
                 <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
@@ -33,13 +33,14 @@
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
-                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                
             </div>
 
 
 
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
+            
 
             <!-- Modal -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
@@ -153,28 +154,11 @@
         <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repAllChat" runat="server" >
          
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -197,29 +181,13 @@
     <ContentTemplate>
         <asp:Timer ID="Timer3" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP1Chat" runat="server" >
-         
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
+
           <ItemTemplate>
-            <tr class="floating">
-              <td>
+
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -240,28 +208,13 @@
         <asp:Timer ID="Timer4" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP2Chat" runat="server" >
          
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
+
                 <div class="message">
                     <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
                     <hr />
                 </div>
-              </td>
-            </tr>
-          </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
+    </ItemTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -280,30 +233,12 @@
                             <asp:UpdatePanel ID="UpdatePanel4" runat="server">        
     <ContentTemplate>
         <asp:Timer ID="Timer5" runat="server" Interval="1000" OnTick="timer_Ticked" />
-        <asp:Repeater ID="repP3Chat" runat="server" >
-         
-    <HeaderTemplate>
-         <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
+        <asp:Repeater ID="repP3Chat" runat="server" >      
           <ItemTemplate>
-            <tr class="floating">
-              <td>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p><br/>
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
