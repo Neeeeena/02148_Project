@@ -219,6 +219,7 @@
     <Content Include="Images\wood.gif" />
     <Content Include="MapView.aspx" />
     <Content Include="MarketView.aspx" />
+    <Content Include="Party.aspx" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -302,6 +303,13 @@
       <DependentUpon>MarketView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Party.aspx.cs">
+      <DependentUpon>Party.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Party.aspx.designer.cs">
+      <DependentUpon>Party.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\Advert.cs" />
     <Compile Include="Servers\DatabaseInterface.cs" />

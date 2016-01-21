@@ -17,10 +17,16 @@ namespace _02148_Project.Website
     public partial class _Default : Page
     {
 
+        
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
+
+        
+
+        
 
         protected void submitusername_Click(object sender, EventArgs e)
         {
@@ -34,7 +40,7 @@ namespace _02148_Project.Website
                 string ret = MainClient.createPlayer(username.Value);
                 if (ret == null)
                 {
-                    Response.Redirect("~/MarketView?player=" + username.Value);
+                    Response.Redirect("~/Party?player=" + username.Value);
                 }
                 else
                 {
@@ -60,7 +66,7 @@ namespace _02148_Project.Website
                 try
                 {
                     MainClient.ReadAPlayer(existingusername.Value);
-                    Response.Redirect("~/MarketView?player="+existingusername.Value);
+                    Response.Redirect("~/Party?player=" + existingusername.Value);
                 }
                 catch (Exception ex)
                 {

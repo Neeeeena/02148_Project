@@ -226,7 +226,7 @@ namespace _02148_Project.Client
         {
             try {
                 allOtherPlayers = DatabaseInterface.ReadAllPlayers();
-                removeYourself();
+                //removeYourself();
             }
             catch(Exception ex)
             {
