@@ -58,35 +58,35 @@
                             <asp:ListItem Value="2"></asp:ListItem>
                         </asp:DropDownList>
 
+                                
+
+                                <!--
+
                                 <div class="resContainer">
-                                <h3><b>Resources you want to sell:</b></h3>
-                                <div class="tradeOfferDiv">
-                                    <img src="Images/firewood.png" />
-                                    <asp:label Text="0" runat="server" id="lbls1" />
-                                </div>
-                                <div class="tradeOfferDiv">
+                                
+                                <div id="ds2" class="tradeOfferDiv">
                                     <img src="Images/får.png" />
-                                    <label runat="server" id="s1">0</label>
+                                    <asp:label runat="server" id="lbls2">0</asp:label>
                                 </div>
-                                <div class="tradeOfferDiv">
+                                <div id="ds3" class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
-                                    <label runat="server" id="s2" >0</label>
+                                    <asp:label runat="server" id="lbls3" >0</asp:label>
                                 </div>
-                                <div class="tradeOfferDiv">
+                                <div id="ds4" class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
-                                    <label runat="server" id="s3">0</label>
+                                    <asp:label runat="server" id="lbls4">0</asp:label>
                                 </div>
-                                <div class="tradeOfferDiv">
+                                <div id="ds5" class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
-                                    <label runat="server" id="s4">0</label>
+                                    <asp:label runat="server" id="lbls5">0</asp:label>
                                 </div>
-                                <div class="tradeOfferDiv">
+                                <div id="ds6" class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
-                                    <label runat="server" id="s5">0</label>
+                                    <asp:label runat="server" id="lbls6">0</asp:label>
                                 </div>
-                                <div class="tradeOfferDiv">
+                                <div id="ds7" class="tradeOfferDiv">
                                     <img src="Images/food.png" />
-                                    <label runat="server" id="s6">0</label>
+                                    <asp:label runat="server" id="lbls7">0</asp:label>
                                 </div>
                                 </div>
                                 <div class="resContainer">
@@ -119,10 +119,39 @@
                                     <img src="Images/food.png" />
                                     <label runat="server" id="r6">0</label>
                             </div>
+
+                                
+
+
                             </div>
                                 <br/>
                            <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
-                    
+                            
+
+                                 <div>
+                                 <asp:UpdatePanel ID="UpdatePanel10" runat="server"
+                                 UpdateMode="Conditional">
+                                 <ContentTemplate>
+                                
+                                 
+
+                                 
+                                 </ContentTemplate>
+                                  <Triggers>
+                                 <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
+                                 </Triggers>
+                                 </asp:UpdatePanel>
+                                 </div>
+                                    -->
+                        <h3><b>Resources you want to sell:</b></h3>
+                                <div id="ds1" class="tradeOfferDiv">
+                                    <img src="Images/firewood.png" />
+                                    <p runat="server" id="lbls1">0</p> 
+                                </div>
+                        <asp:Button ID="Button1" runat="server"
+                                 Text="Update Both Panels" OnClick="Button1_Click" />
+
+
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -380,10 +409,55 @@ $(document).ready(function(){
 
 </script>
 
-<script>
+
+
+    
+<script type="text/javascript">
+
+    /* LORTET HER VIRKER!
     $(document).ready(function () {
-        $(".tradeOfferDiv").click(function () {
-            $("#lbls1").Text = $("#lbls1").Text + 1;
+        $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "MarketView.aspx/AjaxCall",
+                dataType: "json",
+                data:'{}',
+                success: function (result) {
+                    alert("Succes!");
+                    // window.location.href = "ClubCreation.aspx";
+                },
+                Error: function () {
+                    alert('error');
+                }
+        });
+    });
+     */   
+    
+</script>
+
+<script>
+    
+    $(document).ready(function () {
+        $("#ds1").click(function () {
+            document.getElementById('MainContent_lbls1').val() = 1;
+        });
+        $("#ds2").click(function () {
+            document.getElementById('MainContent_lbls2').innerHTML = parseInt(document.getElementById('MainContent_lbls2').innerHTML) + 1;
+        });
+        $("#ds3").click(function () {
+            document.getElementById('MainContent_lbls3').innerHTML = parseInt(document.getElementById('MainContent_lbls3').innerHTML) + 1;
+        });
+        $("#ds4").click(function () {
+            document.getElementById('MainContent_lbls4').innerHTML = parseInt(document.getElementById('MainContent_lbls4').innerHTML) + 1;
+        });
+        $("#ds5").click(function () {
+            document.getElementById('MainContent_lbls5').innerHTML = parseInt(document.getElementById('MainContent_lbls5').innerHTML) + 1;
+        });
+        $("#ds6").click(function () {
+            document.getElementById('MainContent_lbls6').innerHTML = parseInt(document.getElementById('MainContent_lbls6').innerHTML) + 1;
+        });
+        $("#ds7").click(function () {
+            document.getElementById('MainContent_lbls7').innerHTML = parseInt(document.getElementById('MainContent_lbls7').innerHTML) + 1;
         });
     });
 </script>

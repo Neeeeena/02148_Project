@@ -103,67 +103,58 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.DropDownList dd;
         
         /// <summary>
-        /// lbls1 control.
+        /// lbls2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbls1;
+        protected global::System.Web.UI.WebControls.Label lbls2;
         
         /// <summary>
-        /// s1 control.
+        /// lbls3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s1;
+        protected global::System.Web.UI.WebControls.Label lbls3;
         
         /// <summary>
-        /// s2 control.
+        /// lbls4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s2;
+        protected global::System.Web.UI.WebControls.Label lbls4;
         
         /// <summary>
-        /// s3 control.
+        /// lbls5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s3;
+        protected global::System.Web.UI.WebControls.Label lbls5;
         
         /// <summary>
-        /// s4 control.
+        /// lbls6 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s4;
+        protected global::System.Web.UI.WebControls.Label lbls6;
         
         /// <summary>
-        /// s5 control.
+        /// lbls7 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s5;
-        
-        /// <summary>
-        /// s6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s6;
+        protected global::System.Web.UI.WebControls.Label lbls7;
         
         /// <summary>
         /// r0 control.
@@ -236,6 +227,33 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button sendTradeOfferBtns;
+        
+        /// <summary>
+        /// UpdatePanel10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel10;
+        
+        /// <summary>
+        /// lbls1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbls1;
+        
+        /// <summary>
+        /// Button1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button1;
         
         /// <summary>
         /// player1Tab control.

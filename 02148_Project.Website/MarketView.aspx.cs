@@ -100,9 +100,8 @@ namespace _02148_Project.Website
         protected void sendTradeOffer_click(Object sender, EventArgs e)
         {
             Dictionary<ResourceType, int> sell = new Dictionary<ResourceType, int>();
-            
-            sell.Add(ResourceType.Wood, Int32.Parse(lbls1.Text));
-            sell.Add(ResourceType.Wool, Int32.Parse(s1.InnerText));
+            /*
+            sell.Add(ResourceType.Wood, Int32.Parse(lbls1.InnerText));
             sell.Add(ResourceType.Clay, Int32.Parse(s2.InnerText));
             sell.Add(ResourceType.Stone, Int32.Parse(s3.InnerText));
             sell.Add(ResourceType.Straw, Int32.Parse(s4.InnerText));
@@ -120,7 +119,7 @@ namespace _02148_Project.Website
             string test = dd.SelectedValue;
             TradeOffer to = new TradeOffer(MainClient.player.Name, dd.SelectedValue, sell, rec);
             MainClient.SendTradeOfferToPlayer(to);
-            
+            */
         }
 
         //protected void createTradeOfferElements()
@@ -165,7 +164,7 @@ namespace _02148_Project.Website
 
         //}
 
-    
+
         protected void fillTradeOffers()
         {
             var values = Enum.GetValues(typeof(ResourceType));
@@ -416,6 +415,10 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Console.Write(lbls1.InnerText);
+        }
         public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
         {
             (sender as SqlDependency).OnChange -= OnChange_TradeOffer;

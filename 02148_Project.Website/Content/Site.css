@@ -291,3 +291,8 @@ div.scroll {
     height: 50px;
 
 }
+
+.playerOnline {
+    display: block;
+    clear: both;
+}
