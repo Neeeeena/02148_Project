@@ -67,11 +67,17 @@ namespace _02148_Project.Website
             Player3 = MainClient.allOtherPlayers[2];
             player3Tab.InnerText = Player3.Name;
 
+            List<string> names = new List<string>();
+            foreach (Player player in MainClient.allOtherPlayers)
+            {
+                if (player.Name != "Server")
+                {
+                    names.Add(player.Name);
+                }
+            }
+            tradeOfferReceiver.DataSource = names;
+            tradeOfferReceiver.DataBind();
             
-            dd.Items[0].Text = Player1.Name;
-            dd.Items[1].Text = Player2.Name;
-            dd.Items[1].Text = Player3.Name;
-
             fillTradeOffers();
             //createTradeOfferElements();
 
@@ -98,26 +104,25 @@ namespace _02148_Project.Website
         protected void sendTradeOffer_click(Object sender, EventArgs e)
         {
             Dictionary<ResourceType, int> sell = new Dictionary<ResourceType, int>();
-            /*
-            sell.Add(ResourceType.Wood, Int32.Parse(lbls1.InnerText));
-            sell.Add(ResourceType.Clay, Int32.Parse(s2.InnerText));
-            sell.Add(ResourceType.Stone, Int32.Parse(s3.InnerText));
-            sell.Add(ResourceType.Straw, Int32.Parse(s4.InnerText));
-            sell.Add(ResourceType.Iron, Int32.Parse(s5.InnerText));
-            sell.Add(ResourceType.Food, Int32.Parse(s6.InnerText));
 
-            Dictionary<ResourceType, int> rec = new Dictionary<ResourceType, int>();
-            rec.Add(ResourceType.Wood, Int32.Parse(r0.InnerText));
-            rec.Add(ResourceType.Wool, Int32.Parse(r1.InnerText));
-            rec.Add(ResourceType.Clay, Int32.Parse(r2.InnerText));
-            rec.Add(ResourceType.Stone, Int32.Parse(r3.InnerText));
-            rec.Add(ResourceType.Straw, Int32.Parse(r4.InnerText));
-            rec.Add(ResourceType.Iron, Int32.Parse(r5.InnerText));
-            rec.Add(ResourceType.Food, Int32.Parse(r6.InnerText));
-            string test = dd.SelectedValue;
-            TradeOffer to = new TradeOffer(MainClient.player.Name, dd.SelectedValue, sell, rec);
+            sell.Add(ResourceType.Wood, Int32.Parse(woodOffer.Value));
+            sell.Add(ResourceType.Wool, Int32.Parse(woolOffer.Value));
+            sell.Add(ResourceType.Clay, Int32.Parse(clayOffer.Value));
+            sell.Add(ResourceType.Stone, Int32.Parse(stoneOffer.Value));
+            sell.Add(ResourceType.Straw, Int32.Parse(strawOffer.Value));
+            sell.Add(ResourceType.Iron, Int32.Parse(ironOffer.Value));
+            sell.Add(ResourceType.Food, Int32.Parse(foodOffer.Value));
+
+            Dictionary<ResourceType, int> buy = new Dictionary<ResourceType, int>();
+            buy.Add(ResourceType.Wood, Int32.Parse(woodReceive.Value));
+            buy.Add(ResourceType.Wool, Int32.Parse(woolReceive.Value));
+            buy.Add(ResourceType.Clay, Int32.Parse(clayReceive.Value));
+            buy.Add(ResourceType.Stone, Int32.Parse(stoneReceive.Value));
+            buy.Add(ResourceType.Straw, Int32.Parse(strawReceive.Value));
+            buy.Add(ResourceType.Iron, Int32.Parse(ironReceive.Value));
+            buy.Add(ResourceType.Food, Int32.Parse(foodReceive.Value));
+            TradeOffer to = new TradeOffer(MainClient.player.Name, tradeOfferReceiver.SelectedValue, sell, buy);
             MainClient.SendTradeOfferToPlayer(to);
-            */
         }
 
         //protected void createTradeOfferElements()
@@ -162,7 +167,7 @@ namespace _02148_Project.Website
 
         //}
 
-
+    
         protected void fillTradeOffers()
         {
             var values = Enum.GetValues(typeof(ResourceType));
@@ -391,10 +396,6 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            Console.Write(lbls1.InnerText);
-        }
         public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
         {
             (sender as SqlDependency).OnChange -= OnChange_TradeOffer;

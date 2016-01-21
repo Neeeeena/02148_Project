@@ -215,6 +215,7 @@
     <Content Include="Images\stone.png" />
     <Content Include="Images\Straw.png" />
     <Content Include="Images\TownHall.png" />
+    <Content Include="Images\winscreen.jpg" />
     <Content Include="Images\wood.gif" />
     <Content Include="MapView.aspx" />
     <Content Include="MarketView.aspx" />

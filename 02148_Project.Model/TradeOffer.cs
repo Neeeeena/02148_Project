@@ -12,7 +12,7 @@ namespace _02148_Project.Model
 
         public string SellerName { get; set; }
 
-        public string RecieverName { get; set; }
+        public string ReceiverName { get; set; }
 
         public Dictionary<ResourceType, int> SellerResources { get; set; }
 
@@ -38,7 +38,7 @@ namespace _02148_Project.Model
             Dictionary<ResourceType, int> resources, Dictionary<ResourceType, int> price)
         {
             this.SellerName = sellerName;
-            this.RecieverName = recieverName;
+            this.ReceiverName = recieverName;
             this.SellerResources = resources;
             this.ReceiverResources = price;
         }
