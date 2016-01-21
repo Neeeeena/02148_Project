@@ -240,13 +240,14 @@ namespace _02148_Project.Website
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
-            //MainClient.AcceptTradeOffer(Int32.Parse((string)e.CommandArgument));
+            MainClient.AcceptTradeOffer(Int32.Parse(tradeOfferId.Value));
             RenderTradeOffers();
         }
 
         protected void declineTradeOffer_click(Object sender, EventArgs e)
         {
             //MainClient.DeclineTradeOffer(Int32.Parse((string)e.CommandArgument));
+            MainClient.AcceptTradeOffer(Int32.Parse(tradeOfferId.Value));
             RenderTradeOffers();
         }
 
