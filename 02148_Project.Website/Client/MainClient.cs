@@ -15,6 +15,8 @@ namespace _02148_Project.Client
 {
     public class MainClient
     {
+
+        private static bool missionGiven = false;
         //public List<ResourceOffer> allResourcesOnMarket;
         //public List<TradeOffer> allYourRecievedTradeOffers;
         //public static List<TradeOffer> allYourSentTradeOffers;
@@ -183,48 +185,38 @@ namespace _02148_Project.Client
             player = DatabaseInterface.ReadPlayer(userName);
             //DatabaseInterface.UpdatePlayerResource("Oliver", ResourceType.Wool, 1);
         }
+        public static List<MissionGoal> GetMissionGoals()
+        {
+            if (!missionGiven)
+            {
+                GiveMission();
+                missionGiven = true;
+            }
 
+            List<MissionGoal> missionGoals = new List<MissionGoal>();
+            foreach(Construction c in MissionList)
+                missionGoals.Add(new MissionGoal(c) { Id = Guid.NewGuid().ToString() });         
+            return missionGoals;
+        }
 
         public static List<LocalResource> GetLocalResources()
         {
-            string idGenerator = "a";
             UpdateOwnGoldAndResources();
             List<LocalResource> result = new List<LocalResource>();
             for (int i = 0; i < player.Clay; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Clay) { Id = idGenerator});
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Clay) { Id = Guid.NewGuid().ToString()});
             for (int i = 0; i < player.Food; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Food) { Id = idGenerator });
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Food) { Id = Guid.NewGuid().ToString() });
             for (int i = 0; i < player.Iron; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Iron) { Id = idGenerator});
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Iron) { Id = Guid.NewGuid().ToString() });
             for (int i = 0; i < player.Stone; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Stone) { Id = idGenerator});
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Stone) { Id = Guid.NewGuid().ToString() });
             for (int i = 0; i < player.Straw; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Straw) { Id = idGenerator });
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Straw) { Id = Guid.NewGuid().ToString() });
             for (int i = 0; i < player.Wood; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Wood) { Id = idGenerator});
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Wood) { Id = Guid.NewGuid().ToString() });
             for (int i = 0; i < player.Wool; i++)
-            {
-                result.Add(new LocalResource(ResourceType.Wool) { Id = idGenerator});
-                idGenerator += "a";
-            }
+                result.Add(new LocalResource(ResourceType.Wool) { Id = Guid.NewGuid().ToString() });
             return result;
         }
 
@@ -233,7 +225,7 @@ namespace _02148_Project.Client
         {
             try {
                 allOtherPlayers = DatabaseInterface.ReadAllPlayers();
-                removeYourself();
+                //removeYourself();
             }
             catch(Exception ex)
             {

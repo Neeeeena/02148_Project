@@ -74,7 +74,7 @@ namespace _02148_Project.Website
             }
             tradeOfferReceiver.DataSource = names;
             tradeOfferReceiver.DataBind();
-          
+            
             fillTradeOffers();
             //createTradeOfferElements();
 
@@ -120,7 +120,6 @@ namespace _02148_Project.Website
             buy.Add(ResourceType.Food, Int32.Parse(foodReceive.Value));
             TradeOffer to = new TradeOffer(MainClient.player.Name, tradeOfferReceiver.SelectedValue, sell, buy);
             MainClient.SendTradeOfferToPlayer(to);
-            
         }
 
         //protected void createTradeOfferElements()
@@ -292,10 +291,7 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
 
-        protected void GetChat()
-        {
-            messages = MainClient.GetNewMessage();
-        }
+
         protected void RenderChat()
         {
             messages = MainClient.GetNewMessage();
@@ -397,6 +393,10 @@ namespace _02148_Project.Website
             DatabaseInterface.MonitorResourceOffers(OnChange_ResourceOffer);
         }
 
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            Console.Write(lbls1.InnerText);
+        }
         public void OnChange_TradeOffer(object sender, SqlNotificationEventArgs e)
         {
             (sender as SqlDependency).OnChange -= OnChange_TradeOffer;
@@ -414,7 +414,7 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-            GetChat();
+            
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion

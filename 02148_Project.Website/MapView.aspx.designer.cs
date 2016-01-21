@@ -49,6 +49,15 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Label cottageNo;
         
         /// <summary>
+        /// hiddenCottageNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hiddenCottageNo;
+        
+        /// <summary>
         /// buyMill control.
         /// </summary>
         /// <remarks>
@@ -146,5 +155,14 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater repLocalResources;
+        
+        /// <summary>
+        /// repMission control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater repMission;
     }
 }

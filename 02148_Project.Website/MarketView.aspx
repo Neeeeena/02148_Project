@@ -5,7 +5,6 @@
 <!--<script type="text/javascript" src="Scripts/DragDrop.js"></script>-->
 
 
-
 <div class="container-fluid">
   <div class="row-fluid">
         <div class="span3">
@@ -14,6 +13,7 @@
                 <img id="goldImage" src="Images/gold3.png" />
                 <figcaption><p runat="server" id="goldAmount"></p></figcaption>
             </figure>
+            <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
       <!--Sidebar content-->
             <div runat="server" id="tradeOffers">
                 <asp:PlaceHolder ID="tradeOfferASP" runat="server"/>
@@ -33,13 +33,14 @@
                 <INPUT runat="server" id="inputPrice" type="text" placeholder="Insert a price" 
                     onblur="if (this.value == '') {this.value = 'Insert a price';}"
                     onfocus="if (this.value == 'Insert a price') {this.value = '';}" />
-                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 <asp:Button class="btn btn-default" id="buttonConfirmSell" runat="server" OnClick="buttonConfirmSell_Click" Text="Confirm Sell"></asp:Button>
+                <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
+                
             </div>
 
 
 
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#modalTradeOffer">Send TradeOffer</button>
+
 
             <!-- Modal -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
@@ -98,47 +99,76 @@
                                 </div>
                                 <div class="resContainer">
                                 <h3><b>Resources you want to receive:</b></h3>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/firewood.png" />
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/firewood.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/får.png" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/får.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/mursten.png" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/mursten.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/stone.png" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/stone.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/Straw.png" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/Straw.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/anvil.png" />
+                                </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/anvil.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" />
-                                    </div>
-                                    <div class="tradeOfferDiv">
-                                        <img src="Images/food.png" />
+                            </div>
+                                <div class="tradeOfferDiv">
+                                    <img src="Images/food.png" />
                                         <br /> 
                                         <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" />
-                                    </div>
-                                </div>
+                            </div>
+
+                                
+
+
+                            </div>
                                 <br/>
                         <br />
                             
                            <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
                     
+
+                                 <div>
+                                 <asp:UpdatePanel ID="UpdatePanel10" runat="server"
+                                 UpdateMode="Conditional">
+                                 <ContentTemplate>
+                                
+                                 
+
+                                 
+                                 </ContentTemplate>
+                                  <Triggers>
+                                 <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
+                                 </Triggers>
+                                 </asp:UpdatePanel>
+                    </div>
+                                   
+                        <h3><b>Resources you want to sell:</b></h3>
+                                <div id="ds1" class="tradeOfferDiv">
+                                    <img src="Images/firewood.png" />
+                                    <p runat="server" id="lbls1">0</p> 
+                                </div>
+                        <asp:Button ID="Button1" runat="server"
+                                 Text="Update Both Panels" OnClick="Button1_Click" />
+
+
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -168,29 +198,11 @@
     <ContentTemplate>
         <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repAllChat" runat="server" >
-         
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <li class=<%# Eval("htmlClass")%> ><span> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></li>
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -214,28 +226,12 @@
         <asp:Timer ID="Timer3" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP1Chat" runat="server" >
          
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
+
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -256,28 +252,13 @@
         <asp:Timer ID="Timer4" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP2Chat" runat="server" >
          
-          <HeaderTemplate>
-            <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
+
                 <div class="message">
                     <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
                     <hr />
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -297,29 +278,11 @@
     <ContentTemplate>
         <asp:Timer ID="Timer5" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP3Chat" runat="server" >
-         
-    <HeaderTemplate>
-         <table>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-          </HeaderTemplate>
           <ItemTemplate>
-            <tr class="floating">
-              <td>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p><br/>
                 </div>
-              </td>
-            </tr>
           </ItemTemplate>
-          <FooterTemplate>
-            </tbody>
-            </table>
-          </FooterTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -516,13 +479,58 @@ $(document).ready(function(){
 	
 	
 });
+	
+</script>
+
+
+
+    
+<script type="text/javascript">
+	
+    /* LORTET HER VIRKER!
+    $(document).ready(function () {
+        $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "MarketView.aspx/AjaxCall",
+                dataType: "json",
+                data:'{}',
+                success: function (result) {
+                    alert("Succes!");
+                    // window.location.href = "ClubCreation.aspx";
+                },
+                Error: function () {
+                    alert('error');
+                }
+        });
+});
+     */   
 
 </script>
 
 <script>
+    
     $(document).ready(function () {
-        $(".tradeOfferDiv").click(function () {
-            $("#lbls1").Text = $("#lbls1").Text + 1;
+        $("#ds1").click(function () {
+            document.getElementById('MainContent_lbls1').val() = 1;
+        });
+        $("#ds2").click(function () {
+            document.getElementById('MainContent_lbls2').innerHTML = parseInt(document.getElementById('MainContent_lbls2').innerHTML) + 1;
+        });
+        $("#ds3").click(function () {
+            document.getElementById('MainContent_lbls3').innerHTML = parseInt(document.getElementById('MainContent_lbls3').innerHTML) + 1;
+        });
+        $("#ds4").click(function () {
+            document.getElementById('MainContent_lbls4').innerHTML = parseInt(document.getElementById('MainContent_lbls4').innerHTML) + 1;
+        });
+        $("#ds5").click(function () {
+            document.getElementById('MainContent_lbls5').innerHTML = parseInt(document.getElementById('MainContent_lbls5').innerHTML) + 1;
+        });
+        $("#ds6").click(function () {
+            document.getElementById('MainContent_lbls6').innerHTML = parseInt(document.getElementById('MainContent_lbls6').innerHTML) + 1;
+        });
+        $("#ds7").click(function () {
+            document.getElementById('MainContent_lbls7').innerHTML = parseInt(document.getElementById('MainContent_lbls7').innerHTML) + 1;
         });
     });
 </script>
