@@ -479,33 +479,6 @@ $(document).ready(function(){
 
 </script>
 
-<script>
-    
-    $(document).ready(function () {
-        $("#ds1").click(function () {
-            document.getElementById('MainContent_lbls1').val() = 1;
-        });
-        $("#ds2").click(function () {
-            document.getElementById('MainContent_lbls2').innerHTML = parseInt(document.getElementById('MainContent_lbls2').innerHTML) + 1;
-        });
-        $("#ds3").click(function () {
-            document.getElementById('MainContent_lbls3').innerHTML = parseInt(document.getElementById('MainContent_lbls3').innerHTML) + 1;
-        });
-        $("#ds4").click(function () {
-            document.getElementById('MainContent_lbls4').innerHTML = parseInt(document.getElementById('MainContent_lbls4').innerHTML) + 1;
-        });
-        $("#ds5").click(function () {
-            document.getElementById('MainContent_lbls5').innerHTML = parseInt(document.getElementById('MainContent_lbls5').innerHTML) + 1;
-        });
-        $("#ds6").click(function () {
-            document.getElementById('MainContent_lbls6').innerHTML = parseInt(document.getElementById('MainContent_lbls6').innerHTML) + 1;
-        });
-        $("#ds7").click(function () {
-            document.getElementById('MainContent_lbls7').innerHTML = parseInt(document.getElementById('MainContent_lbls7').innerHTML) + 1;
-        });
-    });
-</script>
-
 
     <!--
 <script type="text/javascript">
