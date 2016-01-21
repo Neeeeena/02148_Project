@@ -27,9 +27,9 @@ namespace _02148_Project.Website
 
         protected void renderOnlinePlayers()
         {
-            MainClient.ReadOtherPlayers();
-            players = MainClient.allOtherPlayers;
-            if (players.Count >= 5)
+            players = DatabaseInterface.ReadAllPlayers();
+            players.Remove(players.Find(x => x.Name == "Server"));
+            if (players.Count >= 4)
             {
                 Response.Redirect("~/MarketView?player=" + MainClient.player.Name);
             }
