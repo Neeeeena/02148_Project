@@ -16,5 +16,6 @@ namespace _02148_Project.Model
             Type = type;
             ImageSrc = Type.GetImageSrc();
         }
+
     }
 }

@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-<a runat="server" href="~/MarketView" class="horseLink"><img src="Images/Horse.png" /></a>
+
 <div class="container-fluid">
   <div class="row-fluid">
           <div class="span3">
@@ -107,7 +107,7 @@
                 <div class="col col-md-6">
                     <div>
                         <a runat="server" href="~/MarketView" class="horseLink">
-                            <img src="Images/Horse.png", style="margin-left:-100%; margin-right:10%">
+                            <img src="Images/Horse.png">
                         </a>
   
         </div>
@@ -121,7 +121,7 @@
               <thead>
                 <tr>
                                         <th id="headlineMission">
-                                            <h3>Your current mission is to gather the following:</h3>
+                                            <h3>Your mission is to build the constructions below (When you build a construction, it will be removed from here)</h3>
                                         </th>
                 </tr>
               </thead>
@@ -131,7 +131,7 @@
             <tr class="dockFloating">
               <td>
                                     <div class="dockResource">
-                                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>" />
+                                        <img id="<%#Eval("Id")%>" src="<%#Eval("ImageSrc")%>" style="width:100px;height:100px"/>
                  </div>
               </td>
             </tr>
