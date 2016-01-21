@@ -56,6 +56,13 @@ namespace _02148_Project.Website
             repLocalResources.DataSource = localresources;
             repLocalResources.DataBind();
             missionGoals = MainClient.GetMissionGoals();
+            if(missionGoals.Count == 0)
+            {
+                MissionGoal mg = new MissionGoal(Construction.Farm);
+                mg.ImageSrc = "Images/winscreen.jpg";
+                missionGoals.Add(mg);
+            }
+              
             repMission.DataSource = missionGoals;
             repMission.DataBind();
             

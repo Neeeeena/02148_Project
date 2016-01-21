@@ -607,7 +607,7 @@ namespace _02148_Project.Website
         {
             try
             {
-                string query = "INSERT INTO TradeOffers (SellerName, RecieverName, " +
+                string query = "INSERT INTO TradeOffers (SellerName, ReceiverName, " +
                     "WoodSender, ClaySender, WoolSender, StoneSender, IronSender, StrawSender, FoodSender, GoldSender, " +
                     "WoodReceiver, ClayReceiver, WoolReceiver, StoneReceiver, IronReceiver, StrawReceiver, FoodReceiver, GoldReceiver) " +
                     "OUTPUT INSERTED.Id " +
@@ -620,7 +620,7 @@ namespace _02148_Project.Website
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Seller", offer.SellerName);
-                        command.Parameters.AddWithValue("@Receiver", offer.RecieverName);
+                        command.Parameters.AddWithValue("@Receiver", offer.ReceiverName);
 
                         int value = 0;
                         offer.SellerResources.TryGetValue(ResourceType.Wood, out value);
@@ -631,8 +631,6 @@ namespace _02148_Project.Website
                         command.Parameters.AddWithValue("@WoolS", value);
                         offer.SellerResources.TryGetValue(ResourceType.Stone, out value);
                         command.Parameters.AddWithValue("@StoneS", value);
-                        offer.SellerResources.TryGetValue(ResourceType.Iron, out value);
-                        command.Parameters.AddWithValue("@IronS", value);
                         offer.SellerResources.TryGetValue(ResourceType.Iron, out value);
                         command.Parameters.AddWithValue("@IronS", value);
                         offer.SellerResources.TryGetValue(ResourceType.Straw, out value);

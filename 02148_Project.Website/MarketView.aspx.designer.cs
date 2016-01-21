@@ -94,139 +94,139 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.Button buttonCancelSell;
         
         /// <summary>
-        /// dd control.
+        /// tradeOfferReceiver control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList dd;
+        protected global::System.Web.UI.WebControls.DropDownList tradeOfferReceiver;
         
         /// <summary>
-        /// lbls1 control.
+        /// woodOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbls1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl woodOffer;
         
         /// <summary>
-        /// s1 control.
+        /// woolOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl woolOffer;
         
         /// <summary>
-        /// s2 control.
+        /// clayOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s2;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl clayOffer;
         
         /// <summary>
-        /// s3 control.
+        /// stoneOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s3;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl stoneOffer;
         
         /// <summary>
-        /// s4 control.
+        /// strawOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s4;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl strawOffer;
         
         /// <summary>
-        /// s5 control.
+        /// ironOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s5;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl ironOffer;
         
         /// <summary>
-        /// s6 control.
+        /// foodOffer control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl s6;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl foodOffer;
         
         /// <summary>
-        /// r0 control.
+        /// woodReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r0;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl woodReceive;
         
         /// <summary>
-        /// r1 control.
+        /// woolReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl woolReceive;
         
         /// <summary>
-        /// r2 control.
+        /// clayReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r2;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl clayReceive;
         
         /// <summary>
-        /// r3 control.
+        /// stoneReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r3;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl stoneReceive;
         
         /// <summary>
-        /// r4 control.
+        /// strawReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r4;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl strawReceive;
         
         /// <summary>
-        /// r5 control.
+        /// ironReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r5;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl ironReceive;
         
         /// <summary>
-        /// r6 control.
+        /// foodReceive control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl r6;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl foodReceive;
         
         /// <summary>
         /// sendTradeOfferBtns control.
@@ -236,6 +236,15 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button sendTradeOfferBtns;
+        
+        /// <summary>
+        /// UpdatePanel10 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel10;
         
         /// <summary>
         /// player1Tab control.

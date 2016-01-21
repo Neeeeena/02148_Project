@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MarketView.aspx.cs" Inherits="_02148_Project.Website.MarketView" EnableEventValidation="false" %>
+﻿<%@ Page Title="Market" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MarketView.aspx.cs" Inherits="_02148_Project.Website.MarketView" EnableEventValidation="false" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -37,15 +37,9 @@
                 <asp:Button class="btn btn-default" id="buttonCancelSell" runat="server" OnClick="buttonCancelSell_Click" Text="Cancel"></asp:Button>
                 
             </div>
-
-
-
-            
-
-            <!-- Modal -->
+            <!-- Modal for sending trade offers -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -53,84 +47,103 @@
                         <h4 class="modal-title">Send Trade Offer</h4>
                     </div>
                     <div class="modal-body">
-                        <asp:DropDownList ID="dd" runat="server" Width="200px">
-                            <asp:ListItem Value="0"></asp:ListItem>
-                            <asp:ListItem Value="1"></asp:ListItem>
-                            <asp:ListItem Value="2"></asp:ListItem>
+                            <asp:DropDownList ID="tradeOfferReceiver" runat="server" Width="200px">
+                                <asp:ListItem></asp:ListItem>
+                                <asp:ListItem></asp:ListItem>
+                                <asp:ListItem></asp:ListItem>
                         </asp:DropDownList>
-
                                 <div class="resContainer">
                                 <h3><b>Resources you want to sell:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
-                                    <asp:label Text="0" runat="server" id="lbls1" />
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woodOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
-                                    <label runat="server" id="s1">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woolOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
-                                    <label runat="server" id="s2" >0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="clayOffer" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
-                                    <label runat="server" id="s3">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="stoneOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
-                                    <label runat="server" id="s4">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="strawOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
-                                    <label runat="server" id="s5">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="ironOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
-                                    <label runat="server" id="s6">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="foodOffer" value="0" min="0" />
                                 </div>
                                 </div>
                                 <div class="resContainer">
                                 <h3><b>Resources you want to receive:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
-                                    <label runat="server" id="r0">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
-                                    <label runat="server" id="r1">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
-                                    <label runat="server" id="r2">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
-                                    <label runat="server" id="r3">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
-                                    <label runat="server" id="r4">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
-                                    <label runat="server" id="r5">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" min="0" />
                             </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
-                                    <label runat="server" id="r6">0</label>
+                                    <br />
+                                    <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" min="0" />
+                                </div>
                             </div>
+                            <br />
+                            <br />
+                            <asp:Button Text="Send Trade Offer" runat="server" ID="sendTradeOfferBtns" OnClick="sendTradeOffer_click"></asp:Button>
+                            <div>
+                                <asp:UpdatePanel ID="UpdatePanel10" runat="server"
+                                    UpdateMode="Conditional">
+                                    <ContentTemplate>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
                             </div>
-                                <br/>
-                           <asp:button Text="Send Trade Offer" runat="server" id="sendTradeOfferBtns" onclick="sendTradeOffer_click"></asp:button>
-                    
                     </div>
                     <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
                 </div>
-
                 </div>
             
 
@@ -401,11 +414,11 @@
     $(document).ready(function () {
         $(".tradeOfferDiv").click(function () {
             $("#lbls1").Text = $("#lbls1").Text + 1;
-        });
+    });
     });
 </script>
-
-
+	
+	
 <script>
     $('#chat1').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat1");
@@ -414,15 +427,17 @@
     $('#chat2').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat2");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p1");
-    });
+});
     $('#chat3').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat3");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p2");
-    });
+        });
     $('#chat4').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
     });
+     */   
+
 </script>
 
 <script type="text/javascript">
