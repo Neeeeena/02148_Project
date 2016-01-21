@@ -153,10 +153,9 @@
     <ContentTemplate>
         <asp:Timer ID="Timer2" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repAllChat" runat="server" >
-         
           <ItemTemplate>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
+                    <li class=<%# Eval("htmlClass")%> ><span> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></li>
                 </div>
           </ItemTemplate>
     </asp:Repeater>
