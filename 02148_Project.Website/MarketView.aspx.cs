@@ -290,10 +290,7 @@ namespace _02148_Project.Website
             repLocalResources.DataBind();
         }
 
-        protected void GetChat()
-        {
-            messages = MainClient.GetNewMessage();
-        }
+
         protected void RenderChat()
         {
             messages = MainClient.GetNewMessage();
@@ -412,7 +409,7 @@ namespace _02148_Project.Website
         {
             (sender as SqlDependency).OnChange -= OnChange_Chat;
             // Get the latest message and save it locally
-            GetChat();
+            
             DatabaseInterface.MonitorChat(OnChange_Chat);
         }
         #endregion

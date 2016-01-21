@@ -198,6 +198,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="ApplicationInsights.config" />
+    <Content Include="Content\GoudyMediaevalRegular.ttf" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Images\anvil.png" />
     <Content Include="Images\Cottage.png" />

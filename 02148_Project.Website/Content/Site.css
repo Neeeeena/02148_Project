@@ -50,7 +50,7 @@ input[type="select"] {
 
 .resource {
     width:70px;
-    height:150px;
+
 }
 
 .dockFloating {
@@ -195,10 +195,18 @@ input.hidden {
 }
 
 h3 {
-    font-size: small;
+    font-size:medium;
     margin: 0;
+    font-family: Medieval, serif;
 }
 
+h1,h2,h4 {
+    font-family: Medieval, serif;
+}
+
+p{
+    font-size:medium;
+}
 #invisibleLines {
     border:0 none;
     color:white;
@@ -296,3 +304,10 @@ div.scroll {
 
 }
 
+@font-face {
+  font-family: Medieval;
+  src: url(GoudyMediaevalRegular.ttf);
+}
+
+
+*{ font-family: Medieval, serif; }
