@@ -164,10 +164,11 @@ input.hidden {
     position:relative;
 }
 #markedContent{
-    height:400px;
+    overflow-y:scroll;
+    height:280px;
     width:500px;
     position:absolute;
-    top:150px;
+    top:130px;
     left:50px;
 }
 
@@ -177,6 +178,7 @@ input.hidden {
 
 .horseLink {
     float:right;
+    margin-bottom:10px;
 }
 
 .horseLink img {
@@ -291,3 +293,4 @@ div.scroll {
     height: 50px;
 
 }
+
