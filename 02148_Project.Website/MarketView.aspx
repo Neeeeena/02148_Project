@@ -21,8 +21,7 @@
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
-            <hr />
-            <hr />
+            
             <p>Sell resources here!</p>
             <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
@@ -40,19 +39,19 @@
             <!-- Modal for sending trade offers -->
             <div id="modalTradeOffer" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Send Trade Offer</h4>
-                    </div>
-                    <div class="modal-body">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Send Trade Offer</h4>
+                        </div>
+                        <div class="modal-body">
                             <asp:DropDownList ID="tradeOfferReceiver" runat="server" Width="200px">
                                 <asp:ListItem></asp:ListItem>
                                 <asp:ListItem></asp:ListItem>
                                 <asp:ListItem></asp:ListItem>
-                        </asp:DropDownList>
-                                <div class="resContainer">
+                            </asp:DropDownList>
+                            <div class="resContainer">
                                 <h3><b>Resources you want to sell:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
@@ -89,8 +88,8 @@
                                     <br />
                                     <input class="tradeInput" runat="server" type="number" id="foodOffer" value="0" min="0" />
                                 </div>
-                                </div>
-                                <div class="resContainer">
+                            </div>
+                            <div class="resContainer">
                                 <h3><b>Resources you want to receive:</b></h3>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
@@ -121,7 +120,7 @@
                                     <img src="Images/anvil.png" />
                                     <br />
                                     <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" min="0" />
-                            </div>
+                                </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
                                     <br />
@@ -138,13 +137,13 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
                 </div>
-                </div>
-                </div>
+            </div>
             
 
 
@@ -193,7 +192,7 @@
     <ContentTemplate>
         <asp:Timer ID="Timer3" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repP1Chat" runat="server" >
-
+         
           <ItemTemplate>
 
                 <div class="message">
@@ -225,7 +224,7 @@
                 <div class="message">
                     <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span> <br />
                 </div>
-    </ItemTemplate>
+          </ItemTemplate>
     </asp:Repeater>
     </ContentTemplate>
 </asp:UpdatePanel>
@@ -244,7 +243,7 @@
                             <asp:UpdatePanel ID="UpdatePanel4" runat="server">        
     <ContentTemplate>
         <asp:Timer ID="Timer5" runat="server" Interval="1000" OnTick="timer_Ticked" />
-        <asp:Repeater ID="repP3Chat" runat="server" >      
+        <asp:Repeater ID="repP3Chat" runat="server" >
           <ItemTemplate>
                 <div class="message">
                     <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span><br/>
@@ -427,7 +426,7 @@
     $('#chat2').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat2");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p1");
-});
+	});
     $('#chat3').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat3");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p2");
@@ -435,7 +434,7 @@
     $('#chat4').click(function () {
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
-    });
+});
      */   
 
 </script>
