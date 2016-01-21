@@ -21,8 +21,7 @@
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
-            <hr />
-            <hr />
+            
             <p>Sell resources here!</p>
             <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
@@ -184,7 +183,7 @@
         <asp:Repeater ID="repAllChat" runat="server" >
           <ItemTemplate>
                 <div class="message">
-                    <li class=<%# Eval("htmlClass")%> ><span> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></li>
+                   <span class=<%# Eval("htmlClass")%>> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></br>
                 </div>
           </ItemTemplate>
     </asp:Repeater>

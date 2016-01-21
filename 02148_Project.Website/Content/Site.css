@@ -50,7 +50,7 @@ input[type="select"] {
 
 .resource {
     width:70px;
-
+    float:left;
 }
 
 .dockFloating {
@@ -253,13 +253,11 @@ div.scroll {
     height: 50px;
 }
 
-#tradeOffers {
-    
-}
-
 .tradeOffer {
     float: right;
-    border: 1px solid black;
+    border: 3px solid gray;
+    padding: 5px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -269,10 +267,12 @@ div.scroll {
 
 .myMessage{
     float:right;
+    display: block;
 }
 
 .otherMessage {
     float:left;
+    display: block;
 }
 
 #dropdownSelected {
