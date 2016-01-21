@@ -45,14 +45,14 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Send Trade Offer</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body row">
                             <asp:DropDownList ID="tradeOfferReceiver" runat="server" Width="200px">
                                 <asp:ListItem></asp:ListItem>
                                 <asp:ListItem></asp:ListItem>
                                 <asp:ListItem></asp:ListItem>
                             </asp:DropDownList>
                             <div class="resContainer">
-                                <h3><b>Resources you want to sell:</b></h3>
+                                <h4>Resources you want to sell:</h4>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
                                     <br />
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                             <div class="resContainer">
-                                <h3><b>Resources you want to receive:</b></h3>
+                                <h4>Resources you want to receive:</h4>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
                                     <br />
@@ -127,9 +127,7 @@
                                     <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" min="0" />
                                 </div>
                             </div>
-                            <br />
-                            <br />
-                            <asp:Button Text="Send Trade Offer" runat="server" ID="sendTradeOfferBtns" OnClick="sendTradeOffer_click"></asp:Button>
+                            
                             <div>
                                 <asp:UpdatePanel ID="UpdatePanel10" runat="server"
                                     UpdateMode="Conditional">
@@ -137,8 +135,11 @@
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </div>
+
                         </div>
+                        
                         <div class="modal-footer">
+                           <asp:Button CssClass="btn btn-default" Text="Send Trade Offer" runat="server" ID="sendTradeOfferBtns" OnClick="sendTradeOffer_click"></asp:Button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -272,7 +273,10 @@
        
     <div style="background-image:url(Images/market.png); background-repeat:no-repeat; height: 500px;width: 600px" class="markedImage" id="marked" >
         <div id="markedContent">
-            <asp:UpdatePanel ID="up" runat="server">        
+            <asp:UpdatePanel ID="up" runat="server"> 
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlId="Timer1" EventName="Tick"/>
+                </Triggers>       
     <ContentTemplate>
         <asp:Timer ID="Timer1" runat="server" Interval="1000" OnTick="timer_Ticked" />
         <asp:Repeater ID="repMarketResources" runat="server" >
@@ -435,7 +439,7 @@
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
 });
-     */   
+        
 
 </script>
 
