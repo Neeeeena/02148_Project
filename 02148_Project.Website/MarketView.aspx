@@ -57,37 +57,37 @@
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="woodOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="woodOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="woolOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="woolOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="clayOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="clayOffer" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="stoneOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="stoneOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="strawOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="strawOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="ironOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="ironOffer" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="foodOffer" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="foodOffer" value="0" min="0" />
                                 </div>
                             </div>
                             <div class="resContainer">
@@ -95,37 +95,37 @@
                                 <div class="tradeOfferDiv">
                                     <img src="Images/firewood.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="woodReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/får.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="woolReceive" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/mursten.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="clayReceive" value="0" min="0"/>
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/stone.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="stoneReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/Straw.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="strawReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/anvil.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="ironReceive" value="0" min="0" />
                                 </div>
                                 <div class="tradeOfferDiv">
                                     <img src="Images/food.png" />
                                     <br />
-                                    <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" />
+                                    <input class="tradeInput" runat="server" type="number" id="foodReceive" value="0" min="0" />
                                 </div>
                             </div>
                             <br />
@@ -136,9 +136,6 @@
                                     UpdateMode="Conditional">
                                     <ContentTemplate>
                                     </ContentTemplate>
-                                    <Triggers>
-                                        <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
-                                    </Triggers>
                                 </asp:UpdatePanel>
                             </div>
                         </div>
