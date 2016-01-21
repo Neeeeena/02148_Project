@@ -21,8 +21,7 @@
     </div>
         <div class="span2">
             <a runat="server" href="~/MapView" class="horseLink"><img src="Images/Horse.png" /></a>
-            <hr />
-            <hr />
+            
             <p>Sell resources here!</p>
             <div id="sellBox" ondrop="drop(event)" ondragover="allowDrop(event)">
 
@@ -152,10 +151,10 @@
 	<div class="container" style="width:300px">
 	  <h2>CHAT</h2>
 	  <ul class="nav nav-tabs" >
-		<li id="activeChat" style="width:25%"><a data-toggle="tab" href="#all"><p>Everyone</p></a></li>
-		<li id="chatTab2" style="width:25%"><a data-toggle="tab" href="#p1" ><p id="player1Tab" runat="server"></p></a></li>
-		<li id="chatTab3" style="width:25%"><a data-toggle="tab" href="#p2"><p id="player2Tab" runat="server"></p></a></li>
-		<li id="chatTab4" style="width:25%"><a data-toggle="tab" href="#p3"><p id="player3Tab" runat="server"></p></a></li>
+		<li id="chat1" style="width:25%"><a data-toggle="tab" href="#all"><p>Everyone</p></a></li>
+		<li id="chat2" style="width:25%"><a data-toggle="tab" href="#p1" ><p id="player1Tab" runat="server"></p></a></li>
+		<li id="chat3" style="width:25%"><a data-toggle="tab" href="#p2"><p id="player2Tab" runat="server"></p></a></li>
+		<li id="chat4" style="width:25%"><a data-toggle="tab" href="#p3"><p id="player3Tab" runat="server"></p></a></li>
 	  </ul>
 
 	  <div class="tab-content">
@@ -168,7 +167,7 @@
         <asp:Repeater ID="repAllChat" runat="server" >
           <ItemTemplate>
                 <div class="message">
-                    <li class=<%# Eval("htmlClass")%> ><span> <%# Eval("SenderName")%> : <%#Eval("Content")%> </span></li>
+                    <span class=<%# Eval("htmlClass")%> > <%# Eval("SenderName")%> : <%#Eval("Content")%> </span><br />
                 </div>
           </ItemTemplate>
     </asp:Repeater>
@@ -197,7 +196,7 @@
           <ItemTemplate>
 
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p> <br />
+                    <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span> <br />
                 </div>
           </ItemTemplate>
     </asp:Repeater>
@@ -223,8 +222,7 @@
           <ItemTemplate>
 
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p>
-                    <hr />
+                    <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span> <br />
                 </div>
           </ItemTemplate>
     </asp:Repeater>
@@ -248,7 +246,7 @@
         <asp:Repeater ID="repP3Chat" runat="server" >
           <ItemTemplate>
                 <div class="message">
-                    <p class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></p><br/>
+                    <span class=<%# Eval("htmlClass")%> ><%# Eval("SenderName")%> : <%#Eval("Content")%></span><br/>
                 </div>
           </ItemTemplate>
     </asp:Repeater>
@@ -370,7 +368,8 @@
 
   </div>
 </div>
-
+<asp:HiddenField ID="actiChat" runat="server" />
+<asp:HiddenField ID="actiTab" runat="server" />
 
 <script type="text/javascript">
     function saveId(ele) {
@@ -410,96 +409,49 @@
     }
 </script>
 
-
 <script>
-
-
-$(document).ready(function(){
-    
-    $('#allMsg').keypress(function(e){
-      if(e.keyCode==13)
-      $('#allBtn').click();
-        alert("test");
-    });
-	
-	$('#p1Msg').keypress(function(e){
-      if(e.keyCode==13)
-      $('#p1Btn').click();
-    });
-	
-	$('#p2Msg').keypress(function(e){
-      if(e.keyCode==13)
-      $('#p2Btn').click();
-    });
-	
-	$('#p3Msg').keypress(function(e){
-      if(e.keyCode==13)
-      $('#p3Btn').click();
-    });
-	
-	$('#allBtn').click(function(e) {
-		prepareMsg(name,"all",$(allMsg).val(),'#allChat','#allMsg',false);
-	});
-	
-	$('#p1Btn').click(function(e) {
-		prepareMsg(name,p1name,$(p1Msg).val(),'#p1Chat','#p1Msg',true);
-	});
-	
-	
-});
-	
-</script>
-
-
-
-    
-<script type="text/javascript">
-	
-    /* LORTET HER VIRKER!
     $(document).ready(function () {
-        $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "MarketView.aspx/AjaxCall",
-                dataType: "json",
-                data:'{}',
-                success: function (result) {
-                    alert("Succes!");
-                    // window.location.href = "ClubCreation.aspx";
-                },
-                Error: function () {
-                    alert('error');
-                }
+        $(".tradeOfferDiv").click(function () {
+            $("#lbls1").Text = $("#lbls1").Text + 1;
+    });
+    });
+</script>
+	
+	
+<script>
+    $('#chat1').click(function () {
+        document.getElementById("MainContent_actiChat").setAttribute("value", "chat1");
+        document.getElementById("MainContent_actiTab").setAttribute("value", "all");
+    });
+    $('#chat2').click(function () {
+        document.getElementById("MainContent_actiChat").setAttribute("value", "chat2");
+        document.getElementById("MainContent_actiTab").setAttribute("value", "p1");
+	});
+    $('#chat3').click(function () {
+        document.getElementById("MainContent_actiChat").setAttribute("value", "chat3");
+        document.getElementById("MainContent_actiTab").setAttribute("value", "p2");
         });
+    $('#chat4').click(function () {
+        document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
+        document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
 });
      */   
 
 </script>
 
-
-    <!--
 <script type="text/javascript">
-    $(document).ready(function(){
-        $(".tradeOfferDiv").click(function () {
-            $(this).find("#lbls1").Text = $(this).find("#lbls1").Text
+    $(document).ready(function () {
+        var id = document.getElementById("MainContent_actiChat");
+        var chat = document.getElementById(id.value);
+        chat.setAttribute("class", "active");
+        var tabid = document.getElementById("MainContent_actiTab");
+        var tab = document.getElementById(tabid.value);
+        $("#all").attr("class", "tab-pane fade");
+        tab.setAttribute("class","tab-pane fade in active");
 
-            
-            $(this).find("#lbls1").text(String(parseInt($(this).find("#lbls1").text()) + 1));
-            
-        });
+
     });
 </script>
-
-        -->
-
-<script>
-    $('#chatTab2').click(function () {
-        $().att('id','')
-        $(this).attr('id','activeChat');
-    });
-</script>
-
-
 
 
 

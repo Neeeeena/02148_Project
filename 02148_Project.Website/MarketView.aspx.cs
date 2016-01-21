@@ -299,7 +299,7 @@ namespace _02148_Project.Website
         {
             messages = MainClient.GetNewMessage();
             messages.OrderBy(a => a.Id).ToList();
-            //messages.Reverse();
+            messages.Reverse();
             foreach(var mes in messages)
             {
                 if (mes.ToAll)
@@ -445,7 +445,9 @@ namespace _02148_Project.Website
             var message = allMsg.Value;
             var messageObject = new Message(message,MainClient.player.Name,"",true);
             MainClient.SendNewMessage(messageObject);
-            RenderChat();
+            allMsg.Value = "";
+          //  RenderChat();
+            
 
         }
 
@@ -454,7 +456,9 @@ namespace _02148_Project.Website
             var message = p1Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player1.Name);
             MainClient.SendNewMessage(messageObject);
-            RenderChat();
+            p1Msg.Value = "";
+           // RenderChat();
+            
         }
 
         protected void btnSendToPlayer2_Click(object sender, EventArgs e)
@@ -462,14 +466,18 @@ namespace _02148_Project.Website
             var message = p2Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player2.Name);
             MainClient.SendNewMessage(messageObject);
-            RenderChat();
+            p2Msg.Value = "";
+            //RenderChat();
+            
         }
         protected void btnSendToPlayer3_Click(object sender, EventArgs e)
         {
             var message = p3Msg.Value;
             var messageObject = new Message(message, MainClient.player.Name, Player3.Name);
             MainClient.SendNewMessage(messageObject);
-            RenderChat();
+            p3Msg.Value = "";
+            //RenderChat();
+            
         }
 
     }

@@ -50,7 +50,7 @@ input[type="select"] {
 
 .resource {
     width:70px;
-
+    float:left;
 }
 
 .dockFloating {
@@ -207,10 +207,7 @@ h1,h2,h4 {
 p{
     font-size:medium;
 }
-li{
-    font-size:14px;
-    display:inline-block;
-}
+
 #invisibleLines {
     border:0 none;
     color:white;
@@ -253,13 +250,11 @@ div.scroll {
     height: 50px;
 }
 
-#tradeOffers {
-    
-}
-
 .tradeOffer {
     float: right;
-    border: 1px solid black;
+    border: 3px solid gray;
+    padding: 5px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -269,10 +264,12 @@ div.scroll {
 
 .myMessage{
     float:right;
+    display: block;
 }
 
 .otherMessage {
     float:left;
+    display: block;
 }
 
 #dropdownSelected {

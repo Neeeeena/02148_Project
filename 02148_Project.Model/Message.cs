@@ -18,7 +18,7 @@ namespace _02148_Project.Model
         public string RecieverName { get; set; }
 
         public bool ToAll { get; set; }
-        public string htmlClass { get; set; }
+        public string htmlClass { get; set; } = "otherMessage";
 
         public Message(int id, string content, string sender, string receiver, bool toAll = false)
             : this(content, sender, receiver, toAll)
