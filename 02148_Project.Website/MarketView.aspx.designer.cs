@@ -31,6 +31,24 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl goldAmount;
         
         /// <summary>
+        /// TimerTradeOffer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.Timer TimerTradeOffer;
+        
+        /// <summary>
+        /// tradeOfferRepeater control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater tradeOfferRepeater;
+        
+        /// <summary>
         /// tradeOffers control.
         /// </summary>
         /// <remarks>
@@ -569,5 +587,14 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HiddenField actiChat;
+        
+        /// <summary>
+        /// actiTab control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField actiTab;
     }
 }

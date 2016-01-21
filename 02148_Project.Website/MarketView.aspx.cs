@@ -77,8 +77,10 @@ namespace _02148_Project.Website
             }
             tradeOfferReceiver.DataSource = names;
             tradeOfferReceiver.DataBind();
-            
+
+            allYourRecievedTradeOffers = MainClient.ReadAllTradeOffersForYou();
             fillTradeOffers();
+            RenderTradeOffers();
             //createTradeOfferElements();
 
             RenderMarket();
@@ -97,7 +99,6 @@ namespace _02148_Project.Website
         {
             // code before base oninit
             base.OnInit(e);
-            RenderTradeOffers();
             // code after base oninit
         }
 
@@ -124,49 +125,6 @@ namespace _02148_Project.Website
             TradeOffer to = new TradeOffer(MainClient.player.Name, tradeOfferReceiver.SelectedValue, sell, buy);
             MainClient.SendTradeOfferToPlayer(to);
         }
-
-        //protected void createTradeOfferElements()
-        //{
-
-        //    System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferSeller = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-        //    System.Web.UI.HtmlControls.HtmlGenericControl labelSeller = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
-        //    labelSeller.InnerHtml = "Resources you want to sell: ";
-        //    tradeOfferSeller.Controls.Add(labelSeller);
-        //    foreach (KeyValuePair<ResourceType, int> r in SellerResources)
-        //    {
-        //        ResourceType res = r.Key;
-        //        int numb = r.Value;
-        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
-        //        image.Attributes.Add("runat", "server");
-        //        image.Attributes.Add("onclick", "tradeOfferSellerImage_click");
-        //        tradeOfferSeller.Controls.Add(image);
-        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
-        //        numberOfRes.Text = numb.ToString();
-        //        numberOfRes.ID = "S" + res;
-        //        tradeOfferSeller.Controls.Add(numberOfRes);
-        //    }
-
-
-
-        //    System.Web.UI.HtmlControls.HtmlGenericControl tradeOfferReceiver = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-        //    System.Web.UI.HtmlControls.HtmlGenericControl labelReceiver = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
-        //    labelReceiver.InnerHtml = "Resources you want to receive: ";
-        //    tradeOfferReceiver.Controls.Add(labelReceiver);
-        //    foreach (KeyValuePair<ResourceType, int> r in ReceiverResources)
-        //    {
-        //        ResourceType res = r.Key;
-        //        int numb = r.Value;
-        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
-        //        image.ID = "" + res;
-        //        tradeOfferReceiver.Controls.Add(image);
-        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
-        //        numberOfRes.Text = numb.ToString();
-        //        numberOfRes.ID = "R" + res;
-        //        tradeOfferReceiver.Controls.Add(numberOfRes);
-        //    }
-
-        //}
-
     
         protected void fillTradeOffers()
         {
@@ -176,103 +134,119 @@ namespace _02148_Project.Website
                 //SellerResources.Add(v,0);
                 //ReceiverResources.Add(v,0);
             }
-
-
-
         }
 
         protected void RenderTradeOffers()
         {
-            List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
-            tradeOffers.Controls.Clear();
-            foreach(var t in tradeOffersO)
-            {
-                System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
-                tradeOffers.Controls.Add(div);
-            }
+            tradeOfferRepeater.DataSource = allYourRecievedTradeOffers;
+            tradeOfferRepeater.DataBind();
+
+            //List<TradeOffer> tradeOffersO = MainClient.ReadAllTradeOffersForYou();
+            //tradeOffers.Controls.Clear();
+            //foreach(var t in tradeOffersO)
+            //{
+            //    System.Web.UI.HtmlControls.HtmlGenericControl div = createDiv(t);
+            //    tradeOffers.Controls.Add(div);
+            //}
         }
-        protected HtmlGenericControl createDiv(TradeOffer to)
+
+        protected void TradeOfferRepeater_ItemDataBound(Object Sender, RepeaterItemEventArgs e)
         {
-            System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
-            System.Web.UI.HtmlControls.HtmlGenericControl sellerName = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
-            sellerName.InnerHtml = "<b>Seller: " + to.SellerName + "</b>";
-            System.Web.UI.HtmlControls.HtmlGenericControl resP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
-            resP.InnerHtml = "<b>You will receive:</b> ";
-            tradeOffer.Controls.Add(sellerName);
-            tradeOffer.Controls.Add(resP);
-            tradeOffer.Attributes.Add("class","tradeOffer");
-            
-
-            Dictionary<ResourceType, int> resources = to.SellerResources;
-            
-
-            foreach (KeyValuePair<ResourceType, int> r in resources)
+            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
             {
-                ResourceType res = r.Key;
-                int numb = r.Value;
-                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
-                tradeOffer.Controls.Add(image);
-                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
-                numberOfRes.Text = numb.ToString() ;
-                tradeOffer.Controls.Add(numberOfRes);
+                // Grab all your controls like this
+                Repeater sellerRepeater = e.Item.FindControl("tradeSellerResources") as Repeater;
+                Repeater receiverRepeater = e.Item.FindControl("tradeReceiverResources") as Repeater;
+                // Get the current data
+                var data = (TradeOffer)e.Item.DataItem;
+                //Bind the values
+                sellerRepeater.DataSource = data.SellerResources.ToList();
+                sellerRepeater.DataBind();
+                receiverRepeater.DataSource = data.ReceiverResources.ToList();
+                receiverRepeater.DataBind();
             }
-
-            System.Web.UI.HtmlControls.HtmlGenericControl priceP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
-            priceP.InnerHtml = "<b>You will have to pay:</b> ";
-            tradeOffer.Controls.Add(priceP);
-            Dictionary<ResourceType, int> price = to.ReceiverResources;
-
-            foreach (KeyValuePair<ResourceType, int> r in price)
-            {
-                ResourceType res = r.Key;
-                int numb = r.Value;
-                HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
-                tradeOffer.Controls.Add(image);
-                System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
-                numberOfRes.Text = numb.ToString();
-                tradeOffer.Controls.Add(numberOfRes);
-            }
-
-            System.Web.UI.HtmlControls.HtmlButton acceptButton = new System.Web.UI.HtmlControls.HtmlButton();
-            acceptButton.InnerText = "Accept";
-            acceptButton.ID = "a" + to.Id.ToString();
-            acceptButton.Attributes.Add("runat", "server");
-            acceptButton.ServerClick += new EventHandler(acceptTradeOffer_click);
-            acceptButton.Attributes.Add("class", "btn btn-default");
-            tradeOffer.Controls.Add(acceptButton);
-
-            System.Web.UI.HtmlControls.HtmlButton declineButton = new System.Web.UI.HtmlControls.HtmlButton();
-            declineButton.InnerText = "Decline";
-            declineButton.ID = "d" + to.Id.ToString();
-            declineButton.Attributes.Add("runat", "server");
-            declineButton.ServerClick += new EventHandler(declineTradeOffer_click);
-            declineButton.Attributes.Add("class", "btn btn-default");
-            tradeOffer.Controls.Add(declineButton);
-
-            return tradeOffer;
-            
-            //tradeOffer.Attributes.Add("class", "tradeOffer");
-            //tradeOffer.Style.Add(HtmlTextWriterStyle.BackgroundColor, "gray");
-            //createDiv.Style.Add(HtmlTextWriterStyle.Color, "Red");
-            //createDiv.Style.Add(HtmlTextWriterStyle.Height, "100px");
-            //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
-            //createDiv.InnerHtml = " I'm a div, from code behind ";
-            //tradeOffers.Controls.Add(tradeOffer);
         }
+
+        //protected HtmlGenericControl createDiv(TradeOffer to)
+        //{
+        //    System.Web.UI.HtmlControls.HtmlGenericControl tradeOffer = new System.Web.UI.HtmlControls.HtmlGenericControl("DIV");
+        //    System.Web.UI.HtmlControls.HtmlGenericControl sellerName = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+        //    sellerName.InnerHtml = "<b>Seller: " + to.SellerName + "</b>";
+        //    System.Web.UI.HtmlControls.HtmlGenericControl resP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+        //    resP.InnerHtml = "<b>You will receive:</b> ";
+        //    tradeOffer.Controls.Add(sellerName);
+        //    tradeOffer.Controls.Add(resP);
+        //    tradeOffer.Attributes.Add("class","tradeOffer");
+            
+
+        //    Dictionary<ResourceType, int> resources = to.SellerResources;
+            
+
+        //    foreach (KeyValuePair<ResourceType, int> r in resources)
+        //    {
+        //        ResourceType res = r.Key;
+        //        int numb = r.Value;
+        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+        //        tradeOffer.Controls.Add(image);
+        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+        //        numberOfRes.Text = numb.ToString() ;
+        //        tradeOffer.Controls.Add(numberOfRes);
+        //    }
+
+        //    System.Web.UI.HtmlControls.HtmlGenericControl priceP = new System.Web.UI.HtmlControls.HtmlGenericControl("p");
+        //    priceP.InnerHtml = "<b>You will have to pay:</b> ";
+        //    tradeOffer.Controls.Add(priceP);
+        //    Dictionary<ResourceType, int> price = to.ReceiverResources;
+
+        //    foreach (KeyValuePair<ResourceType, int> r in price)
+        //    {
+        //        ResourceType res = r.Key;
+        //        int numb = r.Value;
+        //        HtmlImage image = new HtmlImage { Src = res.GetImageSrc() };
+        //        tradeOffer.Controls.Add(image);
+        //        System.Web.UI.WebControls.Label numberOfRes = new System.Web.UI.WebControls.Label();
+        //        numberOfRes.Text = numb.ToString();
+        //        tradeOffer.Controls.Add(numberOfRes);
+        //    }
+
+        //    System.Web.UI.HtmlControls.HtmlButton acceptButton = new System.Web.UI.HtmlControls.HtmlButton();
+        //    acceptButton.InnerText = "Accept";
+        //    acceptButton.ID = "a" + to.Id.ToString();
+        //    acceptButton.Attributes.Add("runat", "server");
+        //    acceptButton.ServerClick += new EventHandler(acceptTradeOffer_click);
+        //    acceptButton.Attributes.Add("class", "btn btn-default");
+        //    tradeOffer.Controls.Add(acceptButton);
+
+        //    System.Web.UI.HtmlControls.HtmlButton declineButton = new System.Web.UI.HtmlControls.HtmlButton();
+        //    declineButton.InnerText = "Decline";
+        //    declineButton.ID = "d" + to.Id.ToString();
+        //    declineButton.Attributes.Add("runat", "server");
+        //    declineButton.ServerClick += new EventHandler(declineTradeOffer_click);
+        //    declineButton.Attributes.Add("class", "btn btn-default");
+        //    tradeOffer.Controls.Add(declineButton);
+
+        //    return tradeOffer;
+            
+        //    //tradeOffer.Attributes.Add("class", "tradeOffer");
+        //    //tradeOffer.Style.Add(HtmlTextWriterStyle.BackgroundColor, "gray");
+        //    //createDiv.Style.Add(HtmlTextWriterStyle.Color, "Red");
+        //    //createDiv.Style.Add(HtmlTextWriterStyle.Height, "100px");
+        //    //createDiv.Style.Add(HtmlTextWriterStyle.Width, "400px");
+        //    //createDiv.InnerHtml = " I'm a div, from code behind ";
+        //    //tradeOffers.Controls.Add(tradeOffer);
+        //}
 
       
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
-            HtmlButton button = (HtmlButton)sender;
-            MainClient.AcceptTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
+            //MainClient.AcceptTradeOffer(Int32.Parse((string)e.CommandArgument));
             RenderTradeOffers();
         }
 
         protected void declineTradeOffer_click(Object sender, EventArgs e)
         {
-            HtmlButton button = (HtmlButton)sender;
-            MainClient.DeclineTradeOffer(Int32.Parse(button.ID.Remove(0,1)));
+            //MainClient.DeclineTradeOffer(Int32.Parse((string)e.CommandArgument));
             RenderTradeOffers();
         }
 
