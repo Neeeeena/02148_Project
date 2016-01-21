@@ -207,10 +207,7 @@ h1,h2,h4 {
 p{
     font-size:medium;
 }
-li{
-    font-size:14px;
-    display:inline-block;
-}
+
 #invisibleLines {
     border:0 none;
     color:white;
@@ -268,11 +265,15 @@ div.scroll {
 }
 
 .myMessage{
-    float:right;
+    display:block;
+    float: right;
+
+
 }
 
 .otherMessage {
-    float:left;
+    display:block;
+
 }
 
 #dropdownSelected {
