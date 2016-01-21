@@ -435,7 +435,6 @@
         document.getElementById("MainContent_actiChat").setAttribute("value", "chat4");
         document.getElementById("MainContent_actiTab").setAttribute("value", "p3");
 });
-     */   
 
 </script>
 
