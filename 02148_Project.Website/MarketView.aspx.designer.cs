@@ -247,15 +247,6 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl foodReceive;
         
         /// <summary>
-        /// sendTradeOfferBtns control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button sendTradeOfferBtns;
-        
-        /// <summary>
         /// UpdatePanel10 control.
         /// </summary>
         /// <remarks>
@@ -263,6 +254,15 @@ namespace _02148_Project.Website {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel10;
+        
+        /// <summary>
+        /// sendTradeOfferBtns control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button sendTradeOfferBtns;
         
         /// <summary>
         /// player1Tab control.

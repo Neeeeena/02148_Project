@@ -254,6 +254,8 @@ namespace _02148_Project.Website
         {
         }
 
+
+
         protected void RenderMarket()
         {
             marketresources = MainClient.UpdateResourcesOnMarket();

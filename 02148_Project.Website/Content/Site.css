@@ -55,6 +55,11 @@ input[type="select"] {
 
 .dockFloating {
     float: left;
+    
+}
+
+.dockResource {
+    margin-bottom: 10px;
 }
 
 .dockResource img {
@@ -198,6 +203,8 @@ h3 {
     font-size:medium;
     margin: 0;
     font-family: Medieval, serif;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 h1,h2,h4 {
@@ -265,11 +272,20 @@ div.scroll {
 .myMessage{
     float:right;
     display: block;
+    font-size: large;
+    clear: both;
+
 }
 
 .otherMessage {
     float:left;
     display: block;
+    font-size: large;
+    clear: both;
+}
+
+.chatDummy {
+    height: 20px;
 }
 
 #dropdownSelected {
@@ -291,7 +307,7 @@ div.scroll {
 
 .resContainer {
     clear: both;
-    background-color:red;
+
 }
 
 .tradeOfferDiv {
