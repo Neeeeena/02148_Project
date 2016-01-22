@@ -67,15 +67,6 @@ namespace _02148_Project.Website {
         protected global::System.Web.UI.WebControls.PlaceHolder tradeOfferASP;
         
         /// <summary>
-        /// tradeOfferId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField tradeOfferId;
-        
-        /// <summary>
         /// hiddenValue control.
         /// </summary>
         /// <remarks>

@@ -240,14 +240,21 @@ namespace _02148_Project.Website
 
         protected void acceptTradeOffer_click(Object sender, EventArgs e)
         {
-            MainClient.AcceptTradeOffer(Int32.Parse(tradeOfferId.Value));
+            //Button btnTrade = (Button)sender;
+            //RepeaterItem item = (RepeaterItem)btnTrade.NamingContainer;
+            //var id = item.Controls[0].ID;
+            //SNyd
+            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
+            MainClient.AcceptTradeOffer(allYourRecievedTradeOffers.ElementAt(0).Id);
             RenderTradeOffers();
         }
 
         protected void declineTradeOffer_click(Object sender, EventArgs e)
         {
             //MainClient.DeclineTradeOffer(Int32.Parse((string)e.CommandArgument));
-            MainClient.AcceptTradeOffer(Int32.Parse(tradeOfferId.Value));
+            //MainClient.AcceptTradeOffer(Int32.Parse(tradeOfferId.Value));
+            allYourRecievedTradeOffers = DatabaseInterface.ReadAllTradeOffers(MainClient.player.Name);
+            MainClient.AcceptTradeOffer(allYourRecievedTradeOffers.ElementAt(0).Id);
             RenderTradeOffers();
         }
 

@@ -23,6 +23,7 @@
                         <asp:Timer ID="TimerTradeOffer" runat="server" Interval="1000" OnTick="timer_Ticked" />
                         <asp:Repeater runat="server" ID="tradeOfferRepeater" OnItemDataBound="TradeOfferRepeater_ItemDataBound">
                             <ItemTemplate>
+                                <div id="<%#Eval("Id")%>">
                                 <br />
                                 <h3>Seller: <%#Eval("SellerName") %></h3>
                                 <h3>Receiver: <%#Eval("ReceiverName") %></h3>
@@ -39,24 +40,16 @@
                                         <h3><%#Eval("Key") %>: <%#Eval("Value") %></h3>
                                     </ItemTemplate>
                                 </asp:Repeater>
-                                <asp:Button runat="server" Text="Accept" class="btn btn-default btn-md" OnClientClick="saveTradeOfferId(this)" data-id="<%#Eval("Id")%>"  OnClick="acceptTradeOffer_click" />
-                                <asp:Button runat="server" Text="Decline" class="btn btn-default btn-md" OnClientClick="saveTradeOfferId(this)" data-id="<%#Eval("Id")%>" OnClick="declineTradeOffer_click" />
-                            </ItemTemplate>
+                                <asp:Button runat="server" Text="Accept" class="btn btn-default btn-md"  OnClick="acceptTradeOffer_click" />
+                                <asp:Button runat="server" Text="Decline" class="btn btn-default btn-md" OnClick="declineTradeOffer_click" />
+                            </div>
+                               </ItemTemplate>
                         </asp:Repeater>
                     </ContentTemplate>
                 </asp:UpdatePanel>
                 <div runat="server" id="tradeOffers">
                     <asp:PlaceHolder ID="tradeOfferASP" runat="server" />
                 </div>
-                <asp:HiddenField ID="tradeOfferId" runat="server" />
-
-                <script type="text/javascript">
-                            function saveTradeOfferId(ele) {
-                            var resId = ele.getAttribute('data-id');
-
-                            document.getElementById("MainContent_tradeOfferId").setAttribute("value", resId);
-                            }
-                </script>
             </div>
             <div class="span2">
                 <a runat="server" href="~/MapView" class="horseLink">
